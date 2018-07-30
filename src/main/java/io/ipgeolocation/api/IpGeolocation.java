@@ -16,23 +16,23 @@ public class IpGeolocation {
         this.apiKey = apiKey;
     }
 
-    public Map getTimeZone(Map<String, String> parameters){
-        return getIpGeoLocation(parameters, "/timezone");
+    public Map<String, String> getTimezone() {
+        return getApiResponse("/timezone", null);
     }
 
-    public Map getTimeZone(){
-        return getIpGeoLocation(null, "/timezone");
+    public Map<String, String> getTimezone(Map<String, String> parameters) {
+        return getApiResponse("/timezone", parameters);
     }
 
-    public Map getIpGeo(Map<String, String> parameters) {
-        return getIpGeoLocation(parameters, "/ipgeo");
+    public Map<String, String> getIpgeo() {
+        return getApiResponse("/ipgeo", null);
     }
 
-    public Map getIpGeo() {
-        return getIpGeoLocation(null, "/ipgeo");
+    public Map<String, String> getIpgeo(Map<String, String> parameters) {
+        return getApiResponse("/ipgeo", parameters);
     }
 
-    private Map getIpGeoLocation(Map<String, String> parameters, String subUrl) {
+    private Map<String, String> getApiResponse(String subUrl, Map<String, String> parameters) {
         String query = buildQuery(parameters);
         if(query != null) {
             return openConnection(getIpGeoLocationURL() + subUrl + "?" + query);
@@ -40,27 +40,58 @@ public class IpGeolocation {
         return getBadRequestResponse();
     }
 
+    private String buildQuery(Map<String, String> parameters) {
+        String query = "";
+        String ip = null;
+        String fields = null;
+        String tz = null;
+        if(parameters != null) {
+            ip = parameters.get("ip") != null ? parameters.get("ip") : "";
+            fields = parameters.get("fields") != null ? parameters.get("fields") : "";
+            tz = parameters.get("tz") != null ? parameters.get("tz") : "";
+        }
+
+        if(this.apiKey != null && this.apiKey.trim().length() > 0) {
+            query = "apiKey="+this.apiKey;
+
+            if(ip != null && ip.trim().length() > 0) {
+                query = query + ("&ip="+ip);
+            }
+
+            if(fields != null && fields.trim().length() > 0) {
+                query = query + ("&fields="+ fields);
+            }
+
+            if(tz != null && tz.trim().length() > 0) {
+                query = query + ("&tz="+tz);
+            }
+        }
+        return query;
+    }
+
     private Map<String, String> openConnection(String url) {
         StringBuilder response = new StringBuilder("");
         int responseCode = 0;
         try {
             URL obj = new URL(url);
-            HttpURLConnection con = (HttpURLConnection) obj.openConnection();
-            con.setRequestMethod("GET");
-            con.setRequestProperty("Content-Type", "application/json");
-            responseCode = con.getResponseCode();
-            BufferedReader in;
+            HttpURLConnection connection = (HttpURLConnection) obj.openConnection();
+            connection.setRequestMethod("GET");
+            connection.setRequestProperty("Content-Type", "application/json");
+            responseCode = connection.getResponseCode();
+            BufferedReader reader;
+
             if(responseCode == 200) {
-                in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+                reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
             } else {
-                in = new BufferedReader(new InputStreamReader(con.getErrorStream()));
+                reader = new BufferedReader(new InputStreamReader(connection.getErrorStream()));
             }
 
             String inputLine;
-            while ((inputLine = in.readLine()) != null) {
+            while ((inputLine = reader.readLine()) != null) {
                 response.append(inputLine);
             }
-            in.close();
+            reader.close();
+
             if(response.toString().equals("")) {
                 response.append("{\"message\":\"Incorrect parameters\"}");
             }
@@ -78,33 +109,7 @@ public class IpGeolocation {
         return map;
     }
 
-    private String buildQuery(Map<String, String> parameters) {
-        String query = "";
-        String ip = null;
-        String fields = null;
-        String tz = null;
-        if(parameters != null) {
-            ip = parameters.get("ip") != null ? parameters.get("ip") : "";
-            fields = parameters.get("fields") !=null ? parameters.get("fields") : "";
-            tz = parameters.get("tz") !=null ? parameters.get("tz") : "";
-        }
-
-        if(this.apiKey != null && this.apiKey.trim().length() > 0) {
-            query = "apiKey="+this.apiKey;
-            if(ip != null && ip.trim().length() > 0) {
-                query = query + ("&ip="+ip);
-            }
-            if(fields != null && fields.trim().length() > 0) {
-                query = query + ("&fields="+ fields);
-            }
-            if(tz != null && tz.trim().length() > 0) {
-                query = query + ("&tz="+tz);
-            }
-        }
-        return query;
-    }
-
-    private Map getBadRequestResponse() {
+    private Map<String, String> getBadRequestResponse() {
         Map<String, String> response = new HashMap<String, String>();
         response.put("status", "404");
         response.put("message", "Incorrect paramater");
