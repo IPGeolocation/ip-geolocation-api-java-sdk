@@ -76,9 +76,9 @@ public class IpGeolocation {
                 reader = new BufferedReader(new InputStreamReader(connection.getErrorStream()));
             }
 
-            String inputLine;
-            while ((inputLine = reader.readLine()) != null) {
-                response.append(inputLine);
+            String line;
+            while ((line = reader.readLine()) != null) {
+                response.append(line);
             }
             reader.close();
 
