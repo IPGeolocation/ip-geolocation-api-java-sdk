@@ -16,66 +16,28 @@ public class IpGeolocation {
         this.apiKey = apiKey;
     }
 
-    public Map getTimeZone(Map<String, String> parameters){
-        return getIpGeoLocation(parameters, "/timezone");
+    public Map<String, String> getTimezone() {
+        return getApiResponse("/timezone", null);
     }
 
-    public Map getTimeZone(){
-        return getIpGeoLocation(null, "/timezone");
+    public Map<String, String> getTimezone(Map<String, String> parameters) {
+        return getApiResponse("/timezone", parameters);
     }
 
-    public Map getIpGeo(Map<String, String> parameters) {
-        return getIpGeoLocation(parameters, "/ipgeo");
+    public Map<String, String> getIpgeo() {
+        return getApiResponse("/ipgeo", null);
     }
 
-    public Map getIpGeo() {
-        return getIpGeoLocation(null, "/ipgeo");
+    public Map<String, String> getIpgeo(Map<String, String> parameters) {
+        return getApiResponse("/ipgeo", parameters);
     }
 
-    private Map getIpGeoLocation(Map<String, String> parameters, String subUrl) {
+    private Map<String, String> getApiResponse(String subUrl, Map<String, String> parameters) {
         String query = buildQuery(parameters);
         if(query != null) {
             return openConnection(getIpGeoLocationURL() + subUrl + "?" + query);
         }
         return getBadRequestResponse();
-    }
-
-    private Map<String, String> openConnection(String url) {
-        StringBuilder response = new StringBuilder("");
-        int responseCode = 0;
-        try {
-            URL obj = new URL(url);
-            HttpURLConnection con = (HttpURLConnection) obj.openConnection();
-            con.setRequestMethod("GET");
-            con.setRequestProperty("Content-Type", "application/json");
-            responseCode = con.getResponseCode();
-            BufferedReader in;
-            if(responseCode == 200) {
-                in = new BufferedReader(new InputStreamReader(con.getInputStream()));
-            } else {
-                in = new BufferedReader(new InputStreamReader(con.getErrorStream()));
-            }
-
-            String inputLine;
-            while ((inputLine = in.readLine()) != null) {
-                response.append(inputLine);
-            }
-            in.close();
-            if(response.toString().equals("")) {
-                response.append("{\"message\":\"Incorrect parameters\"}");
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return  getResponse(responseCode, response.toString());
-    }
-
-    private Map<String, String> getResponse(int responseCode, String response){
-        Gson gson = new Gson();
-        Map<String, String> map = new HashMap<String, String>();
-        map = (Map<String, String>) gson.fromJson(response, map.getClass());
-        map.put("status", String.valueOf(responseCode));
-        return map;
     }
 
     private String buildQuery(Map<String, String> parameters) {
@@ -104,7 +66,47 @@ public class IpGeolocation {
         return query;
     }
 
-    private Map getBadRequestResponse() {
+    private Map<String, String> openConnection(String url) {
+        StringBuilder response = new StringBuilder("");
+        int responseCode = 0;
+        try {
+            URL obj = new URL(url);
+            HttpURLConnection connection = (HttpURLConnection) obj.openConnection();
+            connection.setRequestMethod("GET");
+            connection.setRequestProperty("Content-Type", "application/json");
+            responseCode = connection.getResponseCode();
+            BufferedReader reader;
+
+            if(responseCode == 200) {
+                reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+            } else {
+                reader = new BufferedReader(new InputStreamReader(connection.getErrorStream()));
+            }
+
+            String inputLine;
+            while ((inputLine = reader.readLine()) != null) {
+                response.append(inputLine);
+            }
+            reader.close();
+
+            if(response.toString().equals("")) {
+                response.append("{\"message\":\"Incorrect parameters\"}");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return  getResponse(responseCode, response.toString());
+    }
+
+    private Map<String, String> getResponse(int responseCode, String response){
+        Gson gson = new Gson();
+        Map<String, String> map = new HashMap<String, String>();
+        map = (Map<String, String>) gson.fromJson(response, map.getClass());
+        map.put("status", String.valueOf(responseCode));
+        return map;
+    }
+
+    private Map<String, String> getBadRequestResponse() {
         Map<String, String> response = new HashMap<String, String>();
         response.put("status", "404");
         response.put("message", "Incorrect paramater");
