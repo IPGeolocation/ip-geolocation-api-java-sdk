@@ -25,14 +25,14 @@ public class IPGeolocationAPI {
         return getApiResponse("/timezone", parameters);
     }
 
-    public GeolocationResult getGeolocation() {
+    public Geolocation getGeolocation() {
         Map<String, Object> apiResponse = getApiResponse("/ipgeo", null);
-        return new GeolocationResult(apiResponse);
+        return new Geolocation(apiResponse);
     }
 
-    public GeolocationResult getGeolocation(Map<String, String> parameters) {
+    public Geolocation getGeolocation(Map<String, String> parameters) {
         Map<String, Object> apiResponse = getApiResponse("/ipgeo", parameters);
-        return new GeolocationResult(apiResponse);
+        return new Geolocation(apiResponse);
     }
 
     private Map<String, Object> getApiResponse(String subUrl, Map<String, String> params) {

@@ -4,7 +4,7 @@ import com.google.gson.internal.LinkedTreeMap;
 
 import java.util.Map;
 
-public class GeolocationResult {
+public class Geolocation {
     private Integer status;
     private String message;
     private String ip;
@@ -28,10 +28,10 @@ public class GeolocationResult {
     private String connectionType;
     private String organization;
     private String geonameId;
-    private Currency currency;
-    private Timezone timezone;
+    private GeolocationCurrency currency;
+    private GeolocationTimezone timezone;
 
-    public GeolocationResult(Map<String, Object> json) {
+    Geolocation(Map<String, Object> json) {
         if(!json.get("status").equals("200")) {
             this.message = (String) json.get("message");
         } else {
@@ -58,11 +58,11 @@ public class GeolocationResult {
             this.geonameId = (String) json.get("geoname_id");
             if(json.get("currency") instanceof LinkedTreeMap) {
                 Map currencyJson = (LinkedTreeMap) json.get("currency");
-                this.currency = new Currency((String) currencyJson.get("name"), (String) currencyJson.get("code"));
+                this.currency = new GeolocationCurrency((String) currencyJson.get("name"), (String) currencyJson.get("code"));
             }
             if(json.get("time_zone") instanceof LinkedTreeMap) {
                 Map timezoneJson = (LinkedTreeMap) json.get("time_zone");
-                this.timezone = new Timezone((String) timezoneJson.get("name"), (Double) timezoneJson.get("offset"), (String) timezoneJson.get("current_time"), (Boolean) timezoneJson.get("is_dst"), (Double) timezoneJson.get("dst_savings"));
+                this.timezone = new GeolocationTimezone((String) timezoneJson.get("name"), (Double) timezoneJson.get("offset"), (String) timezoneJson.get("current_time"), (Boolean) timezoneJson.get("is_dst"), (Double) timezoneJson.get("dst_savings"));
             }
         }
         this.status = Integer.parseInt((String) json.get("status"));
@@ -124,7 +124,7 @@ public class GeolocationResult {
         return longitude;
     }
 
-    public boolean isEu() {
+    public Boolean isEu() {
         return isEu;
     }
 
@@ -160,65 +160,11 @@ public class GeolocationResult {
         return geonameId;
     }
 
-    public Currency getCurrency() {
+    public GeolocationCurrency getCurrency() {
         return currency;
     }
 
-    public Timezone getTimezone() {
+    public GeolocationTimezone getTimezone() {
         return timezone;
-    }
-}
-
-class Currency {
-    private String name;
-    private String code;
-
-    public Currency(String name, String code) {
-        this.name = name;
-        this.code = code;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getCode() {
-        return code;
-    }
-}
-
-class Timezone {
-    private String name;
-    private Double offset;
-    private String currentTime;
-    private Boolean isDST;
-    private Double dstSavings;
-
-    public Timezone(String name, Double offset, String currentTime, Boolean isDST, Double dstSavings) {
-        this.name = name;
-        this.offset = offset;
-        this.currentTime = currentTime;
-        this.isDST = isDST;
-        this.dstSavings = dstSavings;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public Double getOffset() {
-        return offset;
-    }
-
-    public String getCurrentTime() {
-        return currentTime;
-    }
-
-    public Boolean isDST() {
-        return isDST;
-    }
-
-    public Double getDstSavings() {
-        return dstSavings;
     }
 }
