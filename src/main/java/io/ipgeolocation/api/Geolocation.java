@@ -58,11 +58,11 @@ public class Geolocation {
             this.geonameId = (String) json.get("geoname_id");
             if(json.get("currency") instanceof LinkedTreeMap) {
                 Map currencyJson = (LinkedTreeMap) json.get("currency");
-                this.currency = new GeolocationCurrency((String) currencyJson.get("name"), (String) currencyJson.get("code"));
+                this.currency = new GeolocationCurrency(currencyJson);
             }
             if(json.get("time_zone") instanceof LinkedTreeMap) {
                 Map timezoneJson = (LinkedTreeMap) json.get("time_zone");
-                this.timezone = new GeolocationTimezone((String) timezoneJson.get("name"), (Double) timezoneJson.get("offset"), (String) timezoneJson.get("current_time"), (Boolean) timezoneJson.get("is_dst"), (Double) timezoneJson.get("dst_savings"));
+                this.timezone = new GeolocationTimezone(timezoneJson);
             }
         }
         this.status = Integer.parseInt((String) json.get("status"));

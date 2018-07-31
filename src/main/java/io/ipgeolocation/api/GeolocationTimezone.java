@@ -1,5 +1,7 @@
 package io.ipgeolocation.api;
 
+import java.util.Map;
+
 public class GeolocationTimezone {
     private String name;
     private Double offset;
@@ -7,12 +9,12 @@ public class GeolocationTimezone {
     private Boolean isDST;
     private Double dstSavings;
 
-    GeolocationTimezone(String name, Double offset, String currentTime, Boolean isDST, Double dstSavings) {
-        this.name = name;
-        this.offset = offset;
-        this.currentTime = currentTime;
-        this.isDST = isDST;
-        this.dstSavings = dstSavings;
+    GeolocationTimezone(Map json) {
+        this.name = (String) json.get("name");
+        this.offset = (Double) json.get("offset");
+        this.currentTime = (String) json.get("current_time");
+        this.isDST = (Boolean) json.get("is_dst");
+        this.dstSavings = (Double) json.get("dst_savings");
     }
 
     public String getName() {

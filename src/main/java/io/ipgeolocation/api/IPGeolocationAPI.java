@@ -17,12 +17,14 @@ public class IPGeolocationAPI {
         this.apiKey = apiKey;
     }
 
-    public Map<String, Object> getTimezone() {
-        return getApiResponse("/timezone", null);
+    public Timezone getTimezone() {
+        Map<String, Object> apiResponse = getApiResponse("/timezone", null);
+        return new Timezone(apiResponse);
     }
 
-    public Map<String, Object> getTimezone(Map<String, String> parameters) {
-        return getApiResponse("/timezone", parameters);
+    public Timezone getTimezone(Map<String, String> params) {
+        Map<String, Object> apiResponse = getApiResponse("/timezone", params);
+        return new Timezone(apiResponse);
     }
 
     public Geolocation getGeolocation() {
