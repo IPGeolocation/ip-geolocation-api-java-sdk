@@ -11,10 +11,10 @@ import java.util.Set;
 
 import com.google.gson.Gson;
 
-public class IpGeolocation {
+public class IPGeolocationAPI {
     private String apiKey;
 
-    public IpGeolocation(String apiKey) {
+    public IPGeolocationAPI(String apiKey) {
         this.apiKey = apiKey;
     }
 
