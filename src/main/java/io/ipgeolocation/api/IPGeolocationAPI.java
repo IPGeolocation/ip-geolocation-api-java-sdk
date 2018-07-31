@@ -18,29 +18,29 @@ public class IPGeolocationAPI {
     }
 
     public Timezone getTimezone() {
-        Map<String, Object> apiResponse = getApiResponse("/timezone", null);
+        Map<String, Object> apiResponse = getApiResponse("timezone", null);
         return new Timezone(apiResponse);
     }
 
     public Timezone getTimezone(Map<String, String> params) {
-        Map<String, Object> apiResponse = getApiResponse("/timezone", params);
+        Map<String, Object> apiResponse = getApiResponse("timezone", params);
         return new Timezone(apiResponse);
     }
 
     public Geolocation getGeolocation() {
-        Map<String, Object> apiResponse = getApiResponse("/ipgeo", null);
+        Map<String, Object> apiResponse = getApiResponse("ipgeo", null);
         return new Geolocation(apiResponse);
     }
 
     public Geolocation getGeolocation(Map<String, String> parameters) {
-        Map<String, Object> apiResponse = getApiResponse("/ipgeo", parameters);
+        Map<String, Object> apiResponse = getApiResponse("ipgeo", parameters);
         return new Geolocation(apiResponse);
     }
 
-    private Map<String, Object> getApiResponse(String subUrl, Map<String, String> params) {
+    private Map<String, Object> getApiResponse(String api, Map<String, String> params) {
         String query = buildQuery(params);
         if(query != null) {
-            return openConnection("https://api.ipgeolocation.io" + subUrl + "?" + query);
+            return openConnection("https://api.ipgeolocation.io/" + api + "?" + query);
         }
         return getBadRequestResponse();
     }
