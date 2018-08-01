@@ -7,14 +7,10 @@ import java.util.Map;
 public class Main {
     public static void main(String[] args) {
         IPGeolocationAPI api = new IPGeolocationAPI("ea91e4a4159247fdb0926feae70c2911");
-        GeolocationBulkParams geolocationBulkParams = new GeolocationBulkParams();
-        geolocationBulkParams.setFields("time_zone,languages,city,country_name");
-        String[] ips = {"1.1.1.1", "2.2.22.2", "34.1.1.3"};
-        Map<String, Object> data = new HashMap<String, Object>();
-        data.put("ips",ips);
-        List<Geolocation> l = api.getBulkGeolocation(data, geolocationBulkParams);
-        System.out.println(l.size());
-        System.out.println(l.get(2).getCity());
+        GeolocationParams geolocationParams = new GeolocationParams();
+        geolocationParams.setFields("time_zone,languages,city,country_name");
+        geolocationParams.setIps(new String[]{"1.1.1.1", "2.2.22.2", "34.1.1.3"});
+        List<Geolocation> l = api.getBulkGeolocation(geolocationParams);
         //        GeolocationParams geolocationParams = new GeolocationParams();
 //        geolocationParams.setIp("2.3.4.5");
 //        geolocationParams.setFields("time_zone,languages,city,country_name");

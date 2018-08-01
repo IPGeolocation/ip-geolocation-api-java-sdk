@@ -1,15 +1,13 @@
 package io.ipgeolocation.api;
 
 import java.io.*;
-import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.*;
 
 //import static com.google.common.base.Strings.isNullOrEmpty;
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-import com.sun.istack.internal.Nullable;
+
 
 public class IPGeolocationAPI {
     private String apiKey;
@@ -120,9 +118,14 @@ public class IPGeolocationAPI {
         return convertStringToMap(responseCode, jsonString);
     }
 
-    public List<Geolocation> getBulkGeolocation(Map<String, Object> ips,  GeolocationBulkParams params) {
+    public List<Geolocation> getBulkGeolocation(GeolocationParams params) {
+
+        Map<String, Object> data = new HashMap<String, Object>();
+        data.put("ips",params.getIps());
         Gson gson = new Gson();
-        List<Map<String, Object>> apiResponse = getBulkApiResponse(gson.toJson(ips), params);
+        ;
+
+        List<Map<String, Object>> apiResponse = getBulkApiResponse(gson.toJson(data), params);
         List<Geolocation> geolocationList = new ArrayList<Geolocation>();
         for(Map<String, Object> response : apiResponse){
             geolocationList.add(new Geolocation(response));
@@ -131,7 +134,7 @@ public class IPGeolocationAPI {
     }
 
     // Not working
-    private List<Map<String, Object>> getBulkApiResponse(String ips, GeolocationBulkParams params) {
+    private List<Map<String, Object>> getBulkApiResponse(String ips, GeolocationParams params) {
         String query = buildGeolocationBulkUrlParams(params);
         String url = "https://api.ipgeolocation.io/ipgeo-bulk" + "?" + query;
         int responseCode = 0;
@@ -180,7 +183,6 @@ public class IPGeolocationAPI {
         Map<String,Object> map = new HashMap<String,Object>();
         map = (Map<String,Object>) gson.fromJson(response, map.getClass());
         map.put("status", String.valueOf(responseCode));
-        System.out.println(map);
         return map;
     }
 
@@ -203,9 +205,8 @@ public class IPGeolocationAPI {
         return response;
     }
 
-    private String buildGeolocationBulkUrlParams(GeolocationBulkParams params) {
+    private String buildGeolocationBulkUrlParams(GeolocationParams params) {
         String urlParams = "apiKey=" + apiKey;
-
         if(params != null) {
             String param = params.getFields();
             if(!param.equals("")) {

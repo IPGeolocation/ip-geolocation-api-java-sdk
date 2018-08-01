@@ -8,7 +8,6 @@ public class GeolocationParams {
     public GeolocationParams() {
         this.ip = "";
         this.fields = "";
-        this.ips = new String[0];
     }
 
     public void setIp(String ip) {
