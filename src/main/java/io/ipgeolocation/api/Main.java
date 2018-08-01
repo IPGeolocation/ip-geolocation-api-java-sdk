@@ -1,6 +1,7 @@
 package io.ipgeolocation.api;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Main {
@@ -11,7 +12,9 @@ public class Main {
         String[] ips = {"1.1.1.1", "2.2.22.2", "34.1.1.3"};
         Map<String, Object> data = new HashMap<String, Object>();
         data.put("ips",ips);
-        api.getBulkGeolocation(data, geolocationBulkParams);
+        List<Geolocation> l = api.getBulkGeolocation(data, geolocationBulkParams);
+        System.out.println(l.size());
+        System.out.println(l.get(2).getCity());
         //        GeolocationParams geolocationParams = new GeolocationParams();
 //        geolocationParams.setIp("2.3.4.5");
 //        geolocationParams.setFields("time_zone,languages,city,country_name");

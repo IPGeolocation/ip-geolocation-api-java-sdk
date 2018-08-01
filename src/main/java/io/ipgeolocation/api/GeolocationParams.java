@@ -3,10 +3,12 @@ package io.ipgeolocation.api;
 public class GeolocationParams {
     private String ip;
     private String fields;
+    private String[] ips;
 
     public GeolocationParams() {
         this.ip = "";
         this.fields = "";
+        this.ips = new String[0];
     }
 
     public void setIp(String ip) {
@@ -14,7 +16,7 @@ public class GeolocationParams {
     }
 
     public String getIp() {
-        return ip;
+        return this.ip;
     }
 
     public void setFields(String fields) {
@@ -22,6 +24,14 @@ public class GeolocationParams {
     }
 
     public String getFields() {
-        return fields;
+        return this.fields;
+    }
+
+    public void setIps(String[] ips) {
+        this.ips = ips;
+    }
+
+    public String[] getIps() {
+        return this.ips;
     }
 }
