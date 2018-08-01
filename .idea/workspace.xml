@@ -2,9 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="85d84762-ec54-4974-8ea2-030995669968" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/io/ipgeolocation/api/GeolocationBulkParams.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/io/ipgeolocation/api/GeolocationParams.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/io/ipgeolocation/api/GeolocationParams.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/io/ipgeolocation/api/IPGeolocationAPI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/io/ipgeolocation/api/IPGeolocationAPI.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/target/" />
@@ -52,15 +49,15 @@
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="dummy" value="14" />
-          <entry key="java" value="8472" />
+          <entry key="dummy" value="19" />
+          <entry key="java" value="8625" />
           <entry key="xml" value="11" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="JAVA" value="8472" />
-          <entry key="PLAIN_TEXT" value="14" />
+          <entry key="JAVA" value="8625" />
+          <entry key="PLAIN_TEXT" value="19" />
           <entry key="XML" value="11" />
         </counts>
       </usages-collector>
@@ -77,20 +74,15 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/io/ipgeolocation/api/IPGeolocationAPI.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="327">
-              <caret line="166" column="5" selection-start-line="166" selection-start-column="5" selection-end-line="166" selection-end-column="5" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/main/java/io/ipgeolocation/api/GeolocationParams.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="170">
-              <caret line="10" column="33" selection-start-line="10" selection-start-column="33" selection-end-line="10" selection-end-column="33" />
+            <state relative-caret-position="187">
+              <caret line="70" column="70" selection-start-line="70" selection-start-column="70" selection-end-line="70" selection-end-column="70" />
+              <folding>
+                <element signature="e#4241#4259#0" expanded="true" />
+                <element signature="e#3855#3868#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -128,8 +120,8 @@
         <option value="$PROJECT_DIR$/src/main/java/io/ipgeolocation/api/Strings.java" />
         <option value="$PROJECT_DIR$/pom.xml" />
         <option value="$PROJECT_DIR$/src/main/java/io/ipgeolocation/api/Main.java" />
-        <option value="$PROJECT_DIR$/src/main/java/io/ipgeolocation/api/IPGeolocationAPI.java" />
         <option value="$PROJECT_DIR$/src/main/java/io/ipgeolocation/api/GeolocationParams.java" />
+        <option value="$PROJECT_DIR$/src/main/java/io/ipgeolocation/api/IPGeolocationAPI.java" />
       </list>
     </option>
   </component>
@@ -255,18 +247,18 @@
       <workItem from="1533095739470" duration="167000" />
       <workItem from="1533116397341" duration="5028000" />
       <workItem from="1533122900305" duration="2497000" />
-      <workItem from="1533129928565" duration="636000" />
+      <workItem from="1533129928565" duration="2062000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="30291000" />
+    <option name="totallyTimeSpent" value="31717000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="57" y="25" width="1309" height="743" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.2256532" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.2256532" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Designer" order="2" />
       <window_info id="UI Designer" order="3" />
@@ -436,17 +428,21 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/io/ipgeolocation/api/IPGeolocationAPI.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="327">
-          <caret line="166" column="5" selection-start-line="166" selection-start-column="5" selection-end-line="166" selection-end-column="5" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/io/ipgeolocation/api/GeolocationParams.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="170">
           <caret line="10" column="33" selection-start-line="10" selection-start-column="33" selection-end-line="10" selection-end-column="33" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/io/ipgeolocation/api/IPGeolocationAPI.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="187">
+          <caret line="70" column="70" selection-start-line="70" selection-start-column="70" selection-end-line="70" selection-end-column="70" />
+          <folding>
+            <element signature="e#4241#4259#0" expanded="true" />
+            <element signature="e#3855#3868#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
