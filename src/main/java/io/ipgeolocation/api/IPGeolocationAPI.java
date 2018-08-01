@@ -22,30 +22,80 @@ public class IPGeolocationAPI {
     }
 
     public Timezone getTimezone() {
-        Map<String, Object> apiResponse = getApiResponse("timezone", null);
+        Map<String, Object> apiResponse = getTimezoneResponse(null);
         return new Timezone(apiResponse);
     }
 
-    public Timezone getTimezone(Map<String, String> params) {
-        Map<String, Object> apiResponse = getApiResponse("timezone", params);
+    public Timezone getTimezone(TimezoneParams params) {
+        Map<String, Object> apiResponse = getTimezoneResponse(params);
         return new Timezone(apiResponse);
+    }
+
+    private Map<String, Object> getTimezoneResponse(TimezoneParams params) {
+        String urlParams = buildTimezoneUrlParams(params);
+        return getApiResponse("timezone", urlParams);
+    }
+
+    private String buildTimezoneUrlParams(TimezoneParams params) {
+        String urlParams = "apiKey=" + apiKey;
+
+        if(params != null) {
+            String param = params.getIp();
+            if(!param.equals("")) {
+                urlParams = urlParams + "&ip=" + param;
+            }
+
+            param = params.getTimezone();
+            if(!param.equals("")) {
+                urlParams = urlParams + "&tz=" + param;
+            }
+
+            Double latitude = params.getLatitude();
+            Double longitude = params.getLongitude();
+            if(latitude != 1000.0 && longitude != 1000.0) {
+                urlParams = urlParams + "&lat=" + latitude + "&long=" + longitude;
+            }
+        }
+        return urlParams;
     }
 
     public Geolocation getGeolocation() {
-        Map<String, Object> apiResponse = getApiResponse("ipgeo", null);
+        Map<String, Object> apiResponse = getGeolocationResponse(null);
         return new Geolocation(apiResponse);
     }
 
-    public Geolocation getGeolocation(Map<String, String> params) {
-        Map<String, Object> apiResponse = getApiResponse("ipgeo", params);
+    public Geolocation getGeolocation(GeolocationParams params) {
+        Map<String, Object> apiResponse = getGeolocationResponse(params);
         return new Geolocation(apiResponse);
     }
 
-    private Map<String, Object> getApiResponse(String api, Map<String, String> params) {
-        String query = buildQuery(params);
-        String url = "https://api.ipgeolocation.io/" + api + "?" + query;
+    private Map<String, Object> getGeolocationResponse(GeolocationParams params) {
+        String urlParams = buildGeolocationUrlParams(params);
+        return getApiResponse("ipgeo", urlParams);
+    }
+
+    private String buildGeolocationUrlParams(GeolocationParams params) {
+        String urlParams = "apiKey=" + apiKey;
+
+        if(params != null) {
+            String param = params.getIp();
+            if(!param.equals("")) {
+                urlParams = urlParams + "&ip=" + param;
+            }
+
+            param = params.getFields();
+            if(!param.equals("")) {
+                urlParams = urlParams + "&fields=" + param;
+            }
+        }
+        return urlParams;
+    }
+
+    private Map<String, Object> getApiResponse(String api, String params) {
+        String url = "https://api.ipgeolocation.io/" + api + "?" + params;
         int responseCode = 0;
         String jsonString = null;
+
         try {
             URL obj = new URL(url);
             HttpURLConnection connection = (HttpURLConnection) obj.openConnection();
