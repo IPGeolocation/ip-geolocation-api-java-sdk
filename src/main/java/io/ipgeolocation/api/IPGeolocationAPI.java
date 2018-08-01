@@ -166,18 +166,6 @@ public class IPGeolocationAPI {
         return convertStringToListMap(responseCode, jsonString);
     }
 
-    private String buildQuery(Map<String, Object> params) {
-        String query = "apiKey=" + apiKey;
-
-        if(params != null && params.size() > 0) {
-            Set<String> paramNames = params.keySet();
-            for(String paramName: paramNames) {
-                query = query.concat("&" + paramName + "=" + params.get(paramName));
-            }
-        }
-        return query;
-    }
-
     private Map<String, Object> convertStringToMap(int responseCode, String response){
         Gson gson = new Gson();
         Map<String,Object> map = new HashMap<String,Object>();
