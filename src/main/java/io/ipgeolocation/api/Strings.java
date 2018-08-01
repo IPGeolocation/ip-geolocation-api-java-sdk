@@ -8,4 +8,8 @@ public class Strings {
         }
         return s;
     }
+
+    public static Boolean isNullOrEmpty(String string) {
+        return string == null || string.equals("");
+    }
 }

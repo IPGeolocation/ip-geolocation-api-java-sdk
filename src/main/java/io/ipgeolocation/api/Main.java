@@ -12,7 +12,6 @@ public class Main {
 //        System.out.println(timezone.getDateTimeWti());
 //        System.out.println(timezone.getTime24());
 //        System.out.println(timezone.getTimezoneGeo().getCity());
-
         Geolocation geolocation = api.getGeolocation(geolocationParams);
         System.out.println(geolocation.getTimezone().getName());
         System.out.println(geolocation.getIp());
