@@ -120,7 +120,7 @@ public class IPGeolocationAPI {
         return convertStringToMap(responseCode, jsonString);
     }
 
-    public List<Geolocation> getBulkGeolocation(Map<String, Object> ips,  Map<String, Object> params) {
+    public List<Geolocation> getBulkGeolocation(Map<String, Object> ips,  GeolocationBulkParams params) {
         Gson gson = new Gson();
         List<Map<String, Object>> apiResponse = getBulkApiResponse(gson.toJson(ips), params);
         List<Geolocation> geolocationList = new ArrayList<Geolocation>();
@@ -131,8 +131,8 @@ public class IPGeolocationAPI {
     }
 
     // Not working
-    private List<Map<String, Object>> getBulkApiResponse(String ips, Map<String, Object> params) {
-        String query = buildQuery(params);
+    private List<Map<String, Object>> getBulkApiResponse(String ips, GeolocationBulkParams params) {
+        String query = buildGeolocationBulkUrlParams(params);
         String url = "https://api.ipgeolocation.io/ipgeo-bulk" + "?" + query;
         int responseCode = 0;
         String jsonString = null;
@@ -201,5 +201,17 @@ public class IPGeolocationAPI {
         response.put("status", "404");
         response.put("message", "Incorrect parameters");
         return response;
+    }
+
+    private String buildGeolocationBulkUrlParams(GeolocationBulkParams params) {
+        String urlParams = "apiKey=" + apiKey;
+
+        if(params != null) {
+            String param = params.getFields();
+            if(!param.equals("")) {
+                urlParams = urlParams + "&fields=" + param;
+            }
+        }
+        return urlParams;
     }
 }
