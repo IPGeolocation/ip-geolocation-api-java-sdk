@@ -1,14 +1,15 @@
 package io.ipgeolocation.api;
 
+import java.io.*;
+import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Scanner;
-import java.util.Set;
+import java.util.*;
 
-import static com.google.common.base.Strings.isNullOrEmpty;
+//import static com.google.common.base.Strings.isNullOrEmpty;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.sun.istack.internal.Nullable;
 
 public class IPGeolocationAPI {
     private String apiKey;
@@ -26,7 +27,7 @@ public class IPGeolocationAPI {
         return new Timezone(apiResponse);
     }
 
-    public Timezone getTimezone(Map<String, String> params) {
+    public Timezone getTimezone(Map<String, Object> params) {
         Map<String, Object> apiResponse = getApiResponse("timezone", params);
         return new Timezone(apiResponse);
     }
@@ -36,12 +37,12 @@ public class IPGeolocationAPI {
         return new Geolocation(apiResponse);
     }
 
-    public Geolocation getGeolocation(Map<String, String> params) {
+    public Geolocation getGeolocation(Map<String, Object> params) {
         Map<String, Object> apiResponse = getApiResponse("ipgeo", params);
         return new Geolocation(apiResponse);
     }
 
-    private Map<String, Object> getApiResponse(String api, Map<String, String> params) {
+    private Map<String, Object> getApiResponse(String api, Map<String, Object> params) {
         String query = buildQuery(params);
         String url = "https://api.ipgeolocation.io/" + api + "?" + query;
         int responseCode = 0;
@@ -58,9 +59,9 @@ public class IPGeolocationAPI {
             } else {
                 jsonString = new Scanner(connection.getErrorStream()).useDelimiter("\\A").next();
             }
-
+            System.out.print(jsonString);
             if(isNullOrEmpty(jsonString)) {
-                jsonString = "{\"status\":\"403\",\"message\":\"Incorrect parameters\"}";
+                jsonString = "{\"message\":\"Incorrect parameters\"}";
             }
         } catch (Exception e) {
             System.err.println("Please check your internet connection:");
@@ -69,20 +70,18 @@ public class IPGeolocationAPI {
         return convertStringToMap(responseCode, jsonString);
     }
 
-    public Geolocation getBulkGeolocation(String[] ips) {
-//        Map<String, Object> apiResponse = getBulkApiResponse([""], null);
-//        return new Geolocation(apiResponse);
-        return null;
-    }
-
-    public Geolocation getBulkGeolocation(String[] ips, Map<String, String> params) {
-//        Map<String, Object> apiResponse = getBulkApiResponse([""], params);
-//        return new Geolocation(apiResponse);
-        return null;
+    public List<Geolocation> getBulkGeolocation(Map<String, Object> ips,  Map<String, Object> params) {
+        Gson gson = new Gson();
+        List<Map<String, Object>> apiResponse = getBulkApiResponse(gson.toJson(ips), params);
+        List<Geolocation> geolocationList = new ArrayList<Geolocation>();
+        for(Map<String, Object> response : apiResponse){
+            geolocationList.add(new Geolocation(response));
+        }
+        return geolocationList;
     }
 
     // Not working
-    private Map<String, Object> getBulkApiResponse(String[] ips, Map<String, String> params) {
+    private List<Map<String, Object>> getBulkApiResponse(String ips, Map<String, Object> params) {
         String query = buildQuery(params);
         String url = "https://api.ipgeolocation.io/ipgeo-bulk" + "?" + query;
         int responseCode = 0;
@@ -92,26 +91,29 @@ public class IPGeolocationAPI {
             HttpURLConnection connection = (HttpURLConnection) obj.openConnection();
             connection.setRequestMethod("POST");
             connection.setRequestProperty("Content-Type", "application/json");
-
+            // Send post request
+            connection.setDoOutput(true);
+            DataOutputStream wr = new DataOutputStream(connection.getOutputStream());
+            wr.writeBytes(ips);
+            wr.flush();
+            wr.close();
             responseCode = connection.getResponseCode();
-
             if(responseCode == 200) {
                 jsonString = new Scanner(connection.getInputStream()).useDelimiter("\\A").next();
             } else {
                 jsonString = new Scanner(connection.getErrorStream()).useDelimiter("\\A").next();
             }
-
             if(isNullOrEmpty(jsonString)) {
-                jsonString = "{\"status\":\"403\",\"message\":\"Incorrect parameters\"}";
+                jsonString = "[{\"message\":\"Incorrect parameters\"}]";
             }
         } catch (Exception e) {
             System.err.println("Please check your internet connection:");
             e.printStackTrace();
         }
-        return convertStringToMap(responseCode, jsonString);
+        return convertStringToListMap(responseCode, jsonString);
     }
 
-    private String buildQuery(Map<String, String> params) {
+    private String buildQuery(Map<String, Object> params) {
         String query = "apiKey=" + apiKey;
 
         if(params != null && params.size() > 0) {
@@ -123,13 +125,24 @@ public class IPGeolocationAPI {
         return query;
     }
 
-    private Map<String, Object> convertStringToMap(int responseCode, String response) {
+    private Map<String, Object> convertStringToMap(int responseCode, String response){
         Gson gson = new Gson();
-        Map<String, Object> map = new HashMap<String, Object>();
-
-        map = (HashMap<String, Object>) gson.fromJson(response, map.getClass());
+        Map<String,Object> map = new HashMap<String,Object>();
+        map = (Map<String,Object>) gson.fromJson(response, map.getClass());
         map.put("status", String.valueOf(responseCode));
+        System.out.println(map);
         return map;
+    }
+
+    private List<Map<String, Object>>  convertStringToListMap(int responseCode, String response) {
+        Gson gson = new Gson();
+        List<Map<String, Object>> finalResult = new ArrayList<Map<String, Object>>();
+        List<Map<String, Object>> result = (List<Map<String, Object>>) gson.fromJson(response, List.class);
+        for(Map<String, Object> map: result){
+            map.put("status", String.valueOf(responseCode));
+            finalResult.add(map);
+        }
+        return finalResult;
     }
 
     private Map<String, Object> getBadRequestResponse() {
@@ -138,5 +151,9 @@ public class IPGeolocationAPI {
         response.put("status", "404");
         response.put("message", "Incorrect parameters");
         return response;
+    }
+
+    private Boolean isNullOrEmpty(@Nullable String string) {
+        return string == null || string.equals("");
     }
 }
