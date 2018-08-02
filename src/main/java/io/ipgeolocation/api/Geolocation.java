@@ -32,7 +32,8 @@ public class Geolocation {
     private GeolocationTimezone timezone;
 
     Geolocation(Map<String, Object> json) {
-        if(!json.get("status").equals("200")) {
+        this.status = Integer.parseInt((String) json.get("status"));
+        if(this.status != 200) {
             this.message = (String) json.get("message");
         } else {
             this.ip = (String) json.get("ip");
@@ -65,7 +66,6 @@ public class Geolocation {
                 this.timezone = new GeolocationTimezone(timezoneJson);
             }
         }
-        this.status = Integer.parseInt((String) json.get("status"));
     }
 
     public int getStatus() {
