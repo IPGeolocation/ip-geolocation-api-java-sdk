@@ -111,7 +111,7 @@ public class Timezone {
         return yearAbbr;
     }
 
-    public Boolean getDst() {
+    public Boolean isDst() {
         return isDst;
     }
 
