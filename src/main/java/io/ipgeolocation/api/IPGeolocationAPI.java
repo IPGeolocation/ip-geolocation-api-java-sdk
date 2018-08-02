@@ -183,4 +183,8 @@ public class IPGeolocationAPI {
         }
         return finalResult;
     }
+
+    public String getApiKey() {
+        return this.apiKey;
+    }
 }
