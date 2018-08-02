@@ -20,6 +20,38 @@ public class IPGeolocationAPI {
         }
     }
 
+    public Geolocation getGeolocation() {
+        Map<String, Object> apiResponse = getGeolocationResponse(null);
+        return new Geolocation(apiResponse);
+    }
+
+    public Geolocation getGeolocation(GeolocationParams params) {
+        Map<String, Object> apiResponse = getGeolocationResponse(params);
+        return new Geolocation(apiResponse);
+    }
+
+    private Map<String, Object> getGeolocationResponse(GeolocationParams params) {
+        String urlParams = buildGeolocationUrlParams(params);
+        return getApiResponse("ipgeo", urlParams);
+    }
+
+    private String buildGeolocationUrlParams(GeolocationParams params) {
+        String urlParams = "apiKey=" + apiKey;
+
+        if(params != null) {
+            String param = params.getIp();
+            if(!param.equals("")) {
+                urlParams = urlParams + "&ip=" + param;
+            }
+
+            param = params.getFields();
+            if(!param.equals("")) {
+                urlParams = urlParams + "&fields=" + param;
+            }
+        }
+        return urlParams;
+    }
+
     public Timezone getTimezone() {
         Map<String, Object> apiResponse = getTimezoneResponse(null);
         return new Timezone(apiResponse);
@@ -51,21 +83,6 @@ public class IPGeolocationAPI {
             }
         }
         return urlParams;
-    }
-
-    public Geolocation getGeolocation() {
-        Map<String, Object> apiResponse = getGeolocationResponse(null);
-        return new Geolocation(apiResponse);
-    }
-
-    public Geolocation getGeolocation(GeolocationParams params) {
-        Map<String, Object> apiResponse = getGeolocationResponse(params);
-        return new Geolocation(apiResponse);
-    }
-
-    private Map<String, Object> getGeolocationResponse(GeolocationParams params) {
-        String urlParams = buildGeolocationUrlParams(params);
-        return getApiResponse("ipgeo", urlParams);
     }
 
     private Map<String, Object> getApiResponse(String api, String urlParams) {
@@ -146,23 +163,6 @@ public class IPGeolocationAPI {
     private Map<String, Object> getTimezoneResponse(TimezoneParams params) {
         String urlParams = buildTimezoneUrlParams(params);
         return getApiResponse("timezone", urlParams);
-    }
-
-    private String buildGeolocationUrlParams(GeolocationParams params) {
-        String urlParams = "apiKey=" + apiKey;
-
-        if(params != null) {
-            String param = params.getIp();
-            if(!param.equals("")) {
-                urlParams = urlParams + "&ip=" + param;
-            }
-
-            param = params.getFields();
-            if(!param.equals("")) {
-                urlParams = urlParams + "&fields=" + param;
-            }
-        }
-        return urlParams;
     }
 
     private Map<String, Object> convertStringToMap(int responseCode, String response){

@@ -27,8 +27,12 @@ public class GeolocationParams {
         return this.fields;
     }
 
-    public void setIps(String[] ips) {
-        this.ips = ips;
+    public void setIps(String[] ips) throws IllegalArgumentException {
+        if(ips.length > 50) {
+            throw new IllegalArgumentException("Max. number of IP addresses cannot be more than 50.");
+        } else {
+            this.ips = ips;
+        }
     }
 
     public String[] getIps() {
