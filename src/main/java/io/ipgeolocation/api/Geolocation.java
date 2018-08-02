@@ -15,6 +15,7 @@ public class Geolocation {
     private String countryName;
     private String countryCapital;
     private String stateProvince;
+    private String district;
     private String city;
     private String zipcode;
     private String latitude;
@@ -44,6 +45,7 @@ public class Geolocation {
             this.countryName = (String) json.get("country_name");
             this.countryCapital = (String) json.get("country_capital");
             this.stateProvince = (String) json.get("state_province");
+            this.district = (String) json.get("district");
             this.city = (String) json.get("city");
             this.zipcode = (String) json.get("zipcode");
             this.latitude = (String) json.get("latitude");
@@ -106,6 +108,10 @@ public class Geolocation {
 
     public String getStateProvince() {
         return stateProvince;
+    }
+
+    public String getDistrict() {
+        return district;
     }
 
     public String getCity() {
