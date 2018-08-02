@@ -34,8 +34,9 @@ public class Geolocation {
 
     Geolocation(Map<String, Object> json) {
         this.status = Integer.parseInt((String) json.get("status"));
-        if(this.status != 200) {
-            this.message = (String) json.get("message");
+        String message = (String) json.get("message");
+        if(this.status != 200 || message != null) {
+            this.message = message;
         } else {
             this.ip = (String) json.get("ip");
             this.continentCode = (String) json.get("continent_code");

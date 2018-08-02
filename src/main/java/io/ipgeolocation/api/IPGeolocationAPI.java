@@ -102,9 +102,8 @@ public class IPGeolocationAPI {
             } else {
                 jsonString = new Scanner(connection.getErrorStream()).useDelimiter("\\A").next();
             }
-            System.out.print(jsonString);
             if(Strings.isNullOrEmpty(jsonString)) {
-                jsonString = "{\"message\":\"Incorrect parameters\"}";
+                jsonString = "{\"status\":404,\"message\":\"Incorrect parameters\"}";
             }
         } catch (Exception e) {
             System.err.println("Something went wrong. Please check your internet connection:");
@@ -151,7 +150,7 @@ public class IPGeolocationAPI {
             }
 
             if(Strings.isNullOrEmpty(jsonString)) {
-                jsonString = "[{\"message\":\"Incorrect parameters\"}]";
+                jsonString = "[{\"status\":404,\"message\":\"Incorrect parameters\"}]";
             }
         } catch (Exception e) {
             System.err.println("Something went wrong. Please check your internet connection:");
