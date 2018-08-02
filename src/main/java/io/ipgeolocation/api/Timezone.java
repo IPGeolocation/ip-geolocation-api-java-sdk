@@ -25,8 +25,11 @@ public class Timezone {
     private TimezoneGeo timezoneGeo;
 
     Timezone(Map<String, Object> json) {
-        if(!json.get("status").equals("200")) {
-            this.message = (String) json.get("message");
+        this.status = Integer.parseInt((String) json.get("status"));
+        String message = (String) json.get("message");
+
+        if(this.status != 200 || message != null) {
+            this.message = message;
         } else {
             this.timezone = (String) json.get("timezone");
             this.timezoneOffset = (Double) json.get("timezone_offset");
@@ -48,7 +51,6 @@ public class Timezone {
                 this.timezoneGeo = new TimezoneGeo(geoJson);
             }
         }
-        this.status = Integer.parseInt((String) json.get("status"));
     }
 
     public Integer getStatus() {
