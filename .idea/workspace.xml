@@ -2,8 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="85d84762-ec54-4974-8ea2-030995669968" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/src/main/java/io/ipgeolocation/api/Geolocation.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/io/ipgeolocation/api/Geolocation.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/io/ipgeolocation/api/Timezone.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/io/ipgeolocation/api/Timezone.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/io/ipgeolocation/api/IPGeolocationAPI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/io/ipgeolocation/api/IPGeolocationAPI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/io/ipgeolocation/api/Geolocation.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/io/ipgeolocation/api/Geolocation.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/io/ipgeolocation/api/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/io/ipgeolocation/api/Main.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/io/ipgeolocation/api/Timezone.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/io/ipgeolocation/api/Timezone.class" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/target/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -22,22 +25,22 @@
     <session id="1404165143">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="6" />
+          <entry key="project.closed" value="7" />
           <entry key="project.open.time.0" value="2" />
           <entry key="project.open.time.1" value="1" />
           <entry key="project.open.time.15" value="1" />
-          <entry key="project.open.time.16" value="1" />
+          <entry key="project.open.time.16" value="2" />
           <entry key="project.open.time.17" value="1" />
           <entry key="project.open.time.2" value="1" />
           <entry key="project.open.time.21" value="1" />
-          <entry key="project.opened" value="8" />
+          <entry key="project.opened" value="9" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
           <entry key="class" value="2" />
           <entry key="iml" value="1" />
-          <entry key="java" value="81" />
+          <entry key="java" value="82" />
           <entry key="xml" value="3" />
         </counts>
       </usages-collector>
@@ -45,20 +48,20 @@
         <counts>
           <entry key="CLASS" value="2" />
           <entry key="IDEA_MODULE" value="1" />
-          <entry key="JAVA" value="81" />
+          <entry key="JAVA" value="82" />
           <entry key="XML" value="3" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="dummy" value="19" />
-          <entry key="java" value="9950" />
+          <entry key="java" value="9959" />
           <entry key="xml" value="11" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="JAVA" value="9950" />
+          <entry key="JAVA" value="9959" />
           <entry key="PLAIN_TEXT" value="19" />
           <entry key="XML" value="11" />
         </counts>
@@ -66,45 +69,16 @@
     </session>
   </component>
   <component name="FileEditorManager">
-    <leaf>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/io/ipgeolocation/api/Main.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="68">
-              <caret line="45" column="60" selection-start-line="45" selection-start-column="60" selection-end-line="45" selection-end-column="60" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/io/ipgeolocation/api/Timezone.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="272">
-              <caret line="31" column="34" selection-start-line="31" selection-start-column="34" selection-end-line="31" selection-end-column="34" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/main/java/io/ipgeolocation/api/Geolocation.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="323">
-              <caret line="37" column="8" selection-start-line="37" selection-start-column="8" selection-end-line="37" selection-end-column="8" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/io/ipgeolocation/api/IPGeolocationAPI.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="306">
-              <caret line="173" lean-forward="true" selection-start-line="173" selection-end-line="173" />
+            <state relative-caret-position="51">
+              <caret line="163" column="58" selection-start-line="163" selection-start-column="58" selection-end-line="163" selection-end-column="58" />
+              <folding>
+                <element signature="e#6333#6348#0" expanded="true" />
+                <element signature="e#6703#6724#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -141,10 +115,10 @@
         <option value="$PROJECT_DIR$/src/main/java/io/ipgeolocation/api/TimezoneParams.java" />
         <option value="$PROJECT_DIR$/src/main/java/io/ipgeolocation/api/GeolocationParams.java" />
         <option value="$PROJECT_DIR$/src/main/java/io/ipgeolocation/api/TimezoneGeo.java" />
-        <option value="$PROJECT_DIR$/src/main/java/io/ipgeolocation/api/IPGeolocationAPI.java" />
-        <option value="$PROJECT_DIR$/src/main/java/io/ipgeolocation/api/Main.java" />
         <option value="$PROJECT_DIR$/src/main/java/io/ipgeolocation/api/Timezone.java" />
         <option value="$PROJECT_DIR$/src/main/java/io/ipgeolocation/api/Geolocation.java" />
+        <option value="$PROJECT_DIR$/src/main/java/io/ipgeolocation/api/Main.java" />
+        <option value="$PROJECT_DIR$/src/main/java/io/ipgeolocation/api/IPGeolocationAPI.java" />
       </list>
     </option>
   </component>
@@ -173,8 +147,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="PackagesPane" />
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -212,6 +184,8 @@
           <select />
         </subPane>
       </pane>
+      <pane id="PackagesPane" />
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -271,25 +245,26 @@
       <workItem from="1533116397341" duration="5028000" />
       <workItem from="1533122900305" duration="2497000" />
       <workItem from="1533129928565" duration="4335000" />
-      <workItem from="1533200812213" duration="16354000" />
+      <workItem from="1533200812213" duration="18280000" />
+      <workItem from="1533271194978" duration="1646000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="50344000" />
+    <option name="totallyTimeSpent" value="53916000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="57" y="25" width="1309" height="743" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.22961204" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.23357086" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Designer" order="2" />
       <window_info id="UI Designer" order="3" />
       <window_info id="Favorites" order="4" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.38336053" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49881235" weight="0.38336053" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -355,10 +330,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="255">
           <caret line="29" column="37" selection-start-line="29" selection-start-column="37" selection-end-line="29" selection-end-column="68" />
-          <folding>
-            <element signature="e#879#880#0" expanded="true" />
-            <element signature="e#910#911#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -366,10 +337,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="238">
           <caret line="17" column="19" selection-start-line="17" selection-start-column="19" selection-end-line="17" selection-end-column="19" />
-          <folding>
-            <element signature="e#348#349#0" expanded="true" />
-            <element signature="e#383#384#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -394,24 +361,20 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/io/ipgeolocation/api/IPGeolocationAPI.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="306">
-          <caret line="173" lean-forward="true" selection-start-line="173" selection-end-line="173" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/io/ipgeolocation/api/Main.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="68">
-          <caret line="45" column="60" selection-start-line="45" selection-start-column="60" selection-end-line="45" selection-end-column="60" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/io/ipgeolocation/api/GeolocationCurrency.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="68">
           <caret line="4" column="13" selection-start-line="4" selection-start-column="13" selection-end-line="4" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/io/ipgeolocation/api/Geolocation.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-391">
+          <caret line="37" lean-forward="true" selection-start-line="37" selection-end-line="37" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -425,12 +388,20 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/io/ipgeolocation/api/Geolocation.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/io/ipgeolocation/api/Main.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="323">
-          <caret line="37" column="8" selection-start-line="37" selection-start-column="8" selection-end-line="37" selection-end-column="8" />
+        <state relative-caret-position="527">
+          <caret line="63" column="31" selection-start-line="63" selection-start-column="31" selection-end-line="63" selection-end-column="31" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/io/ipgeolocation/api/IPGeolocationAPI.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="51">
+          <caret line="163" column="58" selection-start-line="163" selection-start-column="58" selection-end-line="163" selection-end-column="58" />
           <folding>
-            <element signature="imports" expanded="true" />
+            <element signature="e#6333#6348#0" expanded="true" />
+            <element signature="e#6703#6724#0" expanded="true" />
           </folding>
         </state>
       </provider>
