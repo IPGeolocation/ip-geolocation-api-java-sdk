@@ -156,6 +156,7 @@ public class IPGeolocationAPI {
             System.err.println("Something went wrong. Please check your internet connection:");
             e.printStackTrace();
         }
+
         return convertStringToListMap(responseCode, jsonString);
     }
 
@@ -175,7 +176,13 @@ public class IPGeolocationAPI {
     private List<Map<String, Object>> convertStringToListMap(int responseCode, String response) {
         Gson gson = new Gson();
         List<Map<String, Object>> finalResult = new ArrayList<Map<String, Object>>();
-        List<Map<String, Object>> result = (List<Map<String, Object>>) gson.fromJson(response, List.class);
+        List<Map<String, Object>> result;
+        if(responseCode != 200){
+            response = "["+response+"]";
+            result = (List<Map<String, Object>>) gson.fromJson(response, List.class);
+        }else {
+            result = (List<Map<String, Object>>) gson.fromJson(response, List.class);
+        }
         for(Map<String, Object> map: result){
             map.put("status", String.valueOf(responseCode));
             finalResult.add(map);
