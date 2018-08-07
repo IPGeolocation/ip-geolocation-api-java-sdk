@@ -99,7 +99,7 @@ if(geolocation.getStatus() == 200) {
 }
 ```
 
-## Bulk Geolocations Lookup
+### Bulk Geolocations Lookup
 ```java
 // Query geolocations for multiple IP addresses and all fields
 String[] ips = new String[]{"1.1.1.1", "2.2.2.2", "3.3.3.3"};
