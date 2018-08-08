@@ -35,7 +35,15 @@ Add the following dependency in ‘pom.xml’ file to use the IP Geolocation API
 ### Gradle
 Add the following dependency in ‘build.gradle’ file to use the IP Geolocation API Java SDK.
 ```gradle
-compile(group: 'io.ipgeolocation', name: 'ipgeolocation', version: '1.0')
+repositories {
+    ...
+    maven { url "http://dl.bintray.com/jfreaks1/io.ipgeolocation" }
+}
+
+dependencies {
+    compile(group: 'io.ipgeolocation', name: 'ipgeolocation', version: '1.0')
+    ...
+}
 ```
 
 ### Ivy
