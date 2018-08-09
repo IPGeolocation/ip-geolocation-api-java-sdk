@@ -5,9 +5,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.*;
 
-//import static com.google.common.base.Strings.isNullOrEmpty;
 import com.google.gson.Gson;
-
 
 public class IPGeolocationAPI {
     private String apiKey;
@@ -168,7 +166,6 @@ public class IPGeolocationAPI {
     private Map<String, Object> convertStringToMap(int responseCode, String response){
         Gson gson = new Gson();
         Map<String,Object> map = new HashMap<String,Object>();
-
         map = (Map<String,Object>) gson.fromJson(response, map.getClass());
         map.put("status", String.valueOf(responseCode));
         return map;
@@ -178,7 +175,6 @@ public class IPGeolocationAPI {
         Gson gson = new Gson();
         List<Map<String, Object>> finalResult = new ArrayList<Map<String, Object>>();
         List<Map<String, Object>> result;
-
         if(responseCode != 200){
             response = "[" + response + "]";
             result = (List<Map<String, Object>>) gson.fromJson(response, List.class);

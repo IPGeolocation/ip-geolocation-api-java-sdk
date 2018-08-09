@@ -1,1 +1,13 @@
+<<<<<<< HEAD
 /home/developer/mavenOffical/src/main/java/io/ipgeolocation/api/IpGeoLocation.java
+=======
+/home/developer/Projects/maven/io.ipgeolocation-java/src/main/java/io/ipgeolocation/api/Strings.java
+/home/developer/Projects/maven/io.ipgeolocation-java/src/main/java/io/ipgeolocation/api/Geolocation.java
+/home/developer/Projects/maven/io.ipgeolocation-java/src/main/java/io/ipgeolocation/api/GeolocationTimezone.java
+/home/developer/Projects/maven/io.ipgeolocation-java/src/main/java/io/ipgeolocation/api/GeolocationParams.java
+/home/developer/Projects/maven/io.ipgeolocation-java/src/main/java/io/ipgeolocation/api/TimezoneGeo.java
+/home/developer/Projects/maven/io.ipgeolocation-java/src/main/java/io/ipgeolocation/api/Timezone.java
+/home/developer/Projects/maven/io.ipgeolocation-java/src/main/java/io/ipgeolocation/api/TimezoneParams.java
+/home/developer/Projects/maven/io.ipgeolocation-java/src/main/java/io/ipgeolocation/api/IPGeolocationAPI.java
+/home/developer/Projects/maven/io.ipgeolocation-java/src/main/java/io/ipgeolocation/api/GeolocationCurrency.java
+>>>>>>> 6395e36f2bb8b02aaaceefa6f260b7ea763f1269
