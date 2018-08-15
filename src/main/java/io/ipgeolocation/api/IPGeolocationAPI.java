@@ -14,7 +14,7 @@ public class IPGeolocationAPI {
         if(Strings.isNullOrEmpty(apiKey)) {
             throw new IllegalArgumentException("API key must not be null or empty");
         } else {
-            this.apiKey = apiKey;
+            this.apiKey = apiKey.trim();
         }
     }
 
