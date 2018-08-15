@@ -37,11 +37,11 @@ Add the following dependency in ‘build.gradle’ file to use the IP Geolocatio
 ```gradle
 repositories {
     ...
-    maven { url "http://dl.bintray.com/jfreaks1/io.ipgeolocation" }
+    maven { url "http://dl.bintray.com/ipgeolocation/ipgeolocation" }
 }
 
 dependencies {
-    compile(group: 'io.ipgeolocation', name: 'ipgeolocation', version: '1.0')
+    compile 'io.ipgeolocation:ipgeolocation:1.0'
     ...
 }
 ```
