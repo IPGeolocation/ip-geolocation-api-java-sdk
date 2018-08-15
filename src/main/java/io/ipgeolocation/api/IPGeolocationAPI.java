@@ -98,7 +98,10 @@ public class IPGeolocationAPI {
             if(responseCode == 200) {
                 jsonString = new Scanner(connection.getInputStream()).useDelimiter("\\A").next();
             } else {
-                jsonString = new Scanner(connection.getErrorStream()).useDelimiter("\\A").next();
+                Scanner scanner = new Scanner(connection.getErrorStream());
+                if(scanner.useDelimiter("\\A").hasNextLine()){
+                    jsonString = scanner.useDelimiter("\\A").next();
+                }
             }
             if(Strings.isNullOrEmpty(jsonString)) {
                 jsonString = "{\"status\":404,\"message\":\"Incorrect parameters\"}";
@@ -144,7 +147,10 @@ public class IPGeolocationAPI {
             if(responseCode == 200) {
                 jsonString = new Scanner(connection.getInputStream()).useDelimiter("\\A").next();
             } else {
-                jsonString = new Scanner(connection.getErrorStream()).useDelimiter("\\A").next();
+                Scanner scanner = new Scanner(connection.getErrorStream());
+                if(scanner.useDelimiter("\\A").hasNextLine()){
+                    jsonString = scanner.useDelimiter("\\A").next();
+                }
             }
 
             if(Strings.isNullOrEmpty(jsonString)) {
