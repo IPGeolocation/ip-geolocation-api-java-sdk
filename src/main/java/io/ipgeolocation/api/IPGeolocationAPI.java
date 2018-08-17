@@ -152,10 +152,10 @@ public class IPGeolocationAPI {
             if(responseCode == 200) {
                 jsonString = new Scanner(connection.getInputStream()).useDelimiter("\\A").next();
             } else {
-                 Scanner scanner = new Scanner(connection.getErrorStream());
--                if(scanner.useDelimiter("\\A").hasNextLine()){
--                    jsonString = scanner.useDelimiter("\\A").next();
--                }
+                Scanner scanner = new Scanner(connection.getErrorStream());
+                if(scanner.useDelimiter("\\A").hasNextLine()){
+                    jsonString = scanner.useDelimiter("\\A").next();
+             }
             }
 
             if(Strings.isNullOrEmpty(jsonString)) {
