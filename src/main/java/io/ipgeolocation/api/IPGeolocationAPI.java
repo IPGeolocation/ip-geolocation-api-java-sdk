@@ -104,12 +104,17 @@ public class IPGeolocationAPI {
                 }
             }
             if(Strings.isNullOrEmpty(jsonString)) {
-                jsonString = "{\"status\":404,\"message\":\"Incorrect parameters\"}";
+                jsonString = "{\"message\":\"Incorrect parameters\"}";
+                responseCode = 422;
             }
+
         } catch (Exception e) {
             System.err.println("Something went wrong. Please check your internet connection:");
+            jsonString = "{\"message\":\"Internet is not connected\"}";
+            responseCode = 422;
             e.printStackTrace();
         }
+
         return convertStringToMap(responseCode, jsonString);
     }
 
@@ -150,14 +155,16 @@ public class IPGeolocationAPI {
                 Scanner scanner = new Scanner(connection.getErrorStream());
                 if(scanner.useDelimiter("\\A").hasNextLine()){
                     jsonString = scanner.useDelimiter("\\A").next();
-                }
+             }
             }
 
             if(Strings.isNullOrEmpty(jsonString)) {
-                jsonString = "[{\"status\":404,\"message\":\"Incorrect parameters\"}]";
+                jsonString = "{\"message\":\"Incorrect parameters\"}]";
             }
         } catch (Exception e) {
             System.err.println("Something went wrong. Please check your internet connection:");
+            jsonString = "{\"message\":\"Internet is not connected\"}";
+            responseCode = 422;
             e.printStackTrace();
         }
 

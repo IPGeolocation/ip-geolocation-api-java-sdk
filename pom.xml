@@ -6,7 +6,7 @@
 
     <groupId>io.ipgeolocation</groupId>
     <artifactId>ipgeolocation</artifactId>
-    <version>1.0</version>
+    <version>1.0.2</version>
 
     <dependencies>
         <dependency>
@@ -30,9 +30,9 @@
 
     <distributionManagement>
         <repository>
-            <id>bintray-jfreaks1-ipgeolocation</id>
-            <name>jfreaks1-ipgeolocation</name>
-            <url>https://api.bintray.com/maven/jfreaks1/io.ipgeolocation/ipgeolocation/;publish=1</url>
+            <id>bintray-ipgeolocation-ipgeolocation</id>
+            <name>ipgeolocation-ipgeolocation</name>
+            <url>https://api.bintray.com/maven/ipgeolocation/ipgeolocation/io.ipgeolocation/;publish=1</url>
         </repository>
     </distributionManagement>
 
