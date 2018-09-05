@@ -16,7 +16,7 @@ Developers can use this Java SDK for software and web projects related to, but n
 Quick Start Guide
 -----------------
 
-In this document, you will go through the basic steps to use IP Geolocation API Java SDK.
+In this document, you will go through the basic steps to use IP Geolocation API Java SDK. 
 You need a valid 'IPGeolocation API key' to use this SDK. [Sign up](https://ipgeolocation.io/signup) here and get your free API key if you don’t have one.
 
 System Requirements
