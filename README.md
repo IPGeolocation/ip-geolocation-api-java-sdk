@@ -36,7 +36,7 @@ Add the following dependency in 'pom.xml' file to use the IP Geolocation API Jav
 <dependency>
     <groupId>io.ipgeolocation</groupId>
     <artifactId>ipgeolocation</artifactId>
-    <version>1.0.2</version>
+    <version>1.0.3</version>
 </dependency>
 ```
 
@@ -51,7 +51,7 @@ repositories {
 }
 
 dependencies {
-    compile 'io.ipgeolocation:ipgeolocation:1.0.2'
+    compile 'io.ipgeolocation:ipgeolocation:1.0.3'
     ...
 }
 ```
@@ -61,7 +61,7 @@ dependencies {
 Add the following dependency code in 'ivy.xml' file to use the IP Geolocation API Java SDK.
 
 ```ivy
-<dependency org='io.ipgeolocation' name='ipgeolocation' rev='1.0.2'>
+<dependency org='io.ipgeolocation' name='ipgeolocation' rev='1.0.3'>
     <artifact name='ipgeolocation' />
 </dependency>
 ```
@@ -70,7 +70,7 @@ Add the following dependency code in 'ivy.xml' file to use the IP Geolocation AP
 
 Use the following URL to download the latest JAR file for IP Geolocation API Java SDK.
 
-* https://ipgeolocation.io/downloads/ip-geolocation-api-java-1.0.2.jar
+* (https://ipgeolocation.io/downloads/ip-geolocation-api-java-1.0.3.jar)[https://ipgeolocation.io/downloads/ip-geolocation-api-java-1.0.3.jar]
 
 IP Geolocation API Java SDK Basic Usage
 ---------------------------------------
