@@ -70,7 +70,7 @@ Add the following dependency code in 'ivy.xml' file to use the IP Geolocation AP
 
 Use the following URL to download the latest JAR file for IP Geolocation API Java SDK.
 
-* (https://ipgeolocation.io/downloads/ip-geolocation-api-java-1.0.3.jar)[https://ipgeolocation.io/downloads/ip-geolocation-api-java-1.0.3.jar]
+* https://ipgeolocation.io/downloads/ip-geolocation-api-java-1.0.3.jar
 
 IP Geolocation API Java SDK Basic Usage
 ---------------------------------------
