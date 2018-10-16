@@ -1,7 +1,7 @@
 # IP Geolocation API Java SDK
 
 ## Introduction
-IPGeolocation API is the solution to identify country code (ISO2 and ISO3 standard), country name, continent code, continent name, country capital, state/province, district, city, zip code, latitude and longitude of city, is country belongs to Europian Union, calling code, top level domain (TLD), languages, country flag, internet service provider (ISP), connection type, organization, geoname ID, currency code, currency name, time zone ID, time zone offset, current time in the time zone, is time zone in daylight saving time, and total daylight savings. This document provides important information to help you get up to speed with IPGeolocation API using IP Geolocation API Java SDK.
+[IPGeolocation API](https://ipgeolocation.io) is the solution to identify country code (ISO2 and ISO3 standard), country name, continent code, continent name, country capital, state/province, district, city, zip code, latitude and longitude of city, is country belongs to Europian Union, calling code, top level domain (TLD), languages, country flag, internet service provider (ISP), connection type, organization, geoname ID, currency code, currency name, time zone ID, time zone offset, current time in the time zone, is time zone in daylight saving time, and total daylight savings. This document provides important information to help you get up to speed with IPGeolocation API using IP Geolocation API Java SDK.
 
 Developers can use this Java SDK for software and web projects related to, but not limited to:
 
@@ -13,20 +13,19 @@ Developers can use this Java SDK for software and web projects related to, but n
 6. Filter access from countries you do not do business with
 7. Geo-targeting for increased sales and click-through
 
-Quick Start Guide
------------------
+## Quick Start Guide
 
-In this document, you will go through the basic steps to use IP Geolocation API Java SDK.  
 You need a valid 'IPGeolocation API key' to use this SDK. [Sign up](https://ipgeolocation.io/signup) here and get your free API key if you don’t have one.
 
-System Requirements
--------------------
+**Note:** Complete documentation to use this SDK is also available at [IP Geolocation API JAVA SDK Documentation](https://ipgeolocation.io/documentation/ip-geolocation-api-java-sdk-20180807094025).
+
+## System Requirements
 
 IP Geolocation API Java SDK has been developed and tested on JDK version 8.  
 Note: Internet connection is required to run this component.
 
-Installation
---------------
+## Installation
+Our Java SDK can be installed by various methods given below:
 
 ### Maven
 
@@ -70,10 +69,10 @@ Add the following dependency code in 'ivy.xml' file to use the IP Geolocation AP
 
 Use the following URL to download the latest JAR file for IP Geolocation API Java SDK.
 
-* https://ipgeolocation.io/downloads/ip-geolocation-api-java-1.0.3.jar
+* [https://ipgeolocation.io/downloads/ip-geolocation-api-java-1.0.3.jar](https://ipgeolocation.io/downloads/ip-geolocation-api-java-1.0.3.jar)
 
-IP Geolocation API Java SDK Basic Usage
----------------------------------------
+Basic Usage
+-----------
 
 ### Setup API
 
@@ -129,7 +128,7 @@ if(geolocation.getStatus() == 200) {
 
 ```java
 // Query geolocations for multiple IP addresses and all fields
-String\\\[\\\] ips = new String\\\[\\\]{"1.1.1.1", "2.2.2.2", "3.3.3.3"};
+String[] ips = new String[]{"1.1.1.1", "2.2.2.2", "3.3.3.3"};
 GeolocationParams geoParams = new GeolocationParams();
 geoParams.setIps(ips);
 
@@ -141,7 +140,7 @@ System.out.println(geolocations.get(1).getLanguages());
 System.out.println(geolocations.get(2).getTimezone().getCurrentTime());
 
 // Query geolocations for multiple IP addresses but only geo field
-String\\\[\\\] ips = new String\\\[\\\]{"1.1.1.1", "2.2.2.2", "3.3.3.3"};
+String[] ips = new String[]{"1.1.1.1", "2.2.2.2", "3.3.3.3"};
 GeolocationParams geoParams = new GeolocationParams();
 geoParams.setIps(ips);
 geoParams.setFields("geo");
@@ -214,7 +213,7 @@ IP Geolocation API Java SDK has following classes that you can use to fully leve
 
 | Method | Description | Return Type |
 |:-------|:------------|:------------|
-| IPGeolocationAPI(String apiKey) throws IllegalArgumentException | Constructs the IPGeolocationAPI object. It takes a valid apiKey as parameter and throws IllegalArgumentException if apiKey is empty or null. ||
+| IPGeolocationAPI(String apiKey) throws IllegalArgumentException | Constructs the IPGeolocationAPI object. It takes a valid apiKey as a parameter and throws IllegalArgumentException if apiKey is empty or null. ||
 | getGeolocation() | This function to query Geolocation API. | Geolocation |
 | getGeolocation(GeolocationParams params) | This function to query Geolocation API based on the parameters passed. | Geolocation |
 | getTimezone() | This function to query Timezone API based on calling machine's IP address. | Timezone |
@@ -230,7 +229,7 @@ IP Geolocation API Java SDK has following classes that you can use to fully leve
 | getIp() | Get IP address set to lookup geolocation. | String |
 | setFields(String fields) | Set fields to lookup geolocation. | void |
 | getFields() | Get fields set to lookup geolocation. | String |
-| setIps(String[] ips) throws IllegalArgumentException | Set IP addresses to lookup multiple geolocations. Throws IllegalArgumentException if no. of IP addresses are more than 50. **Note:** Multiple IP addresses lookup is only available for paid users. | void |
+| setIps(String[] ips) throws IllegalArgumentException | Set IP addresses to lookup multiple geo-locations. Throws IllegalArgumentException if no. of IP addresses are more than 50. **Note:** Multiple IP addresses lookup is only available for paid users. | void |
 | getIps() | Get IP addresses set to lookup bulk geolocations. | String[] |
 
 ### Class: io.ipgeolocation.api.Geolocation
