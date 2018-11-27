@@ -3,14 +3,16 @@ package io.ipgeolocation.api;
 public class TimezoneParams {
     private String timezone;
     private String ip;
+    private String lang;
     private Double latitude;
     private Double longitude;
 
     public TimezoneParams() {
-        timezone = "";
-        ip = "";
-        latitude = 1000.0;
-        latitude = 1000.0;
+        this.timezone = "";
+        this.ip = "";
+        this.lang = "en";
+        this.latitude = 1000.0;
+        this.latitude = 1000.0;
     }
 
     public void setTimezone(String timezone) {
@@ -27,6 +29,14 @@ public class TimezoneParams {
 
     public String getIp() {
         return this.ip;
+    }
+
+    public void setLang(String lang) {
+        this.lang = lang;
+    }
+
+    public String getLang() {
+        return this.lang;
     }
 
     public void setLocation(Double latitude, Double longitude) {

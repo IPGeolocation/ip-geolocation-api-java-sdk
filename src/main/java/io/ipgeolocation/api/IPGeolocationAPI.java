@@ -7,6 +7,8 @@ import java.util.*;
 
 import com.google.gson.Gson;
 
+import static io.ipgeolocation.api.Strings.isNullOrEmpty;
+
 public class IPGeolocationAPI {
     private String apiKey;
 
@@ -34,20 +36,28 @@ public class IPGeolocationAPI {
     }
 
     private String buildGeolocationUrlParams(GeolocationParams params) {
-        String urlParams = "apiKey=" + apiKey;
+        StringBuilder urlParams = new StringBuilder();
+
+        urlParams.append("apiKey=");
+        urlParams.append(apiKey);
 
         if(params != null) {
-            String param = params.getIp();
-            if(!param.equals("")) {
-                urlParams = urlParams + "&ip=" + param;
+            if(!isNullOrEmpty(params.getIp())) {
+                urlParams.append("&ip=");
+                urlParams.append(params.getIp());
             }
 
-            param = params.getFields();
-            if(!param.equals("")) {
-                urlParams = urlParams + "&fields=" + param;
+            if(!isNullOrEmpty(params.getFields())) {
+                urlParams.append("&fields=");
+                urlParams.append(params.getFields());
+            }
+
+            if(!isNullOrEmpty(params.getLang())) {
+                urlParams.append("&lang=");
+                urlParams.append(params.getLang());
             }
         }
-        return urlParams;
+        return urlParams.toString();
     }
 
     public Timezone getTimezone() {
@@ -61,26 +71,33 @@ public class IPGeolocationAPI {
     }
 
     private String buildTimezoneUrlParams(TimezoneParams params) {
-        String urlParams = "apiKey=" + apiKey;
+        StringBuilder urlParams = new StringBuilder();
+
+        urlParams.append("apiKey=");
+        urlParams.append(apiKey);
 
         if(params != null) {
-            String param = params.getIp();
-            if(!param.equals("")) {
-                urlParams = urlParams + "&ip=" + param;
+            if(!isNullOrEmpty(params.getIp())) {
+                urlParams.append("&ip=");
+                urlParams.append(params.getIp());
             }
 
-            param = params.getTimezone();
-            if(!param.equals("")) {
-                urlParams = urlParams + "&tz=" + param;
+            if(!isNullOrEmpty(params.getTimezone())) {
+                urlParams.append("&tz=");
+                urlParams.append(params.getTimezone());
             }
 
             Double latitude = params.getLatitude();
             Double longitude = params.getLongitude();
+
             if(latitude != 1000.0 && longitude != 1000.0) {
-                urlParams = urlParams + "&lat=" + latitude + "&long=" + longitude;
+                urlParams.append("&lat=");
+                urlParams.append(latitude);
+                urlParams.append("&long=");
+                urlParams.append(longitude);
             }
         }
-        return urlParams;
+        return urlParams.toString();
     }
 
     private Map<String, Object> getApiResponse(String api, String urlParams) {

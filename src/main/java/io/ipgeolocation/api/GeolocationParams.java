@@ -3,11 +3,13 @@ package io.ipgeolocation.api;
 public class GeolocationParams {
     private String ip;
     private String fields;
+    private String lang;
     private String[] ips;
 
     public GeolocationParams() {
         this.ip = "";
         this.fields = "";
+        this.lang = "en";
         this.ips = new String[0];
     }
 
@@ -25,6 +27,14 @@ public class GeolocationParams {
 
     public String getFields() {
         return this.fields;
+    }
+
+    public void setLang(String lang) {
+        this.lang = lang;
+    }
+
+    public String getLang() {
+        return this.lang;
     }
 
     public void setIps(String[] ips) throws IllegalArgumentException {

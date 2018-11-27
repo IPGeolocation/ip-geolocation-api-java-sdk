@@ -10,6 +10,6 @@ class Strings {
     }
 
     static Boolean isNullOrEmpty(String string) {
-        return string == null || string.equals("");
+        return string == null || string.trim().equals("");
     }
 }
