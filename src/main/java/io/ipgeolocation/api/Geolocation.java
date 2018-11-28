@@ -65,6 +65,7 @@ public class Geolocation {
                 Map currencyJson = (LinkedTreeMap) json.get("currency");
                 this.currency = new GeolocationCurrency(currencyJson);
             }
+
             if(json.get("time_zone") instanceof LinkedTreeMap) {
                 Map timezoneJson = (LinkedTreeMap) json.get("time_zone");
                 this.timezone = new GeolocationTimezone(timezoneJson);

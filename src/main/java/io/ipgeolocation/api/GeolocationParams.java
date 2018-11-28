@@ -1,5 +1,7 @@
 package io.ipgeolocation.api;
 
+import java.util.Arrays;
+
 public class GeolocationParams {
     private String ip;
     private String fields;
@@ -47,5 +49,10 @@ public class GeolocationParams {
 
     public String[] getIPAddresses() {
         return this.ips;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("IP address: '%s', Fields: '%s', Lang: '%s', IP addresses: '%s'", ip, fields, lang, Arrays.toString(ips));
     }
 }

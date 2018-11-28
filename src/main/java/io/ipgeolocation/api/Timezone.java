@@ -46,6 +46,7 @@ public class Timezone {
             this.yearAbbr = (String) json.get("year_abbr");
             this.isDST = (Boolean) json.get("is_dst");
             this.dstSavings = (Double) json.get("dst_savings");
+
             if(json.get("geo") instanceof LinkedTreeMap) {
                 Map geoJson = (LinkedTreeMap) json.get("geo");
                 this.timezoneGeo = new TimezoneGeo(geoJson);
