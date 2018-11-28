@@ -39,6 +39,6 @@ public class GeolocationTimezone {
 
     @Override
     public String toString() {
-        return String.format("Name: '%s' \nOffset: '%s' \nCurrent Time: '%s' \nIs DST? '%b' \nDST Savings: '%s'", name, offset, currentTime, isDST, dstSavings);
+        return String.format("name: '%s' \noffset: '%s' \ncurrent_time: '%s' \nis_dst: '%b' \ndst_savings: '%s'", name, offset, currentTime, isDST, dstSavings);
     }
 }

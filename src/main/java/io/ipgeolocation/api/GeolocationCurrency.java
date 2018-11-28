@@ -21,6 +21,6 @@ public class GeolocationCurrency {
 
     @Override
     public String toString() {
-        return String.format("Name: '%s' \nCode: '%s'", name, code);
+        return String.format("name: '%s' \ncode: '%s'", name, code);
     }
 }
