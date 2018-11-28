@@ -13,11 +13,11 @@ public class GeolocationParams {
         this.ips = new String[0];
     }
 
-    public void setIp(String ip) {
+    public void setIPAddress(String ip) {
         this.ip = Strings.nullToEmpty(ip);
     }
 
-    public String getIp() {
+    public String getIPAddress() {
         return this.ip;
     }
 
@@ -37,7 +37,7 @@ public class GeolocationParams {
         return this.lang;
     }
 
-    public void setIps(String[] ips) throws IllegalArgumentException {
+    public void setIPAddresses(String[] ips) throws IllegalArgumentException {
         if(ips.length > 50) {
             throw new IllegalArgumentException("Max. number of IP addresses cannot be more than 50.");
         } else {
@@ -45,7 +45,7 @@ public class GeolocationParams {
         }
     }
 
-    public String[] getIps() {
+    public String[] getIPAddresses() {
         return this.ips;
     }
 }

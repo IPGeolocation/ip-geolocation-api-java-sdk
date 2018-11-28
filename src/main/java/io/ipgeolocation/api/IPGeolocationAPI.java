@@ -42,9 +42,9 @@ public class IPGeolocationAPI {
         urlParams.append(apiKey);
 
         if(params != null) {
-            if(!isNullOrEmpty(params.getIp())) {
+            if(!isNullOrEmpty(params.getIPAddress())) {
                 urlParams.append("&ip=");
-                urlParams.append(params.getIp());
+                urlParams.append(params.getIPAddress());
             }
 
             if(!isNullOrEmpty(params.getFields())) {
@@ -140,7 +140,7 @@ public class IPGeolocationAPI {
     public List<Geolocation> getBulkGeolocation(GeolocationParams params) {
         Gson gson = new Gson();
         Map<String, String[]> data = new HashMap<String, String[]>();
-        data.put("ips", params.getIps());
+        data.put("ips", params.getIPAddresses());
         String urlParams = buildGeolocationUrlParams(params);
         List<Map<String, Object>> apiResponse = getBulkApiResponse(gson.toJson(data), urlParams);
 
