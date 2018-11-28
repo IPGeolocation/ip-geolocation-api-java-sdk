@@ -231,6 +231,8 @@ IP Geolocation API Java SDK has following classes that you can use to fully leve
 | getFields() | Get fields set to lookup geolocation. | String |
 | setIPAddresses(String[] ips) throws IllegalArgumentException | Set IP addresses to lookup multiple geo-locations. Throws IllegalArgumentException if no. of IP addresses are more than 50. **Note:** Multiple IP addresses lookup is only available for paid users. | void |
 | getIPAddresses() | Get IP addresses set to lookup bulk geolocations. | String[] |
+| setLang(String lang) | Set language parameter to lookup geolocation. | void |
+| getLang() | Get language set to lookup geolocation. | String |
 
 ### Class: io.ipgeolocation.api.Geolocation
 
@@ -291,6 +293,8 @@ IP Geolocation API Java SDK has following classes that you can use to fully leve
 | setLocation(Double latitude, Double longitude) | Sets latitude and longitude of a location to query time zone information. | void |
 | getLatitude() | Returns latitude set to query time zone information. | Double |
 | getLongitude() | Returns longitude set to query time zone information. | Double |
+| setLang(String lang) | Set language parameter to lookup geolocation. Default is 'en'. | void |
+| getLang() | Get language set to lookup geolocation. | String |
 
 ### Class: io.ipgeolocation.api.Timezone
 
