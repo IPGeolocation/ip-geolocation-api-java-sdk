@@ -35,7 +35,7 @@ Add the following dependency in 'pom.xml' file to use the IP Geolocation API Jav
 <dependency>
     <groupId>io.ipgeolocation</groupId>
     <artifactId>ipgeolocation</artifactId>
-    <version>1.0.3</version>
+    <version>1.0.4</version>
 </dependency>
 ```
 
@@ -50,7 +50,7 @@ repositories {
 }
 
 dependencies {
-    compile 'io.ipgeolocation:ipgeolocation:1.0.3'
+    compile 'io.ipgeolocation:ipgeolocation:1.0.4'
     ...
 }
 ```
@@ -60,7 +60,7 @@ dependencies {
 Add the following dependency code in 'ivy.xml' file to use the IP Geolocation API Java SDK.
 
 ```ivy
-<dependency org='io.ipgeolocation' name='ipgeolocation' rev='1.0.3'>
+<dependency org='io.ipgeolocation' name='ipgeolocation' rev='1.0.4'>
     <artifact name='ipgeolocation' />
 </dependency>
 ```
@@ -69,7 +69,7 @@ Add the following dependency code in 'ivy.xml' file to use the IP Geolocation AP
 
 Use the following URL to download the latest JAR file for IP Geolocation API Java SDK.
 
-* [https://ipgeolocation.io/downloads/ip-geolocation-api-java-1.0.3.jar](https://ipgeolocation.io/downloads/ip-geolocation-api-java-1.0.3.jar)
+* [https://ipgeolocation.io/downloads/ip-geolocation-api-java-1.0.4.jar](https://ipgeolocation.io/downloads/ip-geolocation-api-java-1.0.4.jar)
 
 Basic Usage
 -----------
@@ -86,7 +86,7 @@ IPGeolocationAPI api = new IPGeolocationAPI("YOUR_API_KEY");
 ```java
 // Query geolocation for IP address (1.1.1.1) and fields (geo, time_zone and currency)
 GeolocationParams geoParams = new GeolocationParams();
-geoParams.setIp("1.1.1.1");
+geoParams.setIPAddress("1.1.1.1");
 geoParams.setFields("geo,time_zone,currency");
 
 Geolocation geolocation = api.getGeolocation(geoParams);
@@ -97,20 +97,20 @@ if(geolocation.getStatus() == 200) {
     System.out.println(geolocation.getCurrency().getName());
     System.out.println(geolocation.getTimezone().getCurrentTime());
 } else {
-    System.out.println(geolocation.getMessage());
+    System.out.printf("Status Code: %d, Message: %s\n", geolocation.getStatus(), geolocation.getMessage());
 }
 
 // Query geolocation for IP address (1.1.1.1) and all fields
 GeolocationParams geoParams = new GeolocationParams();
-geoParams.setIp("1.1.1.1");
+geoParams.setIPAddress("1.1.1.1");
 
 Geolocation geolocation = api.getGeolocation(geoParams);
 
 if(geolocation.getStatus() == 200) {
-    System.out.println(geolocation.getIp());
+    System.out.println(geolocation.getIPAddress());
     System.out.println(geolocation.getCountryName());
 } else {
-    System.out.println(geolocation.getMessage());
+     System.out.printf("Status Code: %d, Message: %s\n", geolocation.getStatus(), geolocation.getMessage());
 }
 
 // Query geolocation for the calling machine's IP address for all fields
@@ -120,7 +120,7 @@ if(geolocation.getStatus() == 200) {
     System.out.println(geolocation.getCountryCode2());
     System.out.println(geolocation.getTimezone().getCurrentTime());
 } else {
-    System.out.println(geolocation.getMessage());
+     System.out.printf("Status Code: %d, Message: %s\n", geolocation.getStatus(), geolocation.getMessage());
 }
 ```
 
@@ -128,9 +128,9 @@ if(geolocation.getStatus() == 200) {
 
 ```java
 // Query geolocations for multiple IP addresses and all fields
-String[] ips = new String[]{"1.1.1.1", "2.2.2.2", "3.3.3.3"};
+String[] ips = new String[] {"1.1.1.1", "2.2.2.2", "3.3.3.3"};
 GeolocationParams geoParams = new GeolocationParams();
-geoParams.setIps(ips);
+geoParams.setIPAddresses(ips);
 
 List<Geolocation> geolocations = api.getBulkGeolocation(geoParams);
 
@@ -140,9 +140,9 @@ System.out.println(geolocations.get(1).getLanguages());
 System.out.println(geolocations.get(2).getTimezone().getCurrentTime());
 
 // Query geolocations for multiple IP addresses but only geo field
-String[] ips = new String[]{"1.1.1.1", "2.2.2.2", "3.3.3.3"};
+String[] ips = new String[] {"1.1.1.1", "2.2.2.2", "3.3.3.3"};
 GeolocationParams geoParams = new GeolocationParams();
-geoParams.setIps(ips);
+geoParams.setIPAddresses(ips);
 geoParams.setFields("geo");
 
 List<Geolocation> geolocations = api.getBulkGeolocation(geoParams);
@@ -166,7 +166,7 @@ if(tz.getStatus() == 200) {
     System.out.println(tz.getDateTimeWti());
     System.out.println(tz.getDateTimeTxt());
 } else {
-    System.out.println(tz.getMessage());
+     System.out.printf("Status Code: %d, Message: %s\n", geolocation.getStatus(), geolocation.getMessage());
 }
 
 // Query time zone information by latitude and longitude of the location
@@ -183,14 +183,14 @@ if(tz.getStatus() == 200) {
 
 // Query time zone information for IP address (1.1.1.1)
 TimezoneParams tzParams = new TimezoneParams();
-tzParams.setIp("1.1.1.1");
+tzParams.setIPAddress("1.1.1.1");
 
 Timezone tz = api.getTimezone(tzParams);
 
 if(tz.getStatus() == 200) {
-    System.out.println(tz.getTimezone());
+    System.out.println(tz.toString());
 } else {
-    System.out.println(tz.getMessage());
+    System.out.printf("Status Code: %d, Message: %s\n", geolocation.getStatus(), geolocation.getMessage());
 }
 
 // Query time zone information for calling machine's IP address
@@ -200,7 +200,7 @@ if(tz.getMessage()) {
     System.out.println(tz.getTimezone());
     System.out.println(tz.getDateTimeYmd());
 } else {
-    System.out.println(tz.getMessage());
+    System.out.printf("Status Code: %d, Message: %s\n", geolocation.getStatus(), geolocation.getMessage());
 }
 ```
 
@@ -225,12 +225,12 @@ IP Geolocation API Java SDK has following classes that you can use to fully leve
 
 | Method | Description | Return Type |
 |:-------|:------------|:------------|
-| setIp(String ip) | Sets IP address to lookup geolocation. | void |
-| getIp() | Get IP address set to lookup geolocation. | String |
+| setIPAddress(String ip) | Sets IP address to lookup geolocation. | void |
+| getIPAddress() | Get IP address set to lookup geolocation. | String |
 | setFields(String fields) | Set fields to lookup geolocation. | void |
 | getFields() | Get fields set to lookup geolocation. | String |
-| setIps(String[] ips) throws IllegalArgumentException | Set IP addresses to lookup multiple geo-locations. Throws IllegalArgumentException if no. of IP addresses are more than 50. **Note:** Multiple IP addresses lookup is only available for paid users. | void |
-| getIps() | Get IP addresses set to lookup bulk geolocations. | String[] |
+| setIPAddresses(String[] ips) throws IllegalArgumentException | Set IP addresses to lookup multiple geo-locations. Throws IllegalArgumentException if no. of IP addresses are more than 50. **Note:** Multiple IP addresses lookup is only available for paid users. | void |
+| getIPAddresses() | Get IP addresses set to lookup bulk geolocations. | String[] |
 
 ### Class: io.ipgeolocation.api.Geolocation
 
@@ -238,7 +238,7 @@ IP Geolocation API Java SDK has following classes that you can use to fully leve
 |:-------|:------------|:------------|
 | getStatus() | Returns HTTP status of the geolocation query. 200 is the successful query status. | Integer |
 | getMessage() | Returns error message, if the query was not successful. | String |
-| getIp() | Returns IP address of the geolocation. | String |
+| getIPAddress() | Returns IP address of the geolocation. | String |
 | getContinentCode() | Returns 2-letters continent code. | String |
 | getContinentName() | Returns continent name. | String |
 | getCountryCode2() | Returns 2-letters country code. | String |
@@ -248,18 +248,18 @@ IP Geolocation API Java SDK has following classes that you can use to fully leve
 | getStateProvince() | Returns state/province. | String |
 | getDistrict() | Returns district. | String |
 | getCity() | Returns city. | String |
-| getZipcode() | Returns zip code. | String |
+| getZipCode() | Returns zip code. | String |
 | getLatitude() | Returns latitude of the city. | Double |
 | getLongitude() | Returns longitude of the city. | Double |
-| isEu() | Returns is the country in European Union. | Boolean |
+| isEU() | Returns is the country in European Union. | Boolean |
 | getCallingCode() | Returns country calling code. | String |
-| getCountryTld() | Returns country's top level domain like '.au' for Australia. | String |
+| getCountryTLD() | Returns country's top level domain like '.au' for Australia. | String |
 | getLanguages() | Returns languages spoken in the country. | String |
 | getCountryFlag() | Returns a URL to country's flag. | String |
-| getIsp() | Returns ISP name. | String |
+| getISP() | Returns ISP name. | String |
 | getConnectionType() | Returns connection type of the IP address. | String |
 | getOrganization() | Returns organization using the IP address. | String |
-| getGeonameId() | Returns geoname ID from geonames.org database. | String |
+| getGeonameID() | Returns geoname ID from geonames.org database. | String |
 | getCurrency() | Returns currency information of the country. | GeolocationCurrency |
 | getTimezone() | Returns time zone information of the country. | GeolocationTimezone |
 
@@ -278,7 +278,7 @@ IP Geolocation API Java SDK has following classes that you can use to fully leve
 | getOffset() | Returns time zone offset from UTC. | Double |
 | getCurrentTime() | Returns current date-time string in the format "yyyy-MM-dd HH:mm:ss.SSSZ" | String |
 | isDST() | Returns is the country observing daylight saving time. | Boolean |
-| getDstSavings() | Returns daylight savings time (in hours). | Double |
+| getDSTSavings() | Returns daylight savings time (in hours). | Double |
 
 ### Class: io.ipgeolocation.api.TimezoneParams
 
@@ -286,8 +286,8 @@ IP Geolocation API Java SDK has following classes that you can use to fully leve
 |:-------|:------------|:------------|
 | setTimezone(String timezone) | Sets time zone ID to query time zone information. | void |
 | getTimezone() | Get time zone ID set to query time zone information. | String |
-| setIp(String ip) | Sets IP address to query time zone information. | void |
-| getIp() | Get IP address set to query time zone information. | String |
+| setIPAddress(String ip) | Sets IP address to query time zone information. | void |
+| getIPAddress() | Get IP address set to query time zone information. | String |
 | setLocation(Double latitude, Double longitude) | Sets latitude and longitude of a location to query time zone information. | void |
 | getLatitude() | Returns latitude set to query time zone information. | Double |
 | getLongitude() | Returns longitude set to query time zone information. | Double |
@@ -311,8 +311,8 @@ IP Geolocation API Java SDK has following classes that you can use to fully leve
 | getMonth() | Returns current month of the year. | String |
 | getYear() | Returns current year. | String |
 | getYearAbbr() | Returns 2-letters year abbreviation like "18". | String |
-| isDst() | Returns is the country observing Daylight Saving time. | Boolean |
-| getDstSavings() | Returns daylight savings time (in hours). | Double |
+| isDST() | Returns is the country observing Daylight Saving time. | Boolean |
+| getDSTSavings() | Returns daylight savings time (in hours). | Double |
 | getTimezoneGeo() | Returns geolocation of timezone if you lookup timezone information from an IP address. | TimezoneGeo |
 
 ### Class: io.ipgeolocation.api.TimezoneGeo
@@ -325,6 +325,6 @@ IP Geolocation API Java SDK has following classes that you can use to fully leve
 | getStateProvince() | Returns state/province. | String |
 | getDistrict() | Returns district. | String |
 | getCity() | Returns city. | String |
-| getZipcode() | Returns zip code. | String |
+| getZipCode() | Returns zip code. | String |
 | getLatitude() | Returns latitude of the city. | Double |
 | getLongitude() | Returns longitude of the city. | Double |
