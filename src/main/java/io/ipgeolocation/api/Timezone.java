@@ -20,7 +20,7 @@ public class Timezone {
     private String month;
     private String year;
     private String yearAbbr;
-    private Boolean isDst;
+    private Boolean isDST;
     private Double dstSavings;
     private TimezoneGeo timezoneGeo;
 
@@ -44,7 +44,7 @@ public class Timezone {
             this.month = (String) json.get("month");
             this.year = (String) json.get("year");
             this.yearAbbr = (String) json.get("year_abbr");
-            this.isDst = (Boolean) json.get("is_dst");
+            this.isDST = (Boolean) json.get("is_dst");
             this.dstSavings = (Double) json.get("dst_savings");
             if(json.get("geo") instanceof LinkedTreeMap) {
                 Map geoJson = (LinkedTreeMap) json.get("geo");
@@ -113,11 +113,11 @@ public class Timezone {
         return yearAbbr;
     }
 
-    public Boolean isDst() {
-        return isDst;
+    public Boolean isDST() {
+        return isDST;
     }
 
-    public Double getDstSavings() {
+    public Double getDSTSavings() {
         return dstSavings;
     }
 

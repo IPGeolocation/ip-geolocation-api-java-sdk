@@ -9,7 +9,7 @@ public class TimezoneGeo {
     private String stateProvince;
     private String district;
     private String city;
-    private String zipcode;
+    private String zipCode;
     private String latitude;
     private String longitude;
 
@@ -20,7 +20,7 @@ public class TimezoneGeo {
         this.stateProvince = (String) json.get("state_prov");
         this.district = (String) json.get("district");
         this.city = (String) json.get("city");
-        this.zipcode = (String) json.get("zipcode");
+        this.zipCode = (String) json.get("zipcode");
         this.latitude = (String) json.get("latitude");
         this.longitude = (String) json.get("longitude");
     }
@@ -49,8 +49,8 @@ public class TimezoneGeo {
         return city;
     }
 
-    public String getZipcode() {
-        return zipcode;
+    public String getZipCode() {
+        return zipCode;
     }
 
     public String getLatitude() {

@@ -23,11 +23,11 @@ public class TimezoneParams {
         return this.timezone;
     }
 
-    public void setIp(String ip) {
+    public void setIPAddress(String ip) {
         this.ip = Strings.nullToEmpty(ip);
     }
 
-    public String getIp() {
+    public String getIPAddress() {
         return this.ip;
     }
 

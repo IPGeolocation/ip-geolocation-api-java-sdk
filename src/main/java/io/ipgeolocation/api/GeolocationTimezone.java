@@ -33,7 +33,7 @@ public class GeolocationTimezone {
         return isDST;
     }
 
-    public Double getDstSavings() {
+    public Double getDSTSavings() {
         return dstSavings;
     }
 }
