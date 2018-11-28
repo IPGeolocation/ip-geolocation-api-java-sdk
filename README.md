@@ -204,8 +204,7 @@ if(tz.getMessage()) {
 }
 ```
 
-IP Geolocation API Java SDK Objects Reference
----------------------------------------------
+## IP Geolocation API Java SDK Objects Reference
 
 IP Geolocation API Java SDK has following classes that you can use to fully leverage it.
 
