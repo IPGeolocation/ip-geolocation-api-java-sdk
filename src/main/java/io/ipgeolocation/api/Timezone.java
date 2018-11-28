@@ -14,6 +14,7 @@ public class Timezone {
     private String dateTimeTxt;
     private String dateTimeWti;
     private String dateTimeYmd;
+    private Double dateTimeUnix;
     private String time24;
     private String time12;
     private String week;
@@ -38,6 +39,7 @@ public class Timezone {
             this.dateTimeTxt = (String) json.get("date_time_txt");
             this.dateTimeWti = (String) json.get("date_time_wti");
             this.dateTimeYmd = (String) json.get("date_time_ymd");
+            this.dateTimeUnix = (Double) json.get("date_time_unix");
             this.time24 = (String) json.get("time_24");
             this.time12 = (String) json.get("time_12");
             this.week = (String) json.get("week");
@@ -90,6 +92,10 @@ public class Timezone {
         return dateTimeYmd;
     }
 
+    public Double getDateTimeUnix() {
+        return dateTimeUnix;
+    }
+
     public String getTime24() {
         return time24;
     }
@@ -124,5 +130,16 @@ public class Timezone {
 
     public TimezoneGeo getTimezoneGeo() {
         return timezoneGeo;
+    }
+
+    @Override
+    public String toString() {
+        String timezoneGeoString = "";
+
+        if(timezoneGeo != null) {
+            timezoneGeoString = timezoneGeo.toString();
+        }
+
+        return String.format("timezone: '%s', \ntimezone_offset: '%s', \ndate: '%s', \ndate_time: '%s', \ndate_time_txt: '%s', \ndate_time_wti: '%s', \ndate_time_ymd: '%s', \ndate_time_unix: '%f', \ntime_24: '%s', \ntime_12: '%s', \nweek: '%s', \nmonth: '%s', \nyear: '%s', \nyear_abbr: '%s', \nis_dst: '%s', \ndst_savings: '%s', \ngeo: {\n%s\n}\n", timezone, timezoneOffset, date, dateTime, dateTimeTxt, dateTimeWti, dateTimeYmd, dateTimeUnix, time24, time12, week, month, year, yearAbbr, isDST, dstSavings, timezoneGeoString);
     }
 }

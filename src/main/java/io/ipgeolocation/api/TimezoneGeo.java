@@ -60,4 +60,9 @@ public class TimezoneGeo {
     public String getLongitude() {
         return longitude;
     }
+
+    @Override
+    public String toString() {
+        return String.format("country_code2: '%s' \ncountry_code3: '%s' \ncountry_name: '%s' \nstate_prov: '%s' \ndistrict: '%s' \ncity: '%s' \nzipcode: '%s' \nlatitude: '%s' \nlongitude: '%s'", countryCode2, countryCode3, countryName, stateProvince, district, city, zipCode, latitude, longitude);
+    }
 }

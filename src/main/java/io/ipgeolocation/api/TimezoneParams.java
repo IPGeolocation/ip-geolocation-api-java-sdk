@@ -12,7 +12,7 @@ public class TimezoneParams {
         this.ip = "";
         this.lang = "en";
         this.latitude = 1000.0;
-        this.latitude = 1000.0;
+        this.longitude = 1000.0;
     }
 
     public void setTimezone(String timezone) {
@@ -50,5 +50,10 @@ public class TimezoneParams {
 
     public Double getLongitude() {
         return this.longitude;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("IP Address: '%s', Lang: '%s', Location: '%f, %f'", ip, lang, latitude, longitude);
     }
 }
