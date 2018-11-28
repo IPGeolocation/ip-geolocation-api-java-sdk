@@ -176,4 +176,20 @@ public class Geolocation {
     public GeolocationTimezone getTimezone() {
         return timezone;
     }
+
+    @Override
+    public String toString() {
+        String currencyString = "";
+        String timezoneString = "";
+
+        if(currency != null) {
+            currencyString = currency.toString();
+        }
+
+        if(timezone != null) {
+            timezoneString = timezone.toString();
+        }
+
+        return String.format("IP address: '%s' \nContinent Code: '%s' \nContinent Name: '%s' \nCountry Code ISO2: '%s' \nCountry Code ISO3: '%s' \nCountry Name: '%s' \nCountry Capital: '%s \nState/Province: '%s' \nDistrict: '%s' \nCity: '%s' \nZip Code: '%s' \nLatitude: '%s' \nLongitude: '%s' \nIs EU Member: '%s' \nCalling Code: '%s' \nCountry TLD: '%s' \nLanguages: '%s' \nFlag URL: '%s' \nISP: '%s' \nConnection Type: '%s' \nOrganization: '%s' \nGeoname ID: '%s' \nCurrency: {\n%s\n} \nTimezone: {\n%s\n}\n", ip, continentCode, continentName, countryCode2, countryCode3, countryName, countryCapital, stateProvince, district, city, zipCode, latitude, longitude, isEU, callingCode, countryTLD, languages, countryFlag, isp, connectionType, organization, geonameID, currencyString, timezoneString);
+    }
 }

@@ -18,4 +18,9 @@ public class GeolocationCurrency {
     public String getCode() {
         return code;
     }
+
+    @Override
+    public String toString() {
+        return String.format("Name: '%s' \nCode: '%s'", name, code);
+    }
 }
