@@ -17,18 +17,18 @@ public class Geolocation {
     private String stateProvince;
     private String district;
     private String city;
-    private String zipcode;
+    private String zipCode;
     private String latitude;
     private String longitude;
-    private Boolean isEu;
+    private Boolean isEU;
     private String callingCode;
-    private String countryTld;
+    private String countryTLD;
     private String languages;
     private String countryFlag;
     private String isp;
     private String connectionType;
     private String organization;
-    private String geonameId;
+    private String geonameID;
     private GeolocationCurrency currency;
     private GeolocationTimezone timezone;
 
@@ -49,18 +49,18 @@ public class Geolocation {
             this.stateProvince = (String) json.get("state_prov");
             this.district = (String) json.get("district");
             this.city = (String) json.get("city");
-            this.zipcode = (String) json.get("zipcode");
+            this.zipCode = (String) json.get("zipcode");
             this.latitude = (String) json.get("latitude");
             this.longitude = (String) json.get("longitude");
-            this.isEu = (Boolean) json.get("is_eu");
+            this.isEU = (Boolean) json.get("is_eu");
             this.callingCode = (String) json.get("calling_code");
-            this.countryTld = (String) json.get("country_tld");
+            this.countryTLD = (String) json.get("country_tld");
             this.languages = (String) json.get("languages");
             this.countryFlag = (String) json.get("country_flag");
             this.isp = (String) json.get("isp");
             this.connectionType = (String) json.get("connection_type");
             this.organization = (String) json.get("organization");
-            this.geonameId = (String) json.get("geoname_id");
+            this.geonameID = (String) json.get("geoname_id");
             if(json.get("currency") instanceof LinkedTreeMap) {
                 Map currencyJson = (LinkedTreeMap) json.get("currency");
                 this.currency = new GeolocationCurrency(currencyJson);
@@ -80,7 +80,7 @@ public class Geolocation {
         return message;
     }
 
-    public String getIp() {
+    public String getIP() {
         return ip;
     }
 
@@ -120,8 +120,8 @@ public class Geolocation {
         return city;
     }
 
-    public String getZipcode() {
-        return zipcode;
+    public String getZipCode() {
+        return zipCode;
     }
 
     public String getLatitude() {
@@ -132,16 +132,16 @@ public class Geolocation {
         return longitude;
     }
 
-    public Boolean isEu() {
-        return isEu;
+    public Boolean isEU() {
+        return isEU;
     }
 
     public String getCallingCode() {
         return callingCode;
     }
 
-    public String getCountryTld() {
-        return countryTld;
+    public String getCountryTLD() {
+        return countryTLD;
     }
 
     public String getLanguages() {
@@ -152,7 +152,7 @@ public class Geolocation {
         return countryFlag;
     }
 
-    public String getIsp() {
+    public String getISP() {
         return isp;
     }
 
@@ -164,8 +164,8 @@ public class Geolocation {
         return organization;
     }
 
-    public String getGeonameId() {
-        return geonameId;
+    public String getGeonameID() {
+        return geonameID;
     }
 
     public GeolocationCurrency getCurrency() {
