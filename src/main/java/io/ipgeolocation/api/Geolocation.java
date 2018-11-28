@@ -80,7 +80,7 @@ public class Geolocation {
         return message;
     }
 
-    public String getIP() {
+    public String getIPAddress() {
         return ip;
     }
 
