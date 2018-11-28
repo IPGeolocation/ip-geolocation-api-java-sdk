@@ -108,6 +108,8 @@ public class IPGeolocationAPI {
         try {
             URL obj = new URL(url);
             HttpURLConnection connection = (HttpURLConnection) obj.openConnection();
+            connection.setReadTimeout(10000);
+            connection.setConnectTimeout(10000);
             connection.setRequestMethod("GET");
             connection.setRequestProperty("Content-Type", "application/json");
             responseCode = connection.getResponseCode();
@@ -157,6 +159,8 @@ public class IPGeolocationAPI {
         try {
             URL obj = new URL(url);
             HttpURLConnection connection = (HttpURLConnection) obj.openConnection();
+            connection.setReadTimeout(10000);
+            connection.setConnectTimeout(10000);
             connection.setRequestMethod("POST");
             connection.setRequestProperty("Content-Type", "application/json");
             // Send post request
