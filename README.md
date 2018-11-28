@@ -218,7 +218,7 @@ IP Geolocation API Java SDK has following classes that you can use to fully leve
 | getGeolocation(GeolocationParams params) | This function to query Geolocation API based on the parameters passed. | Geolocation |
 | getTimezone() | This function to query Timezone API based on calling machine's IP address. | Timezone |
 | getTimezone(TimezoneParams params) | This function to query Timezone API based on the parameters passed. | Timezone |
-| getBulkGeolocation(GeolocationParams params) | This function to query Geolocation API to lookup multiple IP addresses (max. 50). | List |
+| getBulkGeolocation(GeolocationParams params) | This function to query Geolocation API to lookup multiple IP addresses (max. 50). | List<Geolocation> |
 | getApiKey() | This function to get the API key that you set to query the IPGeolocation API. | String |
 
 ### Class: io.ipgeolocation.api.GeolocationParams
