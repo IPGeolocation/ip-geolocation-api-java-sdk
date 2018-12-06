@@ -84,7 +84,7 @@ IPGeolocationAPI api = new IPGeolocationAPI("YOUR_API_KEY");
 ### Geolocation Lookup
 
 ```java
-// Query geolocation for IP address (1.1.1.1) and fields (geo, time_zone and currency)
+// Get geolocation for IP address (1.1.1.1) and fields (geo, time_zone and currency)
 GeolocationParams geoParams = new GeolocationParams();
 geoParams.setIPAddress("1.1.1.1");
 geoParams.setFields("geo,time_zone,currency");
@@ -100,37 +100,40 @@ if(geolocation.getStatus() == 200) {
     System.out.printf("Status Code: %d, Message: %s\n", geolocation.getStatus(), geolocation.getMessage());
 }
 
-// Query geolocation for IP address (1.1.1.1) and all fields
+// Get geolocation in Russian** for IP address (1.1.1.1) and all fields
 GeolocationParams geoParams = new GeolocationParams();
 geoParams.setIPAddress("1.1.1.1");
+geoParams.setLang("ru");
 
 Geolocation geolocation = api.getGeolocation(geoParams);
 
+// Check if geolocation lookup was successful
 if(geolocation.getStatus() == 200) {
     System.out.println(geolocation.getIPAddress());
     System.out.println(geolocation.getCountryName());
 } else {
-     System.out.printf("Status Code: %d, Message: %s\n", geolocation.getStatus(), geolocation.getMessage());
+    System.out.printf("Status Code: %d, Message: %s\n", geolocation.getStatus(), geolocation.getMessage());
 }
 
-// Query geolocation for the calling machine's IP address for all fields
+// Get geolocation for the calling machine's IP address for all fields
 Geolocation geolocation = api.getGeolocation();
 
 if(geolocation.getStatus() == 200) {
     System.out.println(geolocation.getCountryCode2());
     System.out.println(geolocation.getTimezone().getCurrentTime());
 } else {
-     System.out.printf("Status Code: %d, Message: %s\n", geolocation.getStatus(), geolocation.getMessage());
+    System.out.printf("Status Code: %d, Message: %s\n", geolocation.getStatus(), geolocation.getMessage());
 }
 ```
 
 ### Bulk Geolocations Lookup
 
 ```java
-// Query geolocations for multiple IP addresses and all fields
-String[] ips = new String[] {"1.1.1.1", "2.2.2.2", "3.3.3.3"};
+// Query geolocation in German** for multiple IP addresses and all fields
+String[] ips = new String[]{"1.1.1.1", "2.2.2.2", "3.3.3.3"};
 GeolocationParams geoParams = new GeolocationParams();
 geoParams.setIPAddresses(ips);
+geoParams.setLang("de");
 
 List<Geolocation> geolocations = api.getBulkGeolocation(geoParams);
 
@@ -140,7 +143,7 @@ System.out.println(geolocations.get(1).getLanguages());
 System.out.println(geolocations.get(2).getTimezone().getCurrentTime());
 
 // Query geolocations for multiple IP addresses but only geo field
-String[] ips = new String[] {"1.1.1.1", "2.2.2.2", "3.3.3.3"};
+String[] ips = new String[]{"1.1.1.1", "2.2.2.2", "3.3.3.3"};
 GeolocationParams geoParams = new GeolocationParams();
 geoParams.setIPAddresses(ips);
 geoParams.setFields("geo");
@@ -153,10 +156,10 @@ System.out.println(geolocations.get(1).getCountryName());
 System.out.println(geolocations.get(2).getLatitude());
 ```
 
-### Time Zone API
+### Timezone API
 
 ```java
-// Query time zone information by time zone ID
+// Get time zone information by time zone ID
 TimezoneParams tzParams = new TimezoneParams();
 tzParams.setTimezone("America/New_York");
 
@@ -166,10 +169,10 @@ if(tz.getStatus() == 200) {
     System.out.println(tz.getDateTimeWti());
     System.out.println(tz.getDateTimeTxt());
 } else {
-     System.out.printf("Status Code: %d, Message: %s\n", geolocation.getStatus(), geolocation.getMessage());
+    System.out.printf("Status Code: %d, Message: %s\n", geolocation.getStatus(), geolocation.getMessage());
 }
 
-// Query time zone information by latitude and longitude of the location
+// Get time zone information by latitude and longitude of the location
 TimezoneParams tzParams = new TimezoneParams();
 tzParams.setLocation(37.1838139, -123.8105225);
 
@@ -178,17 +181,18 @@ Timezone tz = api.getTimezone(tzParams);
 if(tz.getStatus() == 200) {
     System.out.println(tz.getTimezone());
 } else {
-    System.out.println(tz.getMessage());
+    System.out.printf("Status Code: %d, Message: %s\n", geolocation.getStatus(), geolocation.getMessage());
 }
 
-// Query time zone information for IP address (1.1.1.1)
+// Get time zone information for IP address (1.1.1.1) and geolocation information Japanese**
 TimezoneParams tzParams = new TimezoneParams();
 tzParams.setIPAddress("1.1.1.1");
+tzParams.setLang("ja");
 
 Timezone tz = api.getTimezone(tzParams);
 
 if(tz.getStatus() == 200) {
-    System.out.println(tz.toString());
+    System.out.println(tz.getTimezone());
 } else {
     System.out.printf("Status Code: %d, Message: %s\n", geolocation.getStatus(), geolocation.getMessage());
 }
@@ -203,6 +207,19 @@ if(tz.getMessage()) {
     System.out.printf("Status Code: %d, Message: %s\n", geolocation.getStatus(), geolocation.getMessage());
 }
 ```
+
+** IPGeolocation provides geolocation information in the following languages:
+* English (en)
+* German (de)
+* Russian (ru)
+* Japanese (ja)
+* French (fr)
+* Chinese Simplified (cn)
+* Spanish (es)
+* Czech (cs)
+* Italian (it)
+
+By default, geolocation information is returned in English. Response in a language other than English is available to paid users only.
 
 ## IP Geolocation API Java SDK Objects Reference
 
