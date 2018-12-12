@@ -184,7 +184,7 @@ public class IPGeolocationAPI {
 
     private Map<String, Object> convertJSONStringToMap(String responseCode, String response){
         Gson gson = new Gson();
-        Map<String,Object> map = new HashMap<String,Object>();
+        Map<String,Object> map = new LinkedHashMap<String, Object>();
 
         map = (Map<String, Object>) gson.fromJson(response, map.getClass());
         map.put("status", responseCode);

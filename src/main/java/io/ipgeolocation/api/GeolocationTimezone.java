@@ -6,6 +6,7 @@ public class GeolocationTimezone {
     private String name;
     private Double offset;
     private String currentTime;
+    private Double currentTimeUnix;
     private Boolean isDST;
     private Double dstSavings;
 
@@ -13,6 +14,7 @@ public class GeolocationTimezone {
         this.name = (String) json.get("name");
         this.offset = (Double) json.get("offset");
         this.currentTime = (String) json.get("current_time");
+        this.currentTimeUnix = (Double) json.get("current_time_unix");
         this.isDST = (Boolean) json.get("is_dst");
         this.dstSavings = (Double) json.get("dst_savings");
     }
@@ -29,6 +31,10 @@ public class GeolocationTimezone {
         return currentTime;
     }
 
+    public Double getCurrentTimeUnix() {
+        return currentTimeUnix;
+    }
+
     public Boolean isDST() {
         return isDST;
     }
@@ -39,6 +45,6 @@ public class GeolocationTimezone {
 
     @Override
     public String toString() {
-        return String.format("name: '%s' \noffset: '%s' \ncurrent_time: '%s' \nis_dst: '%b' \ndst_savings: '%s'", name, offset, currentTime, isDST, dstSavings);
+        return String.format("name: '%s' \noffset: '%s' \ncurrent_time: '%s' \ncurrent_time_unix: '%s' \nis_dst: '%b' \ndst_savings: '%s'", name, offset, currentTime, currentTimeUnix, isDST, dstSavings);
     }
 }
