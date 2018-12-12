@@ -16,4 +16,5 @@ log/
 target/
 
 #
+settings.xml
 Main.java
