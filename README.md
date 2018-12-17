@@ -287,6 +287,7 @@ IP Geolocation API Java SDK has following classes that you can use to fully leve
 |:-------|:------------|:------------|
 | getCode() | Returns 3-letters currency code. | String |
 | getName() | Returns currency name. | String |
+| getSymbol() | Returns currency symbol. | String |
 
 ### Class: io.ipgeolocation.api.GeolocationTimezone
 
