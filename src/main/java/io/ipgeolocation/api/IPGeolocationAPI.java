@@ -55,6 +55,10 @@ public class IPGeolocationAPI {
                 urlParams.append(params.getFields());
             }
 
+            if(params.isIncludeHostname()) {
+                urlParams.append("&include=hostname");
+            }
+
             if(!isNullOrEmpty(params.getLang())) {
                 urlParams.append("&lang=");
                 urlParams.append(params.getLang());

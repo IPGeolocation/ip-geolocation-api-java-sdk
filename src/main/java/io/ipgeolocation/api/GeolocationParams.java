@@ -6,12 +6,14 @@ public class GeolocationParams {
     private String ip;
     private String fields;
     private String lang;
+    private boolean includeHostname;
     private String[] ips;
 
     public GeolocationParams() {
         this.ip = "";
         this.fields = "";
         this.lang = "en";
+        this.includeHostname = false;
         this.ips = new String[0];
     }
 
@@ -20,7 +22,7 @@ public class GeolocationParams {
     }
 
     public String getIPAddress() {
-        return this.ip;
+        return ip;
     }
 
     public void setFields(String fields) {
@@ -28,7 +30,7 @@ public class GeolocationParams {
     }
 
     public String getFields() {
-        return this.fields;
+        return fields;
     }
 
     public void setLang(String lang) {
@@ -36,7 +38,15 @@ public class GeolocationParams {
     }
 
     public String getLang() {
-        return this.lang;
+        return lang;
+    }
+
+    public void setIncludeHostname(boolean includeHostname) {
+        this.includeHostname = includeHostname;
+    }
+
+    public boolean isIncludeHostname() {
+        return includeHostname;
     }
 
     public void setIPAddresses(String[] ips) throws IllegalArgumentException {
@@ -48,7 +58,7 @@ public class GeolocationParams {
     }
 
     public String[] getIPAddresses() {
-        return this.ips;
+        return ips;
     }
 
     @Override

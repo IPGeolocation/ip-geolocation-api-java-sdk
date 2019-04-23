@@ -7,7 +7,9 @@ import java.util.Map;
 public class Geolocation {
     private Integer status;
     private String message;
+    private String domain;
     private String ip;
+    private String hostname;
     private String continentCode;
     private String continentName;
     private String countryCode2;
@@ -39,7 +41,9 @@ public class Geolocation {
         if(this.status != 200 || message != null) {
             this.message = message;
         } else {
+            this.domain = (String) json.get("domain");
             this.ip = (String) json.get("ip");
+            this.hostname = (String) json.get("hostname");
             this.continentCode = (String) json.get("continent_code");
             this.continentName = (String) json.get("continent_name");
             this.countryCode2 = (String) json.get("country_code2");
@@ -81,8 +85,16 @@ public class Geolocation {
         return message;
     }
 
+    public String getDomain() {
+        return domain;
+    }
+
     public String getIPAddress() {
         return ip;
+    }
+
+    public String getHostname() {
+        return hostname;
     }
 
     public String getContinentCode() {
@@ -190,6 +202,6 @@ public class Geolocation {
             timezoneString = timezone.toString();
         }
 
-        return String.format("ip: '%s' \ncontinent_code: '%s' \ncontinent_name: '%s' \ncountry_code2: '%s' \ncountry_code3: '%s' \ncountry_name: '%s' \ncountry_capital: '%s \nstate_prov: '%s' \ndistrict: '%s' \ncity: '%s' \nzipcode: '%s' \nlatitude: '%s' \nlongitude: '%s' \nis_eu: '%s' \ncalling_code: '%s' \ncountry_tld: '%s' \nlanguages: '%s' \ncountry_flag: '%s' \nisp: '%s' \nconnection_type: '%s' \norganization: '%s' \ngeoname_id: '%s' \ncurrency: {\n%s\n} \ntime_zone: {\n%s\n}\n", ip, continentCode, continentName, countryCode2, countryCode3, countryName, countryCapital, stateProvince, district, city, zipCode, latitude, longitude, isEU, callingCode, countryTLD, languages, countryFlag, isp, connectionType, organization, geonameID, currencyString, timezoneString);
+        return String.format("domain: '%s' \nip: '%s' \nhostname: '%s' \ncontinent_code: '%s' \ncontinent_name: '%s' \ncountry_code2: '%s' \ncountry_code3: '%s' \ncountry_name: '%s' \ncountry_capital: '%s \nstate_prov: '%s' \ndistrict: '%s' \ncity: '%s' \nzipcode: '%s' \nlatitude: '%s' \nlongitude: '%s' \nis_eu: '%s' \ncalling_code: '%s' \ncountry_tld: '%s' \nlanguages: '%s' \ncountry_flag: '%s' \nisp: '%s' \nconnection_type: '%s' \norganization: '%s' \ngeoname_id: '%s' \ncurrency: {\n%s\n} \ntime_zone: {\n%s\n}\n", domain, ip, hostname, continentCode, continentName, countryCode2, countryCode3, countryName, countryCapital, stateProvince, district, city, zipCode, latitude, longitude, isEU, callingCode, countryTLD, languages, countryFlag, isp, connectionType, organization, geonameID, currencyString, timezoneString);
     }
 }
