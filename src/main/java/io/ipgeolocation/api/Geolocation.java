@@ -31,7 +31,6 @@ public class Geolocation {
     private String connectionType;
     private String organization;
     private String asn;
-    private String route;
     private String geonameID;
     private GeolocationCurrency currency;
     private GeolocationTimezone timezone;
@@ -67,7 +66,6 @@ public class Geolocation {
             this.connectionType = (String) json.get("connection_type");
             this.organization = (String) json.get("organization");
             this.asn = (String) json.get("asn");
-            this.route = (String) json.get("route");
             this.geonameID = (String) json.get("geoname_id");
             if(json.get("currency") instanceof LinkedTreeMap) {
                 Map currencyJson = (LinkedTreeMap) json.get("currency");
@@ -185,10 +183,6 @@ public class Geolocation {
         return asn;
     }
 
-    public String getRoute() {
-        return route;
-    }
-
     public String getGeonameID() {
         return geonameID;
     }
@@ -214,6 +208,6 @@ public class Geolocation {
             timezoneString = timezone.toString();
         }
 
-        return String.format("domain: '%s' \nip: '%s' \nhostname: '%s' \ncontinent_code: '%s' \ncontinent_name: '%s' \ncountry_code2: '%s' \ncountry_code3: '%s' \ncountry_name: '%s' \ncountry_capital: '%s \nstate_prov: '%s' \ndistrict: '%s' \ncity: '%s' \nzipcode: '%s' \nlatitude: '%s' \nlongitude: '%s' \nis_eu: '%s' \ncalling_code: '%s' \ncountry_tld: '%s' \nlanguages: '%s' \ncountry_flag: '%s' \nisp: '%s' \nconnection_type: '%s' \norganization: '%s' \ngeoname_id: '%s'\nasn: '%s' \nroute: '%s' \ncurrency: {\n%s\n} \ntime_zone: {\n%s\n}\n", domain, ip, hostname, continentCode, continentName, countryCode2, countryCode3, countryName, countryCapital, stateProvince, district, city, zipCode, latitude, longitude, isEU, callingCode, countryTLD, languages, countryFlag, isp, connectionType, organization, geonameID, asn, route, currencyString, timezoneString);
+        return String.format("domain: '%s' \nip: '%s' \nhostname: '%s' \ncontinent_code: '%s' \ncontinent_name: '%s' \ncountry_code2: '%s' \ncountry_code3: '%s' \ncountry_name: '%s' \ncountry_capital: '%s \nstate_prov: '%s' \ndistrict: '%s' \ncity: '%s' \nzipcode: '%s' \nlatitude: '%s' \nlongitude: '%s' \nis_eu: '%s' \ncalling_code: '%s' \ncountry_tld: '%s' \nlanguages: '%s' \ncountry_flag: '%s' \nisp: '%s' \nconnection_type: '%s' \norganization: '%s' \ngeoname_id: '%s'\nasn: '%s' \ncurrency: {\n%s\n} \ntime_zone: {\n%s\n}\n", domain, ip, hostname, continentCode, continentName, countryCode2, countryCode3, countryName, countryCapital, stateProvince, district, city, zipCode, latitude, longitude, isEU, callingCode, countryTLD, languages, countryFlag, isp, connectionType, organization, geonameID, asn, currencyString, timezoneString);
     }
 }

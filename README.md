@@ -35,7 +35,7 @@ Add the following dependency in 'pom.xml' file to use the IP Geolocation API Jav
 <dependency>
     <groupId>io.ipgeolocation</groupId>
     <artifactId>ipgeolocation</artifactId>
-    <version>1.0.8</version>
+    <version>1.0.9</version>
 </dependency>
 ```
 
@@ -50,7 +50,7 @@ repositories {
 }
 
 dependencies {
-    compile 'io.ipgeolocation:ipgeolocation:1.0.8'
+    compile 'io.ipgeolocation:ipgeolocation:1.0.9'
     ...
 }
 ```
@@ -60,7 +60,7 @@ dependencies {
 Add the following dependency code in 'ivy.xml' file to use the IP Geolocation API Java SDK.
 
 ```ivy
-<dependency org='io.ipgeolocation' name='ipgeolocation' rev='1.0.8'>
+<dependency org='io.ipgeolocation' name='ipgeolocation' rev='1.0.9'>
     <artifact name='ipgeolocation' />
 </dependency>
 ```
@@ -69,7 +69,7 @@ Add the following dependency code in 'ivy.xml' file to use the IP Geolocation AP
 
 Use the following URL to download the latest JAR file for IP Geolocation API Java SDK.
 
-* [https://ipgeolocation.io/downloads/ip-geolocation-api-java-1.0.5.jar](https://ipgeolocation.io/downloads/ip-geolocation-api-java-1.0.8.jar)
+* [https://ipgeolocation.io/downloads/ip-geolocation-api-java-1.0.9.jar](https://ipgeolocation.io/downloads/ip-geolocation-api-java-1.0.9.jar)
 
 Basic Usage
 -----------
@@ -278,7 +278,6 @@ IP Geolocation API Java SDK has following classes that you can use to fully leve
 | getConnectionType() | Returns connection type of the IP address. | String |
 | getOrganization() | Returns organization of the IP address. | String |
 | getAsn() | Returns AS number of the IP address. | String |
-| getRoute() | Returns BGP route of the IP address. | String |
 | getGeonameID() | Returns geoname ID from geonames.org database. | String |
 | getCurrency() | Returns currency information of the country. | GeolocationCurrency |
 | getTimezone() | Returns time zone information of the country. | GeolocationTimezone |
