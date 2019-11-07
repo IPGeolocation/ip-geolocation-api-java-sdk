@@ -35,7 +35,7 @@ Add the following dependency in 'pom.xml' file to use the IP Geolocation API Jav
 <dependency>
     <groupId>io.ipgeolocation</groupId>
     <artifactId>ipgeolocation</artifactId>
-    <version>1.0.9</version>
+    <version>1.0.11</version>
 </dependency>
 ```
 
@@ -50,7 +50,7 @@ repositories {
 }
 
 dependencies {
-    compile 'io.ipgeolocation:ipgeolocation:1.0.9'
+    compile 'io.ipgeolocation:ipgeolocation:1.0.11'
     ...
 }
 ```
@@ -60,7 +60,7 @@ dependencies {
 Add the following dependency code in 'ivy.xml' file to use the IP Geolocation API Java SDK.
 
 ```ivy
-<dependency org='io.ipgeolocation' name='ipgeolocation' rev='1.0.9'>
+<dependency org='io.ipgeolocation' name='ipgeolocation' rev='1.0.11'>
     <artifact name='ipgeolocation' />
 </dependency>
 ```
@@ -69,7 +69,7 @@ Add the following dependency code in 'ivy.xml' file to use the IP Geolocation AP
 
 Use the following URL to download the latest JAR file for IP Geolocation API Java SDK.
 
-* [https://ipgeolocation.io/downloads/ip-geolocation-api-java-1.0.9.jar](https://ipgeolocation.io/downloads/ip-geolocation-api-java-1.0.9.jar)
+* [https://ipgeolocation.io/downloads/ip-geolocation-api-java-1.0.11.jar](https://ipgeolocation.io/downloads/ip-geolocation-api-java-1.0.11.jar)
 
 Basic Usage
 -----------
@@ -88,7 +88,7 @@ IPGeolocationAPI api = new IPGeolocationAPI("YOUR_API_KEY");
 GeolocationParams geoParams = new GeolocationParams();
 geoParams.setIPAddress("1.1.1.1");
 geoParams.setFields("geo,time_zone,currency");
-
+geoParams.setIncludeSecurity(true);
 Geolocation geolocation = api.getGeolocation(geoParams);
 
 // Check if geolocation lookup was successful
@@ -96,6 +96,12 @@ if(geolocation.getStatus() == 200) {
     System.out.println(geolocation.getCountryName());
     System.out.println(geolocation.getCurrency().getName());
     System.out.println(geolocation.getTimezone().getCurrentTime());
+    System.out.println(geolocation.getGeolocationSecurity().getAnonymous());
+    System.out.println(geolocation.getGeolocationSecurity().getKnownAttacker());
+    System.out.println(geolocation.getGeolocationSecurity().getProxy());
+    System.out.println(geolocation.getGeolocationSecurity().getProxyType());
+    System.out.println(geolocation.getGeolocationSecurity().getAnonymous());
+    System.out.println(geolocation.getGeolocationSecurity().getCloudProvider());
 } else {
     System.out.printf("Status Code: %d, Message: %s\n", geolocation.getStatus(), geolocation.getMessage());
 }

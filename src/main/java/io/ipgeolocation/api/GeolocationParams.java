@@ -7,6 +7,7 @@ public class GeolocationParams {
     private String fields;
     private String lang;
     private boolean includeHostname;
+    private boolean includeSecurity;
     private String[] ips;
 
     public GeolocationParams() {
@@ -14,6 +15,7 @@ public class GeolocationParams {
         this.fields = "";
         this.lang = "en";
         this.includeHostname = false;
+        this.includeSecurity = false;
         this.ips = new String[0];
     }
 
@@ -47,6 +49,14 @@ public class GeolocationParams {
 
     public boolean isIncludeHostname() {
         return includeHostname;
+    }
+
+    public boolean isIncludeSecurity() {
+        return includeSecurity;
+    }
+
+    public void setIncludeSecurity(boolean includeSecurity) {
+        this.includeSecurity = includeSecurity;
     }
 
     public void setIPAddresses(String[] ips) throws IllegalArgumentException {

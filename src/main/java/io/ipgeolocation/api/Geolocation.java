@@ -34,6 +34,7 @@ public class Geolocation {
     private String geonameID;
     private GeolocationCurrency currency;
     private GeolocationTimezone timezone;
+    private GeolocationSecurity geolocationSecurity;
 
     Geolocation(Map<String, Object> json) {
         this.status = Integer.parseInt((String) json.get("status"));
@@ -75,6 +76,11 @@ public class Geolocation {
             if(json.get("time_zone") instanceof LinkedTreeMap) {
                 Map timezoneJson = (LinkedTreeMap) json.get("time_zone");
                 this.timezone = new GeolocationTimezone(timezoneJson);
+            }
+
+            if(json.get("security") instanceof LinkedTreeMap) {
+                Map securityJson = (LinkedTreeMap) json.get("security");
+                this.geolocationSecurity = new GeolocationSecurity(securityJson);
             }
         }
     }
@@ -195,10 +201,15 @@ public class Geolocation {
         return timezone;
     }
 
+    public GeolocationSecurity getGeolocationSecurity() {
+        return geolocationSecurity;
+    }
+
     @Override
     public String toString() {
         String currencyString = "";
         String timezoneString = "";
+        String geolocationSecurityString = "";
 
         if(currency != null) {
             currencyString = currency.toString();
@@ -208,6 +219,10 @@ public class Geolocation {
             timezoneString = timezone.toString();
         }
 
-        return String.format("domain: '%s' \nip: '%s' \nhostname: '%s' \ncontinent_code: '%s' \ncontinent_name: '%s' \ncountry_code2: '%s' \ncountry_code3: '%s' \ncountry_name: '%s' \ncountry_capital: '%s \nstate_prov: '%s' \ndistrict: '%s' \ncity: '%s' \nzipcode: '%s' \nlatitude: '%s' \nlongitude: '%s' \nis_eu: '%s' \ncalling_code: '%s' \ncountry_tld: '%s' \nlanguages: '%s' \ncountry_flag: '%s' \nisp: '%s' \nconnection_type: '%s' \norganization: '%s' \ngeoname_id: '%s'\nasn: '%s' \ncurrency: {\n%s\n} \ntime_zone: {\n%s\n}\n", domain, ip, hostname, continentCode, continentName, countryCode2, countryCode3, countryName, countryCapital, stateProvince, district, city, zipCode, latitude, longitude, isEU, callingCode, countryTLD, languages, countryFlag, isp, connectionType, organization, geonameID, asn, currencyString, timezoneString);
+        if(geolocationSecurity != null){
+            geolocationSecurityString = geolocationSecurity.toString();
+        }
+
+        return String.format("domain: '%s' \nip: '%s' \nhostname: '%s' \ncontinent_code: '%s' \ncontinent_name: '%s' \ncountry_code2: '%s' \ncountry_code3: '%s' \ncountry_name: '%s' \ncountry_capital: '%s \nstate_prov: '%s' \ndistrict: '%s' \ncity: '%s' \nzipcode: '%s' \nlatitude: '%s' \nlongitude: '%s' \nis_eu: '%s' \ncalling_code: '%s' \ncountry_tld: '%s' \nlanguages: '%s' \ncountry_flag: '%s' \nisp: '%s' \nconnection_type: '%s' \norganization: '%s' \ngeoname_id: '%s'\nasn: '%s' \ncurrency: {\n%s\n} \ntime_zone: {\n%s\n} \nsecurity: {\n%s\n}\n", domain, ip, hostname, continentCode, continentName, countryCode2, countryCode3, countryName, countryCapital, stateProvince, district, city, zipCode, latitude, longitude, isEU, callingCode, countryTLD, languages, countryFlag, isp, connectionType, organization, geonameID, asn, currencyString, timezoneString, geolocationSecurityString);
     }
 }
