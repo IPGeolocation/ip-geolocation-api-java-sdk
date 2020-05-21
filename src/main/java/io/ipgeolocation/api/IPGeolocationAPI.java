@@ -7,6 +7,7 @@ import java.util.*;
 
 import com.google.gson.Gson;
 
+import static io.ipgeolocation.api.Strings.isJsonString;
 import static io.ipgeolocation.api.Strings.isNullOrEmpty;
 
 public class IPGeolocationAPI {
@@ -145,6 +146,9 @@ public class IPGeolocationAPI {
             if(isNullOrEmpty(responseCode) || isNullOrEmpty(jsonString)) {
                 responseCode = "422";
                 jsonString = "{\"message\":\"Something went wrong while parsing IP Geolocation API response\"}";
+            } else if (!isJsonString(jsonString)) {
+                responseCode = "422";
+                jsonString = "{\"message\":\"Connection problem or Invalid response by IP Geolocation API\"}";
             }
         } catch (IOException e) {
             responseCode = "422";
@@ -194,7 +198,7 @@ public class IPGeolocationAPI {
         return responseMap;
     }
 
-    private Map<String, Object> convertJSONStringToMap(String responseCode, String response){
+    private Map<String, Object> convertJSONStringToMap(String responseCode, String response) {
         Gson gson = new Gson();
         Map<String,Object> map = new LinkedHashMap<String, Object>();
 
