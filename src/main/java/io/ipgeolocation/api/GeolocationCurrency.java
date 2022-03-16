@@ -3,11 +3,11 @@ package io.ipgeolocation.api;
 import java.util.Map;
 
 public class GeolocationCurrency {
-    private String name;
-    private String code;
-    private String symbol;
+    private final String name;
+    private final String code;
+    private final String symbol;
 
-    GeolocationCurrency(Map json) {
+    GeolocationCurrency(Map<String, Object> json) {
         this.name = (String) json.get("name");
         this.code = (String) json.get("code");
         this.symbol = (String) json.get("symbol");

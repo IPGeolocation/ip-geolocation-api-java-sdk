@@ -6,13 +6,13 @@ public class TimezoneParams {
     private String lang;
     private Double latitude;
     private Double longitude;
+    private String location;
 
     public TimezoneParams() {
         this.timezone = "";
         this.ip = "";
         this.lang = "en";
-        this.latitude = 1000.0;
-        this.longitude = 1000.0;
+        this.location = "";
     }
 
     public void setTimezone(String timezone) {
@@ -39,9 +39,13 @@ public class TimezoneParams {
         return this.lang;
     }
 
-    public void setLocation(Double latitude, Double longitude) {
-        this.latitude = latitude;
-        this.longitude = longitude;
+    public void setCoordinates(Double latitude, Double longitude) {
+        if ((latitude >= -90 && latitude <= 90) && (longitude >= -180 && longitude <= 180)) {
+            this.latitude = latitude;
+            this.longitude = longitude;
+        } else {
+            throw new IllegalArgumentException("Coordinate value is out of range!");
+        }
     }
 
     public Double getLatitude() {
@@ -52,8 +56,12 @@ public class TimezoneParams {
         return this.longitude;
     }
 
-    @Override
-    public String toString() {
-        return String.format("IP Address: '%s', Lang: '%s', Location: '%f, %f'", ip, lang, latitude, longitude);
+    public String getLocation() {
+        return location;
     }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
 }

@@ -5,10 +5,11 @@ import com.google.gson.internal.LinkedTreeMap;
 import java.util.Map;
 
 public class Timezone {
-    private Integer status;
+    private final Integer status;
     private String message;
     private String timezone;
     private Double timezoneOffset;
+    private Double timezoneOffsetWithDST;
     private String date;
     private String dateTime;
     private String dateTimeTxt;
@@ -17,9 +18,9 @@ public class Timezone {
     private Double dateTimeUnix;
     private String time24;
     private String time12;
-    private String week;
-    private String month;
-    private String year;
+    private Integer week;
+    private Integer month;
+    private Integer year;
     private String yearAbbr;
     private Boolean isDST;
     private Double dstSavings;
@@ -29,11 +30,12 @@ public class Timezone {
         this.status = Integer.parseInt((String) json.get("status"));
         String message = (String) json.get("message");
 
-        if(this.status != 200 || message != null) {
+        if (this.status != 200 || message != null) {
             this.message = message;
         } else {
             this.timezone = (String) json.get("timezone");
             this.timezoneOffset = (Double) json.get("timezone_offset");
+            this.timezoneOffsetWithDST = (Double) json.get("timezone_offset_with_dst");
             this.date = (String) json.get("date");
             this.dateTime = (String) json.get("date_time");
             this.dateTimeTxt = (String) json.get("date_time_txt");
@@ -42,15 +44,14 @@ public class Timezone {
             this.dateTimeUnix = (Double) json.get("date_time_unix");
             this.time24 = (String) json.get("time_24");
             this.time12 = (String) json.get("time_12");
-            this.week = (String) json.get("week");
-            this.month = (String) json.get("month");
-            this.year = (String) json.get("year");
+            this.week = (Integer) json.get("week");
+            this.month = (Integer) json.get("month");
+            this.year = (Integer) json.get("year");
             this.yearAbbr = (String) json.get("year_abbr");
             this.isDST = (Boolean) json.get("is_dst");
             this.dstSavings = (Double) json.get("dst_savings");
-
-            if(json.get("geo") instanceof LinkedTreeMap) {
-                Map geoJson = (LinkedTreeMap) json.get("geo");
+            if (json.get("geo") instanceof LinkedTreeMap) {
+                Map<String, Object> geoJson = (LinkedTreeMap) json.get("geo");
                 this.timezoneGeo = new TimezoneGeo(geoJson);
             }
         }
@@ -70,6 +71,10 @@ public class Timezone {
 
     public Double getTimezoneOffset() {
         return timezoneOffset;
+    }
+
+    public Double getTimezoneOffsetWithDST() {
+        return timezoneOffsetWithDST;
     }
 
     public String getDate() {
@@ -104,15 +109,15 @@ public class Timezone {
         return time12;
     }
 
-    public String getWeek() {
+    public Integer getWeek() {
         return week;
     }
 
-    public String getMonth() {
+    public Integer getMonth() {
         return month;
     }
 
-    public String getYear() {
+    public Integer getYear() {
         return year;
     }
 
@@ -135,11 +140,9 @@ public class Timezone {
     @Override
     public String toString() {
         String timezoneGeoString = "";
-
-        if(timezoneGeo != null) {
+        if (timezoneGeo != null) {
             timezoneGeoString = timezoneGeo.toString();
         }
-
-        return String.format("timezone: '%s', \ntimezone_offset: '%s', \ndate: '%s', \ndate_time: '%s', \ndate_time_txt: '%s', \ndate_time_wti: '%s', \ndate_time_ymd: '%s', \ndate_time_unix: '%f', \ntime_24: '%s', \ntime_12: '%s', \nweek: '%s', \nmonth: '%s', \nyear: '%s', \nyear_abbr: '%s', \nis_dst: '%s', \ndst_savings: '%s', \ngeo: {\n%s\n}\n", timezone, timezoneOffset, date, dateTime, dateTimeTxt, dateTimeWti, dateTimeYmd, dateTimeUnix, time24, time12, week, month, year, yearAbbr, isDST, dstSavings, timezoneGeoString);
+        return String.format("timezone: '%s', \ntimezone_offset: '%s', \ndate: '%s', \ndate_time: '%s', \ndate_time_txt: '%s', \ndate_time_wti: '%s', \ndate_time_ymd: '%s', \ndate_time_unix: '%f', \ntime_24: '%s', \ntime_12: '%s', \nweek: '%d', \nmonth: '%d', \nyear: '%d', \nyear_abbr: '%s', \nis_dst: '%s', \ndst_savings: '%s', \ngeo: {\n%s\n}\n", timezone, timezoneOffset, date, dateTime, dateTimeTxt, dateTimeWti, dateTimeYmd, dateTimeUnix, time24, time12, week, month, year, yearAbbr, isDST, dstSavings, timezoneGeoString);
     }
 }

@@ -3,14 +3,14 @@ package io.ipgeolocation.api;
 import java.util.Map;
 
 public class GeolocationTimezone {
-    private String name;
-    private Double offset;
-    private String currentTime;
-    private Double currentTimeUnix;
-    private Boolean isDST;
-    private Double dstSavings;
+    private final String name;
+    private final Double offset;
+    private final String currentTime;
+    private final Double currentTimeUnix;
+    private final Boolean isDST;
+    private final Double dstSavings;
 
-    GeolocationTimezone(Map json) {
+    GeolocationTimezone(Map<String, Object> json) {
         this.name = (String) json.get("name");
         this.offset = (Double) json.get("offset");
         this.currentTime = (String) json.get("current_time");

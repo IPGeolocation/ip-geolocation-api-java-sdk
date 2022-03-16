@@ -3,17 +3,17 @@ package io.ipgeolocation.api;
 import java.util.Map;
 
 public class TimezoneGeo {
-    private String countryCode2;
-    private String countryCode3;
-    private String countryName;
-    private String stateProvince;
-    private String district;
-    private String city;
-    private String zipCode;
-    private String latitude;
-    private String longitude;
+    private final String countryCode2;
+    private final String countryCode3;
+    private final String countryName;
+    private final String stateProvince;
+    private final String district;
+    private final String city;
+    private final String zipCode;
+    private final String latitude;
+    private final String longitude;
 
-    TimezoneGeo(Map json) {
+    TimezoneGeo(Map<String, Object> json) {
         this.countryCode2 = (String) json.get("country_code2");
         this.countryCode3 = (String) json.get("country_code3");
         this.countryName = (String) json.get("country_name");
@@ -21,8 +21,8 @@ public class TimezoneGeo {
         this.district = (String) json.get("district");
         this.city = (String) json.get("city");
         this.zipCode = (String) json.get("zipcode");
-        this.latitude = (String) json.get("latitude");
-        this.longitude = (String) json.get("longitude");
+        this.latitude = Double.toString((Double) json.get("latitude"));
+        this.longitude = Double.toString((Double) json.get("longitude"));
     }
 
     public String getCountryCode2() {

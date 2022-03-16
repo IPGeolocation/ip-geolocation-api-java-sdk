@@ -5,7 +5,7 @@ import com.google.gson.Gson;
 class Strings {
 
     static String nullToEmpty(String s) {
-        if(s == null) {
+        if (s == null) {
             s = "";
         }
         return s;
@@ -19,10 +19,7 @@ class Strings {
         Gson gson = new Gson();
         try {
             Object jsonObjType = gson.fromJson(jsonString, Object.class).getClass();
-            if(jsonObjType.equals(String.class)){
-                return false;
-            }
-            return true;
+            return !jsonObjType.equals(String.class);
         } catch (com.google.gson.JsonSyntaxException ex) {
             return false;
         }

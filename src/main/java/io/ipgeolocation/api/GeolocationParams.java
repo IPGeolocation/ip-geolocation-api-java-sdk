@@ -1,22 +1,24 @@
 package io.ipgeolocation.api;
 
-import java.util.Arrays;
-
 public class GeolocationParams {
     private String ip;
-    private String fields;
+    private String[] ips;
     private String lang;
+    private String fields;
     private boolean includeHostname;
     private boolean includeSecurity;
-    private String[] ips;
+    private boolean includeUserAgentDetail;
+    private String excludes;
 
     public GeolocationParams() {
         this.ip = "";
-        this.fields = "";
+        this.ips = new String[0];
         this.lang = "en";
+        this.fields = "";
         this.includeHostname = false;
         this.includeSecurity = false;
-        this.ips = new String[0];
+        this.includeUserAgentDetail = false;
+        this.excludes = "";
     }
 
     public void setIPAddress(String ip) {
@@ -51,16 +53,33 @@ public class GeolocationParams {
         return includeHostname;
     }
 
-    public boolean isIncludeSecurity() {
-        return includeSecurity;
-    }
-
     public void setIncludeSecurity(boolean includeSecurity) {
         this.includeSecurity = includeSecurity;
     }
 
+    public boolean isIncludeSecurity() {
+        return includeSecurity;
+    }
+
+    public void setIncludeUserAgentDetail(boolean includeUserAgentDetail) {
+        this.includeUserAgentDetail = includeUserAgentDetail;
+    }
+
+    public boolean isIncludeUserAgentDetail() {
+        return includeUserAgentDetail;
+    }
+
+    public void setExcludes(String excludes) {
+        this.excludes = excludes;
+    }
+
+    public String getExcludes() {
+        return excludes;
+    }
+
+
     public void setIPAddresses(String[] ips) throws IllegalArgumentException {
-        if(ips.length > 50) {
+        if (ips.length > 50) {
             throw new IllegalArgumentException("Max. number of IP addresses cannot be more than 50.");
         } else {
             this.ips = ips;
@@ -69,10 +88,5 @@ public class GeolocationParams {
 
     public String[] getIPAddresses() {
         return ips;
-    }
-
-    @Override
-    public String toString() {
-        return String.format("IP address: '%s', Fields: '%s', Lang: '%s', IP addresses: '%s'", ip, fields, lang, Arrays.toString(ips));
     }
 }

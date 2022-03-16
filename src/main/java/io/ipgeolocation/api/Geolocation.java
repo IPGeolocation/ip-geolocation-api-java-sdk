@@ -5,7 +5,7 @@ import com.google.gson.internal.LinkedTreeMap;
 import java.util.Map;
 
 public class Geolocation {
-    private Integer status;
+    private final Integer status;
     private String message;
     private String domain;
     private String ip;
@@ -35,12 +35,12 @@ public class Geolocation {
     private GeolocationCurrency currency;
     private GeolocationTimezone timezone;
     private GeolocationSecurity geolocationSecurity;
+    private UserAgent userAgent;
 
     Geolocation(Map<String, Object> json) {
         this.status = Integer.parseInt((String) json.get("status"));
         String message = (String) json.get("message");
-
-        if(this.status != 200 || message != null) {
+        if (this.status != 200 || message != null) {
             this.message = message;
         } else {
             this.domain = (String) json.get("domain");
@@ -68,19 +68,24 @@ public class Geolocation {
             this.organization = (String) json.get("organization");
             this.asn = (String) json.get("asn");
             this.geonameID = (String) json.get("geoname_id");
-            if(json.get("currency") instanceof LinkedTreeMap) {
-                Map currencyJson = (LinkedTreeMap) json.get("currency");
+            if (json.get("currency") instanceof LinkedTreeMap) {
+                Map<String, Object> currencyJson = (LinkedTreeMap) json.get("currency");
                 this.currency = new GeolocationCurrency(currencyJson);
             }
 
-            if(json.get("time_zone") instanceof LinkedTreeMap) {
-                Map timezoneJson = (LinkedTreeMap) json.get("time_zone");
+            if (json.get("time_zone") instanceof LinkedTreeMap) {
+                Map<String, Object> timezoneJson = (LinkedTreeMap) json.get("time_zone");
                 this.timezone = new GeolocationTimezone(timezoneJson);
             }
 
-            if(json.get("security") instanceof LinkedTreeMap) {
-                Map securityJson = (LinkedTreeMap) json.get("security");
+            if (json.get("security") instanceof LinkedTreeMap) {
+                Map<String, Object> securityJson = (LinkedTreeMap) json.get("security");
                 this.geolocationSecurity = new GeolocationSecurity(securityJson);
+            }
+
+            if (json.get("user_agent") instanceof LinkedTreeMap) {
+                Map<String, Object> userAgentJson = (LinkedTreeMap) json.get("user_agent");
+                this.userAgent = new UserAgent(userAgentJson);
             }
         }
     }
@@ -205,24 +210,33 @@ public class Geolocation {
         return geolocationSecurity;
     }
 
+    public UserAgent getUserAgent() {
+        return userAgent;
+    }
+
     @Override
     public String toString() {
         String currencyString = "";
         String timezoneString = "";
         String geolocationSecurityString = "";
+        String userAgentString = "";
 
-        if(currency != null) {
+        if (currency != null) {
             currencyString = currency.toString();
         }
 
-        if(timezone != null) {
+        if (timezone != null) {
             timezoneString = timezone.toString();
         }
 
-        if(geolocationSecurity != null){
+        if (geolocationSecurity != null) {
             geolocationSecurityString = geolocationSecurity.toString();
         }
 
-        return String.format("domain: '%s' \nip: '%s' \nhostname: '%s' \ncontinent_code: '%s' \ncontinent_name: '%s' \ncountry_code2: '%s' \ncountry_code3: '%s' \ncountry_name: '%s' \ncountry_capital: '%s \nstate_prov: '%s' \ndistrict: '%s' \ncity: '%s' \nzipcode: '%s' \nlatitude: '%s' \nlongitude: '%s' \nis_eu: '%s' \ncalling_code: '%s' \ncountry_tld: '%s' \nlanguages: '%s' \ncountry_flag: '%s' \nisp: '%s' \nconnection_type: '%s' \norganization: '%s' \ngeoname_id: '%s'\nasn: '%s' \ncurrency: {\n%s\n} \ntime_zone: {\n%s\n} \nsecurity: {\n%s\n}\n", domain, ip, hostname, continentCode, continentName, countryCode2, countryCode3, countryName, countryCapital, stateProvince, district, city, zipCode, latitude, longitude, isEU, callingCode, countryTLD, languages, countryFlag, isp, connectionType, organization, geonameID, asn, currencyString, timezoneString, geolocationSecurityString);
+        if (userAgent != null) {
+            userAgentString = userAgent.toString();
+        }
+
+        return String.format("domain: '%s' \nip: '%s' \nhostname: '%s' \ncontinent_code: '%s' \ncontinent_name: '%s' \ncountry_code2: '%s' \ncountry_code3: '%s' \ncountry_name: '%s' \ncountry_capital: '%s \nstate_prov: '%s' \ndistrict: '%s' \ncity: '%s' \nzipcode: '%s' \nlatitude: '%s' \nlongitude: '%s' \nis_eu: '%s' \ncalling_code: '%s' \ncountry_tld: '%s' \nlanguages: '%s' \ncountry_flag: '%s' \nisp: '%s' \nconnection_type: '%s' \norganization: '%s' \ngeoname_id: '%s'\nasn: '%s' \ncurrency: {\n%s\n} \ntime_zone: {\n%s\n} \nsecurity: {\n%s\n} \nuser_agent: {\n%s\n}\n", domain, ip, hostname, continentCode, continentName, countryCode2, countryCode3, countryName, countryCapital, stateProvince, district, city, zipCode, latitude, longitude, isEU, callingCode, countryTLD, languages, countryFlag, isp, connectionType, organization, geonameID, asn, currencyString, timezoneString, geolocationSecurityString, userAgentString);
     }
 }

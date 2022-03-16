@@ -308,17 +308,17 @@ IP Geolocation API Java SDK has following classes that you can use to fully leve
 
 ### Class: io.ipgeolocation.api.TimezoneParams
 
-| Method | Description | Return Type |
-|:-------|:------------|:------------|
-| setTimezone(String timezone) | Sets time zone ID to query time zone information. | void |
-| getTimezone() | Get time zone ID set to query time zone information. | String |
-| setIPAddress(String ip) | Sets IP address to query time zone information. | void |
-| getIPAddress() | Get IP address set to query time zone information. | String |
-| setLocation(Double latitude, Double longitude) | Sets latitude and longitude of a location to query time zone information. | void |
-| getLatitude() | Returns latitude set to query time zone information. | Double |
-| getLongitude() | Returns longitude set to query time zone information. | Double |
-| setLang(String lang) | Set language parameter to lookup geolocation. Default is 'en'. | void |
-| getLang() | Get language set to lookup geolocation. | String |
+| Method                                            | Description | Return Type |
+|:--------------------------------------------------|:------------|:------------|
+| setTimezone(String timezone)                      | Sets time zone ID to query time zone information. | void |
+| getTimezone()                                     | Get time zone ID set to query time zone information. | String |
+| setIPAddress(String ip)                           | Sets IP address to query time zone information. | void |
+| getIPAddress()                                    | Get IP address set to query time zone information. | String |
+| setCoordinates(Double latitude, Double longitude) | Sets latitude and longitude of a location to query time zone information. | void |
+| getLatitude()                                     | Returns latitude set to query time zone information. | Double |
+| getLongitude()                                    | Returns longitude set to query time zone information. | Double |
+| setLang(String lang)                              | Set language parameter to lookup geolocation. Default is 'en'. | void |
+| getLang()                                         | Get language set to lookup geolocation. | String |
 
 ### Class: io.ipgeolocation.api.Timezone
 
