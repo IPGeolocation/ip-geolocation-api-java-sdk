@@ -1,7 +1,7 @@
 # IP Geolocation API Java SDK
 
 ## Introduction
-[IPGeolocation API](https://ipgeolocation.io) is the solution to identify country code (ISO2 and ISO3 standard), country name, continent code, continent name, country capital, state/province, district, city, zip code, latitude and longitude of city, is country belongs to Europian Union, calling code, top level domain (TLD), languages, country flag, internet service provider (ISP), connection type, organization, geoname ID, currency code, currency name, time zone ID, time zone offset, current time in the time zone, is time zone in daylight saving time, and total daylight savings. This document provides important information to help you get up to speed with IPGeolocation API using IP Geolocation API Java SDK.
+[IPGeolocation API](https://ipgeolocation.io) is the solution to identify country code (ISO2 and ISO3 standard), country name, continent code, continent name, country capital, state/province, district, city, zip code, latitude and longitude of city, is country belongs to Europian Union, calling code, top level domain (TLD), languages, country flag, internet service provider (ISP), connection type, organization, geoname ID, currency code, currency name, time zone ID, time zone offset, current time in the time zone, is time zone in daylight saving time, total daylight savings and user agent details. This document provides important information to help you get up to speed with IPGeolocation API using IP Geolocation API Java SDK.
 
 Developers can use this Java SDK for software and web projects related to, but not limited to:
 
@@ -102,6 +102,7 @@ if(geolocation.getStatus() == 200) {
     System.out.println(geolocation.getGeolocationSecurity().getProxyType());
     System.out.println(geolocation.getGeolocationSecurity().getAnonymous());
     System.out.println(geolocation.getGeolocationSecurity().getCloudProvider());
+    System.out.println(geolocation.getUserAgent().getDevice().getName());
 } else {
     System.out.printf("Status Code: %d, Message: %s\n", geolocation.getStatus(), geolocation.getMessage());
 }
@@ -178,9 +179,9 @@ if(tz.getStatus() == 200) {
     System.out.printf("Status Code: %d, Message: %s\n", geolocation.getStatus(), geolocation.getMessage());
 }
 
-// Get time zone information by latitude and longitude of the location
+// Get time zone information by coordinates (latitude and longitude) of the location
 TimezoneParams tzParams = new TimezoneParams();
-tzParams.setLocation(37.1838139, -123.8105225);
+tzParams.setCoordinates(37.1838139, -123.8105225);
 
 Timezone tz = api.getTimezone(tzParams);
 
@@ -225,23 +226,26 @@ if(tz.getMessage()) {
 * Czech (cs)
 * Italian (it)
 
-By default, geolocation information is returned in English. Response in a language other than English is available to paid users only.
+By default, geolocation information is returned into English. Response in a language other than English is available to paid users only.
 
 ## IP Geolocation API Java SDK Objects Reference
 
-IP Geolocation API Java SDK has following classes that you can use to fully leverage it.
+IP Geolocation API Java SDK has the following classes that you can use to fully leverage it.
 
 ### Class: io.ipgeolocation.api.IPGeolocationAPI
 
-| Method | Description | Return Type |
-|:-------|:------------|:------------|
+| Method                                                          | Description                                                                                                                                    | Return Type         |
+|:----------------------------------------------------------------|:-----------------------------------------------------------------------------------------------------------------------------------------------|:--------------------|
 | IPGeolocationAPI(String apiKey) throws IllegalArgumentException | Constructs the IPGeolocationAPI object. It takes a valid apiKey as a parameter and throws IllegalArgumentException if apiKey is empty or null. ||
-| getGeolocation() | This function to query Geolocation API. | Geolocation |
-| getGeolocation(GeolocationParams params) | This function to query Geolocation API based on the parameters passed. | Geolocation |
-| getTimezone() | This function to query Timezone API based on calling machine's IP address. | Timezone |
-| getTimezone(TimezoneParams params) | This function to query Timezone API based on the parameters passed. | Timezone |
-| getBulkGeolocation(GeolocationParams params) | This function to query Geolocation API to lookup multiple IP addresses (max. 50). | List\<Geolocation\> |
-| getApiKey() | This function to get the API key that you set to query the IPGeolocation API. | String |
+| getApiKey()                                                     | This function to get the API key that you set to query the IPGeolocation API.                                                                  | String              |
+| getGeolocation()                                                | This function to query Geolocation API.                                                                                                        | Geolocation         |
+| getGeolocation(GeolocationParams params)                        | This function to query Geolocation API based on the parameters passed.                                                                         | Geolocation         |
+| getBulkGeolocation(GeolocationParams params)                    | This function to query Geolocation API to lookup multiple IP addresses (max. 50).                                                              | List\<Geolocation\> |
+| getTimezone()                                                   | This function to query Timezone API based on calling machine's IP address.                                                                     | Timezone            |
+| getTimezone(TimezoneParams params)                              | This function to query Timezone API based on the parameters passed.                                                                            | Timezone            |
+| getUserAgent(String uaString)                                   | This function to query UserAgent API.                                                                                                          | UserAgent         |
+| getBulkUserAgent(List<String> uaStrings)                        | This function to query UserAgent API to lookup multiple user-agent strings (max. 50).                                                          | List\<UserAgent\> |
+
 
 ### Class: io.ipgeolocation.api.GeolocationParams
 
