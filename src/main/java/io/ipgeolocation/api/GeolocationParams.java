@@ -77,7 +77,6 @@ public class GeolocationParams {
         return excludes;
     }
 
-
     public void setIPAddresses(String[] ips) throws IllegalArgumentException {
         if (ips.length > 50) {
             throw new IllegalArgumentException("Max. number of IP addresses cannot be more than 50.");

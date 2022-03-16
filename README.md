@@ -253,44 +253,54 @@ IP Geolocation API Java SDK has the following classes that you can use to fully 
 |:-------|:------------|:------------|
 | setIPAddress(String ip) | Sets IP address to lookup geolocation. | void |
 | getIPAddress() | Get IP address set to lookup geolocation. | String |
-| setFields(String fields) | Set fields to lookup geolocation. | void |
-| getFields() | Get fields set to lookup geolocation. | String |
 | setIPAddresses(String[] ips) throws IllegalArgumentException | Set IP addresses to lookup multiple geo-locations. Throws IllegalArgumentException if no. of IP addresses are more than 50. **Note:** Multiple IP addresses lookup is only available for paid users. | void |
 | getIPAddresses() | Get IP addresses set to lookup bulk geolocations. | String[] |
 | setLang(String lang) | Set language parameter to lookup geolocation. | void |
 | getLang() | Get language set to lookup geolocation. | String |
+| setFields(String fields) | Set fields to lookup geolocation. | void |
+| getFields() | Get fields set to lookup geolocation. | String |
+| setIncludeHostname(boolean includeHostname) | Set includeHostname to true to get hostname as well. | void |
+| isIncludeHostname() | Returns boolean value whether hostname is included in response or not. | boolean |
+| setIncludeSecurity(boolean includeSecurity) | Set includeSecurity to true to get Security object as well. | void |
+| isIncludeSecurity() | Returns boolean value whether Security object is included in response or not. | boolean |
+| setIncludeUserAgentDetail(boolean includeUserAgentDetail) | Set includeUserAgentDetail to true to get UserAgent object as well. | void |
+| isIncludeUserAgentDetail() | Returns boolean value whether UserAgent object is included in response or not. | boolean |
+| setExcludes(String excludes) | Set fields (as a comma separated value) to exclude from response. | void |
+| getExcludes() | Get fields (as a comma separated value) that have been excluded from response. | String |
 
 ### Class: io.ipgeolocation.api.Geolocation
 
-| Method | Description | Return Type |
-|:-------|:------------|:------------|
+| Method | Description                                                                       | Return Type |
+|:-------|:----------------------------------------------------------------------------------|:------------|
 | getStatus() | Returns HTTP status of the geolocation query. 200 is the successful query status. | Integer |
-| getMessage() | Returns error message, if the query was not successful. | String |
-| getIPAddress() | Returns IP address of the geolocation. | String |
-| getContinentCode() | Returns 2-letters continent code. | String |
-| getContinentName() | Returns continent name. | String |
-| getCountryCode2() | Returns 2-letters country code. | String |
-| getCountryCode3() | Returns 3-letters country code. | String |
-| getCountryName() | Returns country name. | String |
-| getCountryCapital() | Returns country capital. | String |
-| getStateProvince() | Returns state/province. | String |
-| getDistrict() | Returns district. | String |
-| getCity() | Returns city. | String |
-| getZipCode() | Returns zip code. | String |
-| getLatitude() | Returns latitude of the city. | Double |
-| getLongitude() | Returns longitude of the city. | Double |
-| isEU() | Returns is the country in European Union. | Boolean |
-| getCallingCode() | Returns country calling code. | String |
-| getCountryTLD() | Returns country's top level domain like '.au' for Australia. | String |
-| getLanguages() | Returns languages spoken in the country. | String |
-| getCountryFlag() | Returns a URL to country's flag. | String |
-| getISP() | Returns ISP name. | String |
-| getConnectionType() | Returns connection type of the IP address. | String |
-| getOrganization() | Returns organization of the IP address. | String |
-| getAsn() | Returns AS number of the IP address. | String |
-| getGeonameID() | Returns geoname ID from geonames.org database. | String |
-| getCurrency() | Returns currency information of the country. | GeolocationCurrency |
-| getTimezone() | Returns time zone information of the country. | GeolocationTimezone |
+| getMessage() | Returns error message, if the query was not successful.                           | String |
+| getIPAddress() | Returns IP address of the geolocation.                                            | String |
+| getContinentCode() | Returns 2-letters continent code.                                                 | String |
+| getContinentName() | Returns continent name.                                                           | String |
+| getCountryCode2() | Returns 2-letters country code.                                                   | String |
+| getCountryCode3() | Returns 3-letters country code.                                                   | String |
+| getCountryName() | Returns country name.                                                             | String |
+| getCountryCapital() | Returns country capital.                                                          | String |
+| getStateProvince() | Returns state/province.                                                           | String |
+| getDistrict() | Returns district.                                                                 | String |
+| getCity() | Returns city.                                                                     | String |
+| getZipCode() | Returns zip code.                                                                 | String |
+| getLatitude() | Returns latitude of the city.                                                     | Double |
+| getLongitude() | Returns longitude of the city.                                                    | Double |
+| isEU() | Returns is the country in European Union.                                         | Boolean |
+| getCallingCode() | Returns country calling code.                                                     | String |
+| getCountryTLD() | Returns country's top level domain like '.au' for Australia.                      | String |
+| getLanguages() | Returns languages spoken in the country.                                          | String |
+| getCountryFlag() | Returns a URL to country's flag.                                                  | String |
+| getISP() | Returns ISP name.                                                                 | String |
+| getConnectionType() | Returns connection type of the IP address.                                        | String |
+| getOrganization() | Returns organization of the IP address.                                           | String |
+| getAsn() | Returns AS number of the IP address.                                              | String |
+| getGeonameID() | Returns geoname ID from geonames.org database.                                    | String |
+| getCurrency() | Returns currency information of the country.                                      | GeolocationCurrency |
+| getTimezone() | Returns time zone information of the country.                                     | GeolocationTimezone |
+| getGeolocationSecurity() | Returns security details of the ip address.                                       | GeolocationSecurity |
+| getUserAgent() | Returns user agent information of the country.                                    | UserAgent |
 
 ### Class: io.ipgeolocation.api.GeolocationCurrency
 
@@ -302,13 +312,14 @@ IP Geolocation API Java SDK has the following classes that you can use to fully 
 
 ### Class: io.ipgeolocation.api.GeolocationTimezone
 
-| Method | Description | Return Type |
-|:-------|:------------|:------------|
-| getName() | Returns standard time zone ID like "America/New_York". | String |
-| getOffset() | Returns time zone offset from UTC. | Double |
-| getCurrentTime() | Returns current date-time string in the format "yyyy-MM-dd HH:mm:ss.SSSZ" | String |
-| isDST() | Returns is the country observing daylight saving time. | Boolean |
-| getDSTSavings() | Returns daylight savings time (in hours). | Double |
+| Method | Description                                                               | Return Type |
+|:-------|:--------------------------------------------------------------------------|:------------|
+| getName() | Returns standard time zone ID like "America/New_York".                    | String      |
+| getOffset() | Returns time zone offset from UTC.                                        | Double      |
+| getCurrentTime() | Returns current date-time string in the format "yyyy-MM-dd HH:mm:ss.SSSZ" | String      |
+| getCurrentTimeUnix() | Returns current date-time as a unix time    | Double      |
+| isDST() | Returns is the country observing daylight saving time.                    | Boolean     |
+| getDSTSavings() | Returns daylight savings time (in hours).                                 | Double      |
 
 ### Class: io.ipgeolocation.api.TimezoneParams
 
@@ -321,30 +332,34 @@ IP Geolocation API Java SDK has the following classes that you can use to fully 
 | setCoordinates(Double latitude, Double longitude) | Sets latitude and longitude of a location to query time zone information. | void |
 | getLatitude()                                     | Returns latitude set to query time zone information. | Double |
 | getLongitude()                                    | Returns longitude set to query time zone information. | Double |
+| setLocation(String location)                      | Set location parameter to get timezone details. | void |
+| getLocation()                                     | Get location parameter value to get timezone details. | String |
 | setLang(String lang)                              | Set language parameter to lookup geolocation. Default is 'en'. | void |
 | getLang()                                         | Get language set to lookup geolocation. | String |
 
 ### Class: io.ipgeolocation.api.Timezone
 
-| Method | Description | Return Type |
-|:-------|:------------|:------------|
-| getStatus() | Returns HTTP status of the geolocation query. 200 is the successful query status. | Integer |
-| getMessage() | Returns error message, if the query was not successful. | String |
-| getTimezone() | Returns time zone ID like "America/New_York". | String |
-| getTimezoneOffset() | Returns time zone offset from UTC. | Double |
-| getDate() | Returns current date in the format "yyyy-MM-dd". | String |
-| getDateTime() | Returns date-time string in the format "yyyy-MM-dd HH:mm:ss". | String |
-| getDateTimeTxt() | Returns date-time string in the format "EEEE, MMMM dd, yyyy HH:mm:ss". | String |
-| getDateTimeWti() | Returns date-time string in the format "EEE, dd MMM yyyy HH:mm:ss Z". | String |
-| getDateTimeYmd() | Returns date-time string in the format "yyyy-MM-dd'T'HH:mm:ssZ". | String |
-| getTime24() | Returns current time in the format "HH:mm:ss". | String |
-| getTime12() | Returns current time in the format "hh:mm:ss aa". | String |
-| getWeek() | Returns current week of the year. | String |
-| getMonth() | Returns current month of the year. | String |
-| getYear() | Returns current year. | String |
-| getYearAbbr() | Returns 2-letters year abbreviation like "18". | String |
-| isDST() | Returns is the country observing Daylight Saving time. | Boolean |
-| getDSTSavings() | Returns daylight savings time (in hours). | Double |
+| Method | Description                                                                            | Return Type |
+|:-------|:---------------------------------------------------------------------------------------|:------------|
+| getStatus() | Returns HTTP status of the geolocation query. 200 is the successful query status.      | Integer     |
+| getMessage() | Returns error message, if the query was not successful.                                | String      |
+| getTimezone() | Returns time zone ID like "America/New_York".                                          | String      |
+| getTimezoneOffset() | Returns time zone offset from UTC.                                                     | Double      |
+| getTimezoneOffsetWithDST() | Returns time zone offset with dst value from UTC.                                      | Double      |
+| getDate() | Returns current date in the format "yyyy-MM-dd".                                       | String      |
+| getDateTime() | Returns date-time string in the format "yyyy-MM-dd HH:mm:ss".                          | String      |
+| getDateTimeTxt() | Returns date-time string in the format "EEEE, MMMM dd, yyyy HH:mm:ss".                 | String      |
+| getDateTimeWti() | Returns date-time string in the format "EEE, dd MMM yyyy HH:mm:ss Z".                  | String      |
+| getDateTimeYmd() | Returns date-time string in the format "yyyy-MM-dd'T'HH:mm:ssZ".                       | String      |
+| getDateTimeUnix() | Returns current date-time as unix time.                                                | Integer     |
+| getTime24() | Returns current time in the format "HH:mm:ss".                                         | String      |
+| getTime12() | Returns current time in the format "hh:mm:ss aa".                                      | String      |
+| getWeek() | Returns current week of the year.                                                      | Integer     |
+| getMonth() | Returns current month of the year.                                                     | Integer     |
+| getYear() | Returns current year.                                                                  | Integer     |
+| getYearAbbr() | Returns 2-letters year abbreviation like "18".                                         | String      |
+| isDST() | Returns is the country observing Daylight Saving time.                                 | Boolean     |
+| getDSTSavings() | Returns daylight savings time (in hours).                                              | Double      |
 | getTimezoneGeo() | Returns geolocation of timezone if you lookup timezone information from an IP address. | TimezoneGeo |
 
 ### Class: io.ipgeolocation.api.TimezoneGeo
@@ -360,3 +375,43 @@ IP Geolocation API Java SDK has the following classes that you can use to fully 
 | getZipCode() | Returns zip code. | String |
 | getLatitude() | Returns latitude of the city. | Double |
 | getLongitude() | Returns longitude of the city. | Double |
+
+### Class: io.ipgeolocation.api.UserAgent
+
+| Method | Description                              | Return Type |
+|:-------|:-----------------------------------------|:------------|
+| getUserAgentString() | Returns user-agent string.               | String |
+| getName() | Returns name of the user agent.          | String |
+| getType() | Returns type of the user agent.          | String |
+| getVersion() | Returns version of the user agent.       | String |
+| getVersionMajor() | Returns version major of the user agent. | String |
+| getDevice() | Returns user-agent's device details. | UserAgentDevice |
+| getEngine() | Returns user-agent's engine details. | UserAgentEngine |
+| getOperatingSystem() | Returns user-agent's operating system details. | UserAgentOperatingSystem |
+
+### Class: io.ipgeolocation.api.UserAgentDevice
+
+| Method | Description                       | Return Type |
+|:-------|:----------------------------------|:------------|
+| getName() | Returns user-agent's device name. | String |
+| getType() | Returns user-agent's type name.   | String |
+| getBrand() | Returns user-agent's brand name.  | String |
+| getCpu() | Returns user-agent's CPU name.    | String |
+
+### Class: io.ipgeolocation.api.UserAgentEngine
+
+| Method | Description                                | Return Type |
+|:-------|:-------------------------------------------|:------------|
+| getName() | Returns user-agent's engine name.          | String |
+| getType() | Returns user-agent's engine type.          | String |
+| getVersion() | Returns user-agent's engine version.       | String |
+| getVersionMajor() | Returns user-agent's engine version major. | String |
+
+### Class: io.ipgeolocation.api.UserAgentOperatingSystem
+
+| Method | Description                                 | Return Type |
+|:-------|:--------------------------------------------|:------------|
+| getName() | Returns user-agent's operating system name. | String |
+| getType() | Returns user-agent's operating system type.           | String |
+| getVersion() | Returns user-agent's operating system version.        | String |
+| getVersionMajor() | Returns user-agent's operating system version major.  | String |
