@@ -5,9 +5,9 @@ public class GeolocationParams {
     private String[] ips;
     private String lang;
     private String fields;
-    private boolean includeHostname;
-    private boolean includeSecurity;
-    private boolean includeUserAgentDetail;
+    private Boolean includeHostname;
+    private Boolean includeSecurity;
+    private Boolean includeUserAgentDetail;
     private String excludes;
 
     public GeolocationParams() {
@@ -45,7 +45,7 @@ public class GeolocationParams {
         return lang;
     }
 
-    public void setIncludeHostname(boolean includeHostname) {
+    public void setIncludeHostname(Boolean includeHostname) {
         this.includeHostname = includeHostname;
     }
 
@@ -53,7 +53,7 @@ public class GeolocationParams {
         return includeHostname;
     }
 
-    public void setIncludeSecurity(boolean includeSecurity) {
+    public void setIncludeSecurity(Boolean includeSecurity) {
         this.includeSecurity = includeSecurity;
     }
 
@@ -61,7 +61,7 @@ public class GeolocationParams {
         return includeSecurity;
     }
 
-    public void setIncludeUserAgentDetail(boolean includeUserAgentDetail) {
+    public void setIncludeUserAgentDetail(Boolean includeUserAgentDetail) {
         this.includeUserAgentDetail = includeUserAgentDetail;
     }
 

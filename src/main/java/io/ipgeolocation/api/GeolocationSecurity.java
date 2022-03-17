@@ -29,11 +29,11 @@ public class GeolocationSecurity {
         return threatScore;
     }
 
-    public Boolean getTor() {
+    public Boolean isTor() {
         return isTor;
     }
 
-    public Boolean getProxy() {
+    public Boolean isProxy() {
         return isProxy;
     }
 
@@ -41,23 +41,23 @@ public class GeolocationSecurity {
         return proxyType;
     }
 
-    public Boolean getAnonymous() {
+    public Boolean isAnonymous() {
         return isAnonymous;
     }
 
-    public Boolean getKnownAttacker() {
+    public Boolean isKnownAttacker() {
         return isKnownAttacker;
     }
 
-    public Boolean getBot() {
+    public Boolean isBot() {
         return isBot;
     }
 
-    public Boolean getSpam() {
+    public Boolean isSpam() {
         return isSpam;
     }
 
-    public Boolean getCloudProvider() {
+    public Boolean isCloudProvider() {
         return isCloudProvider;
     }
 

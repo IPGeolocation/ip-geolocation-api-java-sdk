@@ -259,12 +259,12 @@ IP Geolocation API Java SDK has the following classes that you can use to fully 
 | getLang() | Get language set to lookup geolocation. | String |
 | setFields(String fields) | Set fields to lookup geolocation. | void |
 | getFields() | Get fields set to lookup geolocation. | String |
-| setIncludeHostname(boolean includeHostname) | Set includeHostname to true to get hostname as well. | void |
-| isIncludeHostname() | Returns boolean value whether hostname is included in response or not. | boolean |
-| setIncludeSecurity(boolean includeSecurity) | Set includeSecurity to true to get Security object as well. | void |
-| isIncludeSecurity() | Returns boolean value whether Security object is included in response or not. | boolean |
-| setIncludeUserAgentDetail(boolean includeUserAgentDetail) | Set includeUserAgentDetail to true to get UserAgent object as well. | void |
-| isIncludeUserAgentDetail() | Returns boolean value whether UserAgent object is included in response or not. | boolean |
+| setIncludeHostname(Boolean includeHostname) | Set includeHostname to true to get hostname as well. | void |
+| isIncludeHostname() | Returns boolean value whether hostname is included in response or not. | Boolean |
+| setIncludeSecurity(Boolean includeSecurity) | Set includeSecurity to true to get Security object as well. | void |
+| isIncludeSecurity() | Returns boolean value whether Security object is included in response or not. | Boolean |
+| setIncludeUserAgentDetail(Boolean includeUserAgentDetail) | Set includeUserAgentDetail to true to get UserAgent object as well. | void |
+| isIncludeUserAgentDetail() | Returns boolean value whether UserAgent object is included in response or not. | Boolean |
 | setExcludes(String excludes) | Set fields (as a comma separated value) to exclude from response. | void |
 | getExcludes() | Get fields (as a comma separated value) that have been excluded from response. | String |
 
@@ -320,6 +320,20 @@ IP Geolocation API Java SDK has the following classes that you can use to fully 
 | getCurrentTimeUnix() | Returns current date-time as a unix time    | Double      |
 | isDST() | Returns is the country observing daylight saving time.                    | Boolean     |
 | getDSTSavings() | Returns daylight savings time (in hours).                                 | Double      |
+
+### Class: io.ipgeolocation.api.GeolocationSecurity
+
+| Method | Description                                                               | Return Type |
+|:-------|:--------------------------------------------------------------------------|:------------|
+| getThreatScore() | Returns threat score for the ip address                    | Integer      |
+| isTor() | Returns Boolean object whether the ip is using tor or not.                 | Boolean      |
+| isProxy() | Returns Boolean object whether the ip is using proxy or not.                 | Boolean      |
+| getProxyType() | Returns the type of proxy used by ip address  | String      |
+| isAnonymous() | Returns Boolean object whether the ip is anonymous or not.                 | Boolean      |
+| isKnownAttacker() | Returns Boolean object whether the ip is known attacker or not.                 | Boolean  |
+| isBot() | Returns Boolean object whether the ip is bot or not.                 | Boolean      |
+| isSpam() | Returns Boolean object whether the ip is spam or not.                 | Boolean      |
+| isCloudProvider() | Returns Boolean object whether the ip is cloud provider or not.                 | Boolean      |
 
 ### Class: io.ipgeolocation.api.TimezoneParams
 
