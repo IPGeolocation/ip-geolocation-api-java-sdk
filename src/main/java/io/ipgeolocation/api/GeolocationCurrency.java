@@ -25,8 +25,4 @@ public class GeolocationCurrency {
         return symbol;
     }
 
-    @Override
-    public String toString() {
-        return String.format("name: '%s' \ncode: '%s' \nsymbol: '%s'", name, code, symbol);
-    }
 }

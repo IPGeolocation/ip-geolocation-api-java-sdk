@@ -61,9 +61,4 @@ public class GeolocationSecurity {
         return isCloudProvider;
     }
 
-    @Override
-    public String toString() {
-        return String.format("threatScore: '%d' \nisTor: '%b' \nisProxy: '%b' \nproxyType: '%s' \nisAnonymous: '%b' \nisKnownAttacker: '%b' \nisBot: '%b' \nisSpam: '%b' \nisCloudProvider: '%b'", threatScore, isTor, isProxy, proxyType, isAnonymous, isKnownAttacker, isBot, isSpam, isCloudProvider);
-    }
-
 }

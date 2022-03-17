@@ -137,12 +137,4 @@ public class Timezone {
         return timezoneGeo;
     }
 
-    @Override
-    public String toString() {
-        String timezoneGeoString = "";
-        if (timezoneGeo != null) {
-            timezoneGeoString = timezoneGeo.toString();
-        }
-        return String.format("timezone: '%s', \ntimezone_offset: '%s', \ndate: '%s', \ndate_time: '%s', \ndate_time_txt: '%s', \ndate_time_wti: '%s', \ndate_time_ymd: '%s', \ndate_time_unix: '%f', \ntime_24: '%s', \ntime_12: '%s', \nweek: '%d', \nmonth: '%d', \nyear: '%d', \nyear_abbr: '%s', \nis_dst: '%s', \ndst_savings: '%s', \ngeo: {\n%s\n}\n", timezone, timezoneOffset, date, dateTime, dateTimeTxt, dateTimeWti, dateTimeYmd, dateTimeUnix, time24, time12, week, month, year, yearAbbr, isDST, dstSavings, timezoneGeoString);
-    }
 }

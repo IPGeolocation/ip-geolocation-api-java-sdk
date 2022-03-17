@@ -72,5 +72,4 @@ public class UserAgent {
         return operatingSystem;
     }
 
-
 }
