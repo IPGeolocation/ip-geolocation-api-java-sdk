@@ -1,7 +1,6 @@
 package io.ipgeolocation.api;
 
-import com.google.gson.internal.LinkedTreeMap;
-
+import java.util.HashMap;
 import java.util.Map;
 
 public class Geolocation {
@@ -68,23 +67,23 @@ public class Geolocation {
             this.organization = (String) json.get("organization");
             this.asn = (String) json.get("asn");
             this.geonameID = (String) json.get("geoname_id");
-            if (json.get("currency") instanceof LinkedTreeMap) {
-                Map<String, Object> currencyJson = (LinkedTreeMap) json.get("currency");
+            if (json.get("currency") instanceof HashMap) {
+                Map<String, Object> currencyJson = (HashMap) json.get("currency");
                 this.currency = new GeolocationCurrency(currencyJson);
             }
 
-            if (json.get("time_zone") instanceof LinkedTreeMap) {
-                Map<String, Object> timezoneJson = (LinkedTreeMap) json.get("time_zone");
+            if (json.get("time_zone") instanceof HashMap) {
+                Map<String, Object> timezoneJson = (HashMap) json.get("time_zone");
                 this.timezone = new GeolocationTimezone(timezoneJson);
             }
 
-            if (json.get("security") instanceof LinkedTreeMap) {
-                Map<String, Object> securityJson = (LinkedTreeMap) json.get("security");
+            if (json.get("security") instanceof HashMap) {
+                Map<String, Object> securityJson = (HashMap) json.get("security");
                 this.geolocationSecurity = new GeolocationSecurity(securityJson);
             }
 
-            if (json.get("user_agent") instanceof LinkedTreeMap) {
-                Map<String, Object> userAgentJson = (LinkedTreeMap) json.get("user_agent");
+            if (json.get("user_agent") instanceof HashMap) {
+                Map<String, Object> userAgentJson = (HashMap) json.get("user_agent");
                 this.userAgent = new UserAgent(userAgentJson);
             }
         }

@@ -1,6 +1,7 @@
 package io.ipgeolocation.api;
 
-import com.google.gson.Gson;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 class Strings {
 
@@ -16,11 +17,10 @@ class Strings {
     }
 
     static Boolean isJsonString(String jsonString) {
-        Gson gson = new Gson();
         try {
-            Object jsonObjType = gson.fromJson(jsonString, Object.class).getClass();
-            return !jsonObjType.equals(String.class);
-        } catch (com.google.gson.JsonSyntaxException ex) {
+            new JSONObject(jsonString);
+            return true;
+        } catch (JSONException ex) {
             return false;
         }
     }

@@ -196,7 +196,7 @@ public class IPGeolocationAPI {
 
     private Map<String, Object> callAPIEndpoint(String endpoint, String urlParams) {
         String url = "https://api.ipgeolocation.io/" + endpoint + "?" + urlParams;
-        String responseCode;
+        int responseCode = 0;
         String jsonString;
         try {
             URL obj = new URL(url);
@@ -206,20 +206,20 @@ public class IPGeolocationAPI {
             connection.setRequestMethod("GET");
             connection.setRequestProperty("Accept", "application/json");
             Map<String, String> responseMap = parseConnectionResponse(connection);
-            responseCode = responseMap.get("code");
+            responseCode = Integer.parseInt(responseMap.get("code"));
             jsonString = responseMap.get("json");
-            if (isNullOrEmpty(responseCode) || isNullOrEmpty(jsonString)) {
-                responseCode = "422";
+            if (responseCode == 0 || isNullOrEmpty(jsonString)) {
+                responseCode = 422;
                 jsonString = "{\"message\":\"Something went wrong while parsing IP Geolocation API response\"}";
             } else if (!isJsonString(jsonString)) {
-                responseCode = "422";
+                responseCode = 422;
                 jsonString = "{\"message\":\"Connection problem or Invalid response by IP Geolocation API\"}";
             }
         } catch (IOException e) {
-            responseCode = "422";
+            responseCode = 422;
             jsonString = "{\"message\":\"Something went wrong while connecting to IP Geolocation API\"}";
         } catch (IllegalArgumentException e) {
-            responseCode = "422";
+            responseCode = 422;
             jsonString = "{\"message\":\"Something went wrong while parsing IP Geolocation API response\"}";
         }
         return convertJSONStringToMap(responseCode, jsonString);
@@ -256,7 +256,7 @@ public class IPGeolocationAPI {
         return responseMap;
     }
 
-    private Map<String, Object> convertJSONStringToMap(String responseCode, String response) {
+    private Map<String, Object> convertJSONStringToMap(int responseCode, String response) {
         Map<String, Object> map = new LinkedHashMap<String, Object>();
         map = new JSONObject(response).toMap();
         map.put("status", responseCode);

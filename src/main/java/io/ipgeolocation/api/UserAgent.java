@@ -1,7 +1,6 @@
 package io.ipgeolocation.api;
 
-import com.google.gson.internal.LinkedTreeMap;
-
+import java.util.HashMap;
 import java.util.Map;
 
 public class UserAgent {
@@ -23,18 +22,18 @@ public class UserAgent {
         this.type = (String) json.get("type");
         this.version = (String) json.get("version");
         this.versionMajor = (String) json.get("versionMajor");
-        if (json.get("device") instanceof LinkedTreeMap) {
-            Map<String, Object> deviceJson = (LinkedTreeMap) json.get("device");
+        if (json.get("device") instanceof HashMap) {
+            Map<String, Object> deviceJson = (HashMap) json.get("device");
             this.device = new UserAgentDevice(deviceJson);
         }
 
-        if (json.get("engine") instanceof LinkedTreeMap) {
-            Map<String, Object> engineJson = (LinkedTreeMap) json.get("engine");
+        if (json.get("engine") instanceof HashMap) {
+            Map<String, Object> engineJson = (HashMap) json.get("engine");
             this.engine = new UserAgentEngine(engineJson);
         }
 
-        if (json.get("operatingSystem") instanceof LinkedTreeMap) {
-            Map<String, Object> operatingSystemJson = (LinkedTreeMap) json.get("operatingSystem");
+        if (json.get("operatingSystem") instanceof HashMap) {
+            Map<String, Object> operatingSystemJson = (HashMap) json.get("operatingSystem");
             this.operatingSystem = new UserAgentOperatingSystem(operatingSystemJson);
         }
 

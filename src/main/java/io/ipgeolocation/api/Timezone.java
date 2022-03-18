@@ -1,7 +1,6 @@
 package io.ipgeolocation.api;
 
-import com.google.gson.internal.LinkedTreeMap;
-
+import java.util.HashMap;
 import java.util.Map;
 
 public class Timezone {
@@ -50,8 +49,8 @@ public class Timezone {
             this.yearAbbr = (String) json.get("year_abbr");
             this.isDST = (Boolean) json.get("is_dst");
             this.dstSavings = (Double) json.get("dst_savings");
-            if (json.get("geo") instanceof LinkedTreeMap) {
-                Map<String, Object> geoJson = (LinkedTreeMap) json.get("geo");
+            if (json.get("geo") instanceof HashMap) {
+                Map<String, Object> geoJson = (HashMap) json.get("geo");
                 this.timezoneGeo = new TimezoneGeo(geoJson);
             }
         }
