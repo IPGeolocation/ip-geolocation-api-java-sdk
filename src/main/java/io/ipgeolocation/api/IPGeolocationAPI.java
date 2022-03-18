@@ -1,20 +1,27 @@
 package io.ipgeolocation.api;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static io.ipgeolocation.api.Strings.isJsonString;
 import static io.ipgeolocation.api.Strings.isNullOrEmpty;
+import static java.util.Objects.isNull;
 
 public class IPGeolocationAPI {
 
-    private String apiKey;
+    public static void main(String[] args) {
+        IPGeolocationAPI api1 = new IPGeolocationAPI("04121b22f4244f55a04a496edcc8fd9a");
+        UserAgent ua1 = api1.getUserAgent("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36");
+    }
+
+    private final String apiKey;
 
     public IPGeolocationAPI(String apiKey) throws IllegalArgumentException {
         if (isNullOrEmpty(apiKey)) {
@@ -86,11 +93,10 @@ public class IPGeolocationAPI {
     }
 
     public List<Geolocation> getBulkGeolocation(GeolocationParams params) {
-        Gson gson = new Gson();
         Map<String, String[]> data = new HashMap<String, String[]>();
         data.put("ips", params.getIPAddresses());
         String urlParams = buildGeolocationUrlParams(params);
-        List<Map<String, Object>> apiResponse = callBulkGeolocationAPIEndpoint(gson.toJson(data), urlParams);
+        List<Map<String, Object>> apiResponse = callBulkGeolocationAPIEndpoint(new JSONObject(data).toString(), urlParams);
         List<Geolocation> geolocations = new ArrayList<Geolocation>();
         for (Map<String, Object> response : apiResponse) {
             geolocations.add(new Geolocation(response));
@@ -100,7 +106,7 @@ public class IPGeolocationAPI {
 
     private List<Map<String, Object>> callBulkGeolocationAPIEndpoint(String ipAddresses, String urlParams) {
         String url = "https://api.ipgeolocation.io/ipgeo-bulk" + "?" + urlParams;
-        String responseCode;
+        int responseCode = 0;
         String jsonString;
         try {
             URL obj = new URL(url);
@@ -116,37 +122,28 @@ public class IPGeolocationAPI {
             outputStream.flush();
             outputStream.close();
             Map<String, String> responseMap = parseConnectionResponse(connection);
-            responseCode = responseMap.get("code");
+            responseCode = Integer.parseInt(responseMap.get("code"));
             jsonString = responseMap.get("json");
-            if (isNullOrEmpty(responseCode) || isNullOrEmpty(jsonString)) {
-                responseCode = "422";
+            if (responseCode == 0 || isNullOrEmpty(jsonString)) {
+                responseCode = 422;
                 jsonString = "{\"message\":\"Something went wrong while parsing IP Geolocation API response\"}";
             }
         } catch (IOException e) {
-            responseCode = "422";
+            responseCode = 422;
             jsonString = "{\"message\":\"Something went wrong while connecting to IP Geolocation API\"}";
         } catch (IllegalArgumentException e) {
-            responseCode = "422";
+            responseCode = 422;
             jsonString = "{\"message\":\"Something went wrong while parsing IP Geolocation API response\"}";
         }
-        return convertStringToListMap(responseCode, jsonString);
+        return convertJSONStringToListMap(responseCode, jsonString);
     }
 
-    private List<Map<String, Object>> convertStringToListMap(String responseCode, String response) {
-        Gson gson = new Gson();
-        List<Map<String, Object>> finalResult = new ArrayList<Map<String, Object>>();
-        List<Map<String, Object>> result;
-        if (!responseCode.equals("200")) {
+    private List<Map<String, Object>> convertJSONStringToListMap(int responseCode, String response) {
+        if (responseCode != 200) {
             response = "[" + response + "]";
-            result = (List<Map<String, Object>>) gson.fromJson(response, List.class);
-        } else {
-            result = (List<Map<String, Object>>) gson.fromJson(response, List.class);
         }
-        for (Map<String, Object> map : result) {
-            map.put("status", responseCode);
-            finalResult.add(map);
-        }
-        return finalResult;
+        // new Gson().fromJson(response, new TypeToken<HashMap<String, Object>>() {}.getType());
+        return new JSONArray(response).toList().stream().map(it -> ((JSONObject) it).toMap()).collect(Collectors.toList());
     }
 
     public Timezone getTimezone() {
@@ -229,7 +226,7 @@ public class IPGeolocationAPI {
     }
 
     private Map<String, String> parseConnectionResponse(HttpURLConnection connection) {
-        if (connection == null) {
+        if (isNull(connection)) {
             throw new IllegalArgumentException("Pre-condition violated: connection must not be null");
         }
         Map<String, String> responseMap = new HashMap<String, String>();
@@ -260,9 +257,8 @@ public class IPGeolocationAPI {
     }
 
     private Map<String, Object> convertJSONStringToMap(String responseCode, String response) {
-        Gson gson = new Gson();
         Map<String, Object> map = new LinkedHashMap<String, Object>();
-        map = (Map<String, Object>) gson.fromJson(response, map.getClass());
+        map = new JSONObject(response).toMap();
         map.put("status", responseCode);
         return map;
     }
@@ -274,14 +270,13 @@ public class IPGeolocationAPI {
             uaString = uaString.trim();
             if (uaString.isEmpty()) {
                 apiResponse.put("status", 400);
-                apiResponse.put("message", "User-Agent string must not be null.");
+                apiResponse.put("message", "User-Agent string must not be empty.");
                 userAgent = new UserAgent(apiResponse);
             } else {
-                Gson gson = new Gson();
-                Map<String, String> data = new HashMap<String, String>();
+                Map<String, String> data = new HashMap<>();
                 data.put("uaString", uaString);
-                String urlParams = "https://api.ipgeolocation.io/user-agent?apiKey=" + apiKey;
-                apiResponse = callUserAgentAPIEndpoint(gson.toJson(data), urlParams);
+                String url = "https://api.ipgeolocation.io/user-agent?apiKey=" + apiKey;
+                apiResponse = callUserAgentAPIEndpoint(new JSONObject(data).toString(), url);
                 userAgent = new UserAgent(apiResponse);
             }
         } catch (Exception e) {
@@ -309,7 +304,7 @@ public class IPGeolocationAPI {
             outputStream.flush();
             outputStream.close();
             Map<String, String> responseMap = parseConnectionResponse(connection);
-            responseCode = Integer.parseInt((String) responseMap.get("code"));
+            responseCode = Integer.parseInt(responseMap.get("code"));
             jsonString = responseMap.get("json");
             if (responseCode == 0 || isNullOrEmpty(jsonString)) {
                 responseCode = 422;
@@ -329,11 +324,9 @@ public class IPGeolocationAPI {
         Map<String, Object> result;
         if (responseCode != 200) {
             response = "{" + response + "}";
-            result = new Gson().fromJson(response, new TypeToken<HashMap<String, Object>>() {
-            }.getType());
+            result = new JSONObject(response).toMap(); // new Gson().fromJson(response, new TypeToken<HashMap<String, Object>>() {}.getType());
         } else {
-            result = new Gson().fromJson(response, new TypeToken<HashMap<String, Object>>() {
-            }.getType());
+            result = new JSONObject(response).toMap(); // new Gson().fromJson(response, new TypeToken<HashMap<String, Object>>() {}.getType());
         }
         return result;
     }
@@ -342,11 +335,10 @@ public class IPGeolocationAPI {
         List<Map<String, Object>> apiResponses = new ArrayList<>();
         List<UserAgent> userAgents = new ArrayList<>();
         try {
-            Gson gson = new Gson();
             Map<String, List<String>> data = new HashMap<>();
             data.put("uaStrings", uaStrings);
             String urlParams = "https://api.ipgeolocation.io/user-agent-bulk?apiKey=" + apiKey;
-            apiResponses = callBulkUserAgentAPIEndpoint(gson.toJson(data), urlParams);
+            apiResponses = callBulkUserAgentAPIEndpoint(new JSONObject(data).toString(), urlParams);
             userAgents = new ArrayList<UserAgent>();
             for (Map<String, Object> response : apiResponses) {
                 userAgents.add(new UserAgent(response));
@@ -379,7 +371,7 @@ public class IPGeolocationAPI {
             outputStream.flush();
             outputStream.close();
             Map<String, String> responseMap = parseConnectionResponse(connection);
-            responseCode = Integer.parseInt((String) responseMap.get("code"));
+            responseCode = Integer.parseInt(responseMap.get("code"));
             jsonString = responseMap.get("json");
             if (responseCode == 0 || isNullOrEmpty(jsonString)) {
                 responseCode = 422;
@@ -392,25 +384,7 @@ public class IPGeolocationAPI {
             responseCode = 422;
             jsonString = "{\"message\":\"Something went wrong while parsing IP Geolocation API response\"}";
         }
-        return convertBulkUserAgentStringToListMap(responseCode, jsonString);
-    }
-
-    private List<Map<String, Object>> convertBulkUserAgentStringToListMap(int responseCode, String response) {
-        List<Map<String, Object>> finalResult = new ArrayList<Map<String, Object>>();
-        List<Map<String, Object>> result;
-        if (responseCode != 200) {
-            response = "[" + response + "]";
-            result = new Gson().fromJson(response, new TypeToken<HashMap<String, Object>>() {
-            }.getType());
-        } else {
-            result = new Gson().fromJson(response, new TypeToken<HashMap<String, Object>>() {
-            }.getType());
-        }
-        for (Map<String, Object> map : result) {
-            map.put("status", responseCode);
-            finalResult.add(map);
-        }
-        return finalResult;
+        return convertJSONStringToListMap(responseCode, jsonString);
     }
 
 }
