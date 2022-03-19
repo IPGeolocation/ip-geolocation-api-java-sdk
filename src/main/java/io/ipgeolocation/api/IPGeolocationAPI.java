@@ -18,7 +18,7 @@ public class IPGeolocationAPI {
 
     public static void main(String[] args) {
         IPGeolocationAPI api1 = new IPGeolocationAPI("04121b22f4244f55a04a496edcc8fd9a");
-        UserAgent ua1 = api1.getUserAgent("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36");
+//        UserAgent ua1 = api1.getUserAgent("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36");
     }
 
     private final String apiKey;
@@ -36,18 +36,27 @@ public class IPGeolocationAPI {
     }
 
     public Geolocation getGeolocation() {
-        Map<String, Object> apiResponse = getGeolocationResponse(null);
+        Map<String, Object> apiResponse = callAPIEndpoint("ipgeo", "apiKey=" + apiKey, "GET");
         return new Geolocation(apiResponse);
     }
 
     public Geolocation getGeolocation(GeolocationParams params) {
-        Map<String, Object> apiResponse = getGeolocationResponse(params);
+        String urlParams = buildGeolocationUrlParams(params);
+        Map<String, Object> apiResponse = callAPIEndpoint("ipgeo", urlParams, "GET");
         return new Geolocation(apiResponse);
     }
 
-    private Map<String, Object> getGeolocationResponse(GeolocationParams params) {
+    public List<Geolocation> getBulkGeolocation(GeolocationParams params) {
+        Map<String, String[]> data = new HashMap<String, String[]>();
+        data.put("ips", params.getIPAddresses());
         String urlParams = buildGeolocationUrlParams(params);
-        return callAPIEndpoint("ipgeo", urlParams);
+        String url = "https://api.ipgeolocation.io/ipgeo-bulk" + "?" + urlParams;
+        List<Map<String, Object>> apiResponse = callBulkAPIEndpoint(new JSONObject(data).toString(), url, "POST");
+        List<Geolocation> geolocations = new ArrayList<Geolocation>();
+        for (Map<String, Object> response : apiResponse) {
+            geolocations.add(new Geolocation(response));
+        }
+        return geolocations;
     }
 
     private String buildGeolocationUrlParams(GeolocationParams params) {
@@ -92,73 +101,15 @@ public class IPGeolocationAPI {
         return urlParams.toString();
     }
 
-    public List<Geolocation> getBulkGeolocation(GeolocationParams params) {
-        Map<String, String[]> data = new HashMap<String, String[]>();
-        data.put("ips", params.getIPAddresses());
-        String urlParams = buildGeolocationUrlParams(params);
-        List<Map<String, Object>> apiResponse = callBulkGeolocationAPIEndpoint(new JSONObject(data).toString(), urlParams);
-        List<Geolocation> geolocations = new ArrayList<Geolocation>();
-        for (Map<String, Object> response : apiResponse) {
-            geolocations.add(new Geolocation(response));
-        }
-        return geolocations;
-    }
-
-    private List<Map<String, Object>> callBulkGeolocationAPIEndpoint(String ipAddresses, String urlParams) {
-        String url = "https://api.ipgeolocation.io/ipgeo-bulk" + "?" + urlParams;
-        int responseCode = 0;
-        String jsonString;
-        try {
-            URL obj = new URL(url);
-            HttpURLConnection connection = (HttpURLConnection) obj.openConnection();
-            connection.setReadTimeout(10000);
-            connection.setConnectTimeout(10000);
-            connection.setRequestMethod("POST");
-            connection.setRequestProperty("Content-Type", "application/json");
-            connection.setRequestProperty("Accept", "application/json");
-            connection.setDoOutput(true);
-            DataOutputStream outputStream = new DataOutputStream(connection.getOutputStream());
-            outputStream.writeBytes(ipAddresses);
-            outputStream.flush();
-            outputStream.close();
-            Map<String, String> responseMap = parseConnectionResponse(connection);
-            responseCode = Integer.parseInt(responseMap.get("code"));
-            jsonString = responseMap.get("json");
-            if (responseCode == 0 || isNullOrEmpty(jsonString)) {
-                responseCode = 422;
-                jsonString = "{\"message\":\"Something went wrong while parsing IP Geolocation API response\"}";
-            }
-        } catch (IOException e) {
-            responseCode = 422;
-            jsonString = "{\"message\":\"Something went wrong while connecting to IP Geolocation API\"}";
-        } catch (IllegalArgumentException e) {
-            responseCode = 422;
-            jsonString = "{\"message\":\"Something went wrong while parsing IP Geolocation API response\"}";
-        }
-        return convertJSONStringToListMap(responseCode, jsonString);
-    }
-
-    private List<Map<String, Object>> convertJSONStringToListMap(int responseCode, String response) {
-        if (responseCode != 200) {
-            response = "[" + response + "]";
-        }
-        // new Gson().fromJson(response, new TypeToken<HashMap<String, Object>>() {}.getType());
-        return new JSONArray(response).toList().stream().map(it -> ((JSONObject) it).toMap()).collect(Collectors.toList());
-    }
-
     public Timezone getTimezone() {
-        Map<String, Object> apiResponse = getTimezoneResponse(null);
+        Map<String, Object> apiResponse = callAPIEndpoint("timezone", "apiKey=" + apiKey, "GET");
         return new Timezone(apiResponse);
     }
 
     public Timezone getTimezone(TimezoneParams params) {
-        Map<String, Object> apiResponse = getTimezoneResponse(params);
-        return new Timezone(apiResponse);
-    }
-
-    private Map<String, Object> getTimezoneResponse(TimezoneParams params) {
         String urlParams = buildTimezoneUrlParams(params);
-        return callAPIEndpoint("timezone", urlParams);
+        Map<String, Object> apiResponse = callAPIEndpoint("timezone", urlParams, "GET");
+        return new Timezone(apiResponse);
     }
 
     private String buildTimezoneUrlParams(TimezoneParams params) {
@@ -194,18 +145,64 @@ public class IPGeolocationAPI {
         return urlParams.toString();
     }
 
-    private Map<String, Object> callAPIEndpoint(String endpoint, String urlParams) {
-        String url = "https://api.ipgeolocation.io/" + endpoint + "?" + urlParams;
+    public UserAgent getUserAgent(String uaString) {
+        Map<String, Object> apiResponse = new HashMap<>();
+        UserAgent userAgent = new UserAgent();
+        try {
+            uaString = uaString.trim();
+            if (uaString.isEmpty()) {
+                apiResponse.put("status", 400);
+                apiResponse.put("message", "User-Agent string must not be empty.");
+                userAgent = new UserAgent(apiResponse);
+            } else {
+                Map<String, String> data = new HashMap<>();
+                data.put("uaString", uaString);
+                apiResponse = callAPIEndpoint(new JSONObject(data).toString(), "user-agent?apiKey=" + apiKey, "POST");
+                userAgent = new UserAgent(apiResponse);
+            }
+        } catch (Exception e) {
+            apiResponse.put("status", 400);
+            apiResponse.put("message", "User-Agent string must not be null.");
+            userAgent = new UserAgent(apiResponse);
+        }
+        return userAgent;
+    }
+
+    public List<UserAgent> getBulkUserAgent(List<String> uaStrings) {
+        List<Map<String, Object>> apiResponses = new ArrayList<>();
+        List<UserAgent> userAgents = new ArrayList<>();
+        try {
+            Map<String, List<String>> data = new HashMap<>();
+            data.put("uaStrings", uaStrings);
+            String url = "https://api.ipgeolocation.io/user-agent-bulk?apiKey=" + apiKey;
+            apiResponses = callBulkAPIEndpoint(new JSONObject(data).toString(), url, "POST");
+            userAgents = new ArrayList<UserAgent>();
+            for (Map<String, Object> response : apiResponses) {
+                userAgents.add(new UserAgent(response));
+            }
+            return userAgents;
+        } catch (Exception e) {
+            Map<String, Object> apiResponse = new HashMap<>();
+            apiResponse.put("status", 400);
+            apiResponse.put("message", "Something went wrong!.");
+            userAgents = new ArrayList<>();
+            userAgents.add(new UserAgent(apiResponse));
+        }
+        return userAgents;
+    }
+
+    // Generic methods
+    private Map<String, Object> callAPIEndpoint(String endpoint, String urlParams, String requestType) {
+        String url = "";
+        if (endpoint.equalsIgnoreCase("ipgeo") || endpoint.equalsIgnoreCase("timezone")) {
+            url = "https://api.ipgeolocation.io/" + endpoint + "?" + urlParams;
+        } else {
+            url = "https://api.ipgeolocation.io/" + urlParams;
+        }
         int responseCode = 0;
         String jsonString;
         try {
-            URL obj = new URL(url);
-            HttpURLConnection connection = (HttpURLConnection) obj.openConnection();
-            connection.setReadTimeout(10000);
-            connection.setConnectTimeout(10000);
-            connection.setRequestMethod("GET");
-            connection.setRequestProperty("Accept", "application/json");
-            Map<String, String> responseMap = parseConnectionResponse(connection);
+            Map<String, String> responseMap = getResponseMap(url, endpoint, requestType);
             responseCode = Integer.parseInt(responseMap.get("code"));
             jsonString = responseMap.get("json");
             if (responseCode == 0 || isNullOrEmpty(jsonString)) {
@@ -215,14 +212,53 @@ public class IPGeolocationAPI {
                 responseCode = 422;
                 jsonString = "{\"message\":\"Connection problem or Invalid response by IP Geolocation API\"}";
             }
-        } catch (IOException e) {
+        } catch (Exception e) {
             responseCode = 422;
             jsonString = "{\"message\":\"Something went wrong while connecting to IP Geolocation API\"}";
-        } catch (IllegalArgumentException e) {
-            responseCode = 422;
-            jsonString = "{\"message\":\"Something went wrong while parsing IP Geolocation API response\"}";
         }
         return convertJSONStringToMap(responseCode, jsonString);
+    }
+
+    private List<Map<String, Object>> callBulkAPIEndpoint(String jsonBody, String url, String requestType) {
+        int responseCode = 0;
+        String jsonString;
+        try {
+            Map<String, String> responseMap = getResponseMap(url, jsonBody, requestType);
+            responseCode = Integer.parseInt(responseMap.get("code"));
+            jsonString = responseMap.get("json");
+            if (responseCode == 0 || isNullOrEmpty(jsonString)) {
+                responseCode = 422;
+                jsonString = "{\"message\":\"Something went wrong while parsing IP Geolocation API response\"}";
+            }
+        } catch (Exception e) {
+            responseCode = 422;
+            jsonString = "{\"message\":\"Something went wrong while connecting to IP Geolocation API\"}";
+        }
+        return convertJSONStringToListMap(responseCode, jsonString);
+    }
+
+    private Map<String, String> getResponseMap(String url, String jsonBody, String requestType) {
+        Map<String, String> responseMap = null;
+        try {
+            URL obj = new URL(url);
+            HttpURLConnection connection = (HttpURLConnection) obj.openConnection();
+            connection.setReadTimeout(10000);
+            connection.setConnectTimeout(10000);
+            connection.setRequestMethod(requestType);
+            connection.setRequestProperty("Accept", "application/json");
+            if (requestType.equalsIgnoreCase("post")) {
+                connection.setRequestProperty("Content-Type", "application/json");
+                connection.setDoOutput(true);
+                DataOutputStream outputStream = new DataOutputStream(connection.getOutputStream());
+                outputStream.writeBytes(jsonBody);
+                outputStream.flush();
+                outputStream.close();
+            }
+            responseMap = parseConnectionResponse(connection);
+        } catch (Exception e) {
+            //
+        }
+        return responseMap;
     }
 
     private Map<String, String> parseConnectionResponse(HttpURLConnection connection) {
@@ -263,128 +299,11 @@ public class IPGeolocationAPI {
         return map;
     }
 
-    public UserAgent getUserAgent(String uaString) {
-        Map<String, Object> apiResponse = new HashMap<>();
-        UserAgent userAgent = new UserAgent();
-        try {
-            uaString = uaString.trim();
-            if (uaString.isEmpty()) {
-                apiResponse.put("status", 400);
-                apiResponse.put("message", "User-Agent string must not be empty.");
-                userAgent = new UserAgent(apiResponse);
-            } else {
-                Map<String, String> data = new HashMap<>();
-                data.put("uaString", uaString);
-                String url = "https://api.ipgeolocation.io/user-agent?apiKey=" + apiKey;
-                apiResponse = callUserAgentAPIEndpoint(new JSONObject(data).toString(), url);
-                userAgent = new UserAgent(apiResponse);
-            }
-        } catch (Exception e) {
-            apiResponse.put("status", 400);
-            apiResponse.put("message", "User-Agent string must not be null.");
-            userAgent = new UserAgent(apiResponse);
-        }
-        return userAgent;
-    }
-
-    private Map<String, Object> callUserAgentAPIEndpoint(String jsonBody, String url) {
-        int responseCode = 0;
-        String jsonString;
-        try {
-            URL obj = new URL(url);
-            HttpURLConnection connection = (HttpURLConnection) obj.openConnection();
-            connection.setReadTimeout(10000);
-            connection.setConnectTimeout(10000);
-            connection.setRequestMethod("POST");
-            connection.setRequestProperty("Content-Type", "application/json");
-            connection.setRequestProperty("Accept", "application/json");
-            connection.setDoOutput(true);
-            DataOutputStream outputStream = new DataOutputStream(connection.getOutputStream());
-            outputStream.writeBytes(jsonBody);
-            outputStream.flush();
-            outputStream.close();
-            Map<String, String> responseMap = parseConnectionResponse(connection);
-            responseCode = Integer.parseInt(responseMap.get("code"));
-            jsonString = responseMap.get("json");
-            if (responseCode == 0 || isNullOrEmpty(jsonString)) {
-                responseCode = 422;
-                jsonString = "{\"message\":\"Something went wrong while parsing IP Geolocation API response\"}";
-            }
-        } catch (IOException e) {
-            responseCode = 422;
-            jsonString = "{\"message\":\"Something went wrong while connecting to IP Geolocation API\"}";
-        } catch (IllegalArgumentException e) {
-            responseCode = 422;
-            jsonString = "{\"message\":\"Something went wrong while parsing IP Geolocation API response\"}";
-        }
-        return convertUserAgentStringToListMap(responseCode, jsonString);
-    }
-
-    private Map<String, Object> convertUserAgentStringToListMap(int responseCode, String response) {
-        Map<String, Object> result;
+    private List<Map<String, Object>> convertJSONStringToListMap(int responseCode, String response) {
         if (responseCode != 200) {
-            response = "{" + response + "}";
-            result = new JSONObject(response).toMap(); // new Gson().fromJson(response, new TypeToken<HashMap<String, Object>>() {}.getType());
-        } else {
-            result = new JSONObject(response).toMap(); // new Gson().fromJson(response, new TypeToken<HashMap<String, Object>>() {}.getType());
+            response = "[" + response + "]";
         }
-        return result;
-    }
-
-    public List<UserAgent> getBulkUserAgent(List<String> uaStrings) {
-        List<Map<String, Object>> apiResponses = new ArrayList<>();
-        List<UserAgent> userAgents = new ArrayList<>();
-        try {
-            Map<String, List<String>> data = new HashMap<>();
-            data.put("uaStrings", uaStrings);
-            String urlParams = "https://api.ipgeolocation.io/user-agent-bulk?apiKey=" + apiKey;
-            apiResponses = callBulkUserAgentAPIEndpoint(new JSONObject(data).toString(), urlParams);
-            userAgents = new ArrayList<UserAgent>();
-            for (Map<String, Object> response : apiResponses) {
-                userAgents.add(new UserAgent(response));
-            }
-            return userAgents;
-        } catch (Exception e) {
-            Map<String, Object> apiResponse = new HashMap<>();
-            apiResponse.put("status", 400);
-            apiResponse.put("message", "Something went wrong!.");
-            userAgents = new ArrayList<>();
-            userAgents.add(new UserAgent(apiResponse));
-        }
-        return userAgents;
-    }
-
-    private List<Map<String, Object>> callBulkUserAgentAPIEndpoint(String jsonBody, String url) {
-        int responseCode = 0;
-        String jsonString;
-        try {
-            URL obj = new URL(url);
-            HttpURLConnection connection = (HttpURLConnection) obj.openConnection();
-            connection.setReadTimeout(10000);
-            connection.setConnectTimeout(10000);
-            connection.setRequestMethod("POST");
-            connection.setRequestProperty("Content-Type", "application/json");
-            connection.setRequestProperty("Accept", "application/json");
-            connection.setDoOutput(true);
-            DataOutputStream outputStream = new DataOutputStream(connection.getOutputStream());
-            outputStream.writeBytes(jsonBody);
-            outputStream.flush();
-            outputStream.close();
-            Map<String, String> responseMap = parseConnectionResponse(connection);
-            responseCode = Integer.parseInt(responseMap.get("code"));
-            jsonString = responseMap.get("json");
-            if (responseCode == 0 || isNullOrEmpty(jsonString)) {
-                responseCode = 422;
-                jsonString = "{\"message\":\"Something went wrong while parsing IP Geolocation API response\"}";
-            }
-        } catch (IOException e) {
-            responseCode = 422;
-            jsonString = "{\"message\":\"Something went wrong while connecting to IP Geolocation API\"}";
-        } catch (IllegalArgumentException e) {
-            responseCode = 422;
-            jsonString = "{\"message\":\"Something went wrong while parsing IP Geolocation API response\"}";
-        }
-        return convertJSONStringToListMap(responseCode, jsonString);
+        return new JSONArray(response).toList().stream().map(it -> ((JSONObject) it).toMap()).collect(Collectors.toList());
     }
 
 }
