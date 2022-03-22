@@ -17,8 +17,7 @@ import static java.util.Objects.isNull;
 public class IPGeolocationAPI {
 
     public static void main(String[] args) {
-        IPGeolocationAPI api1 = new IPGeolocationAPI("04121b22f4244f55a04a496edcc8fd9a");
-//        UserAgent ua1 = api1.getUserAgent("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36");
+        // System.out.println("Main method");
     }
 
     private final String apiKey;
@@ -116,7 +115,7 @@ public class IPGeolocationAPI {
         StringBuilder urlParams = new StringBuilder();
         urlParams.append("apiKey=");
         urlParams.append(apiKey);
-        if (params != null) {
+        if (!isNull(params)) {
             if (!isNullOrEmpty(params.getIPAddress())) {
                 urlParams.append("&ip=");
                 urlParams.append(params.getIPAddress());
@@ -191,7 +190,6 @@ public class IPGeolocationAPI {
         return userAgents;
     }
 
-    // Generic methods
     private Map<String, Object> callAPIEndpoint(String endpoint, String urlParams, String requestType) {
         String url = "";
         if (endpoint.equalsIgnoreCase("ipgeo") || endpoint.equalsIgnoreCase("timezone")) {
@@ -303,7 +301,7 @@ public class IPGeolocationAPI {
         if (responseCode != 200) {
             response = "[" + response + "]";
         }
-        return new JSONArray(response).toList().stream().map(it -> ((JSONObject) it).toMap()).collect(Collectors.toList());
+        return new JSONArray(response).toList().stream().map(it -> (Map<String, Object>) it).collect(Collectors.toList());
     }
 
 }

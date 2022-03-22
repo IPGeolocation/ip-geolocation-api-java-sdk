@@ -13,6 +13,8 @@ public class TimezoneParams {
         this.ip = "";
         this.lang = "en";
         this.location = "";
+        this.latitude = 1000.00;
+        this.longitude = 1000.00;
     }
 
     public void setTimezone(String timezone) {

@@ -14,7 +14,8 @@ public class UserAgent {
     private UserAgentEngine engine;
     private UserAgentOperatingSystem operatingSystem;
 
-    public UserAgent() {}
+    public UserAgent() {
+    }
 
     public UserAgent(Map<String, Object> json) {
         this.userAgentString = (String) json.get("userAgentString");

@@ -1,5 +1,6 @@
 package io.ipgeolocation.api;
 
+import java.math.BigDecimal;
 import java.util.Map;
 
 public class TimezoneGeo {
@@ -10,8 +11,8 @@ public class TimezoneGeo {
     private final String district;
     private final String city;
     private final String zipCode;
-    private final String latitude;
-    private final String longitude;
+    private final BigDecimal latitude;
+    private final BigDecimal longitude;
 
     TimezoneGeo(Map<String, Object> json) {
         this.countryCode2 = (String) json.get("country_code2");
@@ -21,8 +22,8 @@ public class TimezoneGeo {
         this.district = (String) json.get("district");
         this.city = (String) json.get("city");
         this.zipCode = (String) json.get("zipcode");
-        this.latitude = Double.toString((Double) json.get("latitude"));
-        this.longitude = Double.toString((Double) json.get("longitude"));
+        this.latitude = (BigDecimal) json.get("latitude");
+        this.longitude = (BigDecimal) json.get("longitude");
     }
 
     public String getCountryCode2() {
@@ -53,11 +54,11 @@ public class TimezoneGeo {
         return zipCode;
     }
 
-    public String getLatitude() {
+    public BigDecimal getLatitude() {
         return latitude;
     }
 
-    public String getLongitude() {
+    public BigDecimal getLongitude() {
         return longitude;
     }
 

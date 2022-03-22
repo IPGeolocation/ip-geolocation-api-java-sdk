@@ -1,5 +1,6 @@
 package io.ipgeolocation.api;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -7,14 +8,14 @@ public class Timezone {
     private final Integer status;
     private String message;
     private String timezone;
-    private Double timezoneOffset;
-    private Double timezoneOffsetWithDST;
+    private Integer timezoneOffset;
+    private Integer timezoneOffsetWithDST;
     private String date;
     private String dateTime;
     private String dateTimeTxt;
     private String dateTimeWti;
     private String dateTimeYmd;
-    private Double dateTimeUnix;
+    private BigDecimal dateTimeUnix;
     private String time24;
     private String time12;
     private Integer week;
@@ -22,25 +23,25 @@ public class Timezone {
     private Integer year;
     private String yearAbbr;
     private Boolean isDST;
-    private Double dstSavings;
+    private Integer dstSavings;
     private TimezoneGeo timezoneGeo;
 
     Timezone(Map<String, Object> json) {
-        this.status = Integer.parseInt((String) json.get("status"));
+        this.status = (Integer) json.get("status");
         String message = (String) json.get("message");
 
         if (this.status != 200 || message != null) {
             this.message = message;
         } else {
             this.timezone = (String) json.get("timezone");
-            this.timezoneOffset = (Double) json.get("timezone_offset");
-            this.timezoneOffsetWithDST = (Double) json.get("timezone_offset_with_dst");
+            this.timezoneOffset = (Integer) json.get("timezone_offset");
+            this.timezoneOffsetWithDST = (Integer) json.get("timezone_offset_with_dst");
             this.date = (String) json.get("date");
             this.dateTime = (String) json.get("date_time");
             this.dateTimeTxt = (String) json.get("date_time_txt");
             this.dateTimeWti = (String) json.get("date_time_wti");
             this.dateTimeYmd = (String) json.get("date_time_ymd");
-            this.dateTimeUnix = (Double) json.get("date_time_unix");
+            this.dateTimeUnix = (BigDecimal) json.get("date_time_unix");
             this.time24 = (String) json.get("time_24");
             this.time12 = (String) json.get("time_12");
             this.week = (Integer) json.get("week");
@@ -48,7 +49,7 @@ public class Timezone {
             this.year = (Integer) json.get("year");
             this.yearAbbr = (String) json.get("year_abbr");
             this.isDST = (Boolean) json.get("is_dst");
-            this.dstSavings = (Double) json.get("dst_savings");
+            this.dstSavings = (Integer) json.get("dst_savings");
             if (json.get("geo") instanceof HashMap) {
                 Map<String, Object> geoJson = (HashMap) json.get("geo");
                 this.timezoneGeo = new TimezoneGeo(geoJson);
@@ -68,11 +69,11 @@ public class Timezone {
         return timezone;
     }
 
-    public Double getTimezoneOffset() {
+    public Integer getTimezoneOffset() {
         return timezoneOffset;
     }
 
-    public Double getTimezoneOffsetWithDST() {
+    public Integer getTimezoneOffsetWithDST() {
         return timezoneOffsetWithDST;
     }
 
@@ -96,7 +97,7 @@ public class Timezone {
         return dateTimeYmd;
     }
 
-    public Double getDateTimeUnix() {
+    public BigDecimal getDateTimeUnix() {
         return dateTimeUnix;
     }
 
@@ -128,7 +129,7 @@ public class Timezone {
         return isDST;
     }
 
-    public Double getDSTSavings() {
+    public Integer getDSTSavings() {
         return dstSavings;
     }
 

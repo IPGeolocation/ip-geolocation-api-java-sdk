@@ -37,7 +37,7 @@ public class Geolocation {
     private UserAgent userAgent;
 
     Geolocation(Map<String, Object> json) {
-        this.status = Integer.parseInt((String) json.get("status"));
+        this.status = (Integer) json.get("status");
         String message = (String) json.get("message");
         if (this.status != 200 || message != null) {
             this.message = message;
@@ -89,7 +89,7 @@ public class Geolocation {
         }
     }
 
-    public int getStatus() {
+    public Integer getStatus() {
         return status;
     }
 

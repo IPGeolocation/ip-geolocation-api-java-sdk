@@ -315,11 +315,11 @@ IP Geolocation API Java SDK has the following classes that you can use to fully 
 | Method | Description                                                               | Return Type |
 |:-------|:--------------------------------------------------------------------------|:------------|
 | getName() | Returns standard time zone ID like "America/New_York".                    | String      |
-| getOffset() | Returns time zone offset from UTC.                                        | Double      |
+| getOffset() | Returns time zone offset from UTC.                                        | Integer     |
 | getCurrentTime() | Returns current date-time string in the format "yyyy-MM-dd HH:mm:ss.SSSZ" | String      |
-| getCurrentTimeUnix() | Returns current date-time as a unix time    | Double      |
+| getCurrentTimeUnix() | Returns current date-time as a unix time    | BigDecimal  |
 | isDST() | Returns is the country observing daylight saving time.                    | Boolean     |
-| getDSTSavings() | Returns daylight savings time (in hours).                                 | Double      |
+| getDSTSavings() | Returns daylight savings time (in hours).                                 | Integer     |
 
 ### Class: io.ipgeolocation.api.GeolocationSecurity
 
@@ -358,14 +358,14 @@ IP Geolocation API Java SDK has the following classes that you can use to fully 
 | getStatus() | Returns HTTP status of the geolocation query. 200 is the successful query status.      | Integer     |
 | getMessage() | Returns error message, if the query was not successful.                                | String      |
 | getTimezone() | Returns time zone ID like "America/New_York".                                          | String      |
-| getTimezoneOffset() | Returns time zone offset from UTC.                                                     | Double      |
-| getTimezoneOffsetWithDST() | Returns time zone offset with dst value from UTC.                                      | Double      |
+| getTimezoneOffset() | Returns time zone offset from UTC.                                                     | Integer     |
+| getTimezoneOffsetWithDST() | Returns time zone offset with dst value from UTC.                                      | Integer     |
 | getDate() | Returns current date in the format "yyyy-MM-dd".                                       | String      |
 | getDateTime() | Returns date-time string in the format "yyyy-MM-dd HH:mm:ss".                          | String      |
 | getDateTimeTxt() | Returns date-time string in the format "EEEE, MMMM dd, yyyy HH:mm:ss".                 | String      |
 | getDateTimeWti() | Returns date-time string in the format "EEE, dd MMM yyyy HH:mm:ss Z".                  | String      |
 | getDateTimeYmd() | Returns date-time string in the format "yyyy-MM-dd'T'HH:mm:ssZ".                       | String      |
-| getDateTimeUnix() | Returns current date-time as unix time.                                                | Integer     |
+| getDateTimeUnix() | Returns current date-time as unix time.                                                | BigDecimal  |
 | getTime24() | Returns current time in the format "HH:mm:ss".                                         | String      |
 | getTime12() | Returns current time in the format "hh:mm:ss aa".                                      | String      |
 | getWeek() | Returns current week of the year.                                                      | Integer     |
@@ -373,7 +373,7 @@ IP Geolocation API Java SDK has the following classes that you can use to fully 
 | getYear() | Returns current year.                                                                  | Integer     |
 | getYearAbbr() | Returns 2-letters year abbreviation like "18".                                         | String      |
 | isDST() | Returns is the country observing Daylight Saving time.                                 | Boolean     |
-| getDSTSavings() | Returns daylight savings time (in hours).                                              | Double      |
+| getDSTSavings() | Returns daylight savings time (in hours).                                              | Integer     |
 | getTimezoneGeo() | Returns geolocation of timezone if you lookup timezone information from an IP address. | TimezoneGeo |
 
 ### Class: io.ipgeolocation.api.TimezoneGeo
@@ -387,8 +387,8 @@ IP Geolocation API Java SDK has the following classes that you can use to fully 
 | getDistrict() | Returns district. | String |
 | getCity() | Returns city. | String |
 | getZipCode() | Returns zip code. | String |
-| getLatitude() | Returns latitude of the city. | Double |
-| getLongitude() | Returns longitude of the city. | Double |
+| getLatitude() | Returns latitude of the city. | BigDecimal |
+| getLongitude() | Returns longitude of the city. | BigDecimal |
 
 ### Class: io.ipgeolocation.api.UserAgent
 
