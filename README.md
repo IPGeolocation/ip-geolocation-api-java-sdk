@@ -71,6 +71,13 @@ Use the following URL to download the latest JAR file for IP Geolocation API Jav
 
 * [https://ipgeolocation.io/downloads/ip-geolocation-api-java-1.0.12.jar](https://ipgeolocation.io/downloads/ip-geolocation-api-java-1.0.12.jar)
 
+Documentation
+-----------
+Use the following URL to visit documentation
+
+* [https://ipgeolocation.io/documentation.html](https://ipgeolocation.io/documentation.html)
+
+
 Basic Usage
 -----------
 
@@ -249,24 +256,28 @@ IP Geolocation API Java SDK has the following classes that you can use to fully 
 
 ### Class: io.ipgeolocation.api.GeolocationParams
 
-| Method | Description | Return Type |
-|:-------|:------------|:------------|
-| setIPAddress(String ip) | Sets IP address to lookup geolocation. | void |
-| getIPAddress() | Get IP address set to lookup geolocation. | String |
-| setIPAddresses(String[] ips) throws IllegalArgumentException | Set IP addresses to lookup multiple geo-locations. Throws IllegalArgumentException if no. of IP addresses are more than 50. **Note:** Multiple IP addresses lookup is only available for paid users. | void |
-| getIPAddresses() | Get IP addresses set to lookup bulk geolocations. | String[] |
-| setLang(String lang) | Set language parameter to lookup geolocation. | void |
-| getLang() | Get language set to lookup geolocation. | String |
-| setFields(String fields) | Set fields to lookup geolocation. | void |
-| getFields() | Get fields set to lookup geolocation. | String |
-| setIncludeHostname(Boolean includeHostname) | Set includeHostname to true to get hostname as well. | void |
-| isIncludeHostname() | Returns boolean value whether hostname is included in response or not. | Boolean |
-| setIncludeSecurity(Boolean includeSecurity) | Set includeSecurity to true to get Security object as well. | void |
-| isIncludeSecurity() | Returns boolean value whether Security object is included in response or not. | Boolean |
-| setIncludeUserAgentDetail(Boolean includeUserAgentDetail) | Set includeUserAgentDetail to true to get UserAgent object as well. | void |
-| isIncludeUserAgentDetail() | Returns boolean value whether UserAgent object is included in response or not. | Boolean |
-| setExcludes(String excludes) | Set fields (as a comma separated value) to exclude from response. | void |
-| getExcludes() | Get fields (as a comma separated value) that have been excluded from response. | String |
+| Method                                                              | Description                                                                                                                                                                                                                                                                                                                      | Return Type |
+|:--------------------------------------------------------------------|:---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:------------|
+| setIPAddress(String ip)                                             | Sets IP address to lookup geolocation.                                                                                                                                                                                                                                                                                           | void |
+| getIPAddress()                                                      | Get IP address set to lookup geolocation.                                                                                                                                                                                                                                                                                        | String |
+| setIPAddresses(String[] ips) throws IllegalArgumentException        | Set IP addresses to lookup multiple geo-locations. Throws IllegalArgumentException if no. of IP addresses are more than 50. **Note:** Multiple IP addresses lookup is only available for paid users.                                                                                                                             | void |
+| getIPAddresses()                                                    | Get IP addresses set to lookup bulk geolocations.                                                                                                                                                                                                                                                                                | String[] |
+| setLang(String lang)                                                | Set language parameter to lookup geolocation.                                                                                                                                                                                                                                                                                    | void |
+| getLang()                                                           | Get language set to lookup geolocation.                                                                                                                                                                                                                                                                                          | String |
+| setFields(String fields)                                            | Set fields to lookup geolocation.                                                                                                                                                                                                                                                                                                | void |
+| getFields()                                                         | Get fields set to lookup geolocation.                                                                                                                                                                                                                                                                                            | String |
+| setIncludeHostname(Boolean includeHostname)                         | This URL parameter enables the IPGeolocation API to lookup hostname from our IP-Hostname database and returns the same IP address if there is no hostname found for the queried IP address. Lookup thru IP-Hostname database is faster than other options but is experimental and under process and can produce unwanted output. | void |
+| isIncludeHostname()                                                 | Returns Boolean object whether hostname is included in response or not.                                                                                                                                                                                                                                                          | Boolean |
+| setIncludeLiveHostname(Boolean includeLiveHostname)                 | This URL parameter enables the IPGeolocation API to lookup hostname from live sources. Lookup thru live sources is accurate but can introduce more latency to your query to IPGeolocation API.                                                                                                                                   | void |
+| isIncludeLiveHostname()                                             | Returns Boolean object whether live hostname is included in response or not.                                                                                                                                                                                                                                                     | Boolean |
+| setIncludeHostnameFallbackLive(Boolean includeHostnameFallbackLive) | This URL parameter enables the IPGeolocation API to lookup hostname from our IP-Hostname database and if there is no hostname found for the queried IP address, then lookup thru the live sources. This option has been introduced for faster and accurate lookup.                                                               | void |
+| isIncludeHostnameFallbackLive()                                     | Returns Boolean object whether hostname with fall-back-live is included in response or not.                                                                                                                                                                                                                                      | Boolean |
+| setIncludeSecurity(Boolean includeSecurity)                         | Set includeSecurity to true to get Security object as well.                                                                                                                                                                                                                                                                      | void |
+| isIncludeSecurity()                                                 | Returns Boolean object whether Security object is included in response or not.                                                                                                                                                                                                                                                   | Boolean |
+| setIncludeUserAgentDetail(Boolean includeUserAgentDetail)           | Set includeUserAgentDetail to true to get UserAgent object as well.                                                                                                                                                                                                                                                              | void |
+| isIncludeUserAgentDetail()                                          | Returns Boolean object whether UserAgent object is included in response or not.                                                                                                                                                                                                                                                  | Boolean |
+| setExcludes(String excludes)                                        | Set fields (as a comma separated value) to exclude from response.                                                                                                                                                                                                                                                                | void |
+| getExcludes()                                                       | Get fields (as a comma separated value) that have been excluded from response.                                                                                                                                                                                                                                                   | String |
 
 ### Class: io.ipgeolocation.api.Geolocation
 

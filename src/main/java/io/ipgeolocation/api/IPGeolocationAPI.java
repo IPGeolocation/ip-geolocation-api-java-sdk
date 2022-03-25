@@ -16,10 +16,6 @@ import static java.util.Objects.isNull;
 
 public class IPGeolocationAPI {
 
-    public static void main(String[] args) {
-        // System.out.println("Main method");
-    }
-
     private final String apiKey;
 
     public IPGeolocationAPI(String apiKey) throws IllegalArgumentException {
@@ -71,18 +67,28 @@ public class IPGeolocationAPI {
                 urlParams.append("&fields=");
                 urlParams.append(params.getFields());
             }
+
+            boolean includeHost = false;
             if (params.isIncludeHostname()) {
                 urlParams.append("&include=hostname");
+                includeHost = true;
+            } else if (params.isIncludeHostnameFallbackLive()) {
+                urlParams.append("&include=hostnameFallbackLive");
+                includeHost = true;
+            } else if (params.isIncludeLiveHostname()) {
+                urlParams.append("&include=liveHostname");
+                includeHost = true;
             }
+
             if (params.isIncludeSecurity()) {
-                if (params.isIncludeHostname()) {
+                if (includeHost) {
                     urlParams.append(",security");
                 } else {
                     urlParams.append("&include=security");
                 }
             }
             if (params.isIncludeUserAgentDetail()) {
-                if (params.isIncludeHostname() || params.isIncludeSecurity()) {
+                if (includeHost || params.isIncludeSecurity()) {
                     urlParams.append(",useragent");
                 } else {
                     urlParams.append("&include=useragent");
