@@ -243,15 +243,15 @@ IP Geolocation API Java SDK has the following classes that you can use to fully 
 
 | Method                                                          | Description                                                                                                                                    | Return Type         |
 |:----------------------------------------------------------------|:-----------------------------------------------------------------------------------------------------------------------------------------------|:--------------------|
-| IPGeolocationAPI(String apiKey) throws IllegalArgumentException | Constructs the IPGeolocationAPI object. It takes a valid apiKey as a parameter and throws IllegalArgumentException if apiKey is empty or null. ||
+| IPGeolocationAPI(String apiKey) throws IllegalArgumentException | Constructs the IPGeolocationAPI object. It takes a valid apiKey as a parameter and throws IllegalArgumentException if apiKey is empty or null. |                     |
 | getApiKey()                                                     | This function to get the API key that you set to query the IPGeolocation API.                                                                  | String              |
-| getGeolocation()                                                | This function to query Geolocation API.                                                                                                        | Geolocation         |
-| getGeolocation(GeolocationParams params)                        | This function to query Geolocation API based on the parameters passed.                                                                         | Geolocation         |
-| getBulkGeolocation(GeolocationParams params)                    | This function to query Geolocation API to lookup multiple IP addresses (max. 50).                                                              | List\<Geolocation\> |
-| getTimezone()                                                   | This function to query Timezone API based on calling machine's IP address.                                                                     | Timezone            |
-| getTimezone(TimezoneParams params)                              | This function to query Timezone API based on the parameters passed.                                                                            | Timezone            |
-| getUserAgent(String uaString)                                   | This function to query UserAgent API.                                                                                                          | UserAgent         |
-| getBulkUserAgent(List<String> uaStrings)                        | This function to query UserAgent API to lookup multiple user-agent strings (max. 50).                                                          | List\<UserAgent\> |
+| getGeolocation()                                                | This function to query Geolocation API.                                                                                                        | Map<String, Object> |
+| getGeolocation(GeolocationParams params)                        | This function to query Geolocation API based on the parameters passed.                                                                         | Map<String, Object> |
+| getBulkGeolocation(GeolocationParams params)                    | This function to query Geolocation API to lookup multiple IP addresses (max. 50).                                                              | Map<String, Object> |
+| getTimezone()                                                   | This function to query Timezone API based on calling machine's IP address.                                                                     | Map<String, Object> |
+| getTimezone(TimezoneParams params)                              | This function to query Timezone API based on the parameters passed.                                                                            | Map<String, Object> |
+| getUserAgent(String uaString)                                   | This function to query UserAgent API.                                                                                                          | Map<String, Object> |
+| getBulkUserAgent(List<String> uaStrings)                        | This function to query UserAgent API to lookup multiple user-agent strings (max. 50).                                                          | Map<String, Object> |
 
 
 ### Class: io.ipgeolocation.api.GeolocationParams
@@ -283,8 +283,6 @@ IP Geolocation API Java SDK has the following classes that you can use to fully 
 
 | Method | Description                                                                       | Return Type |
 |:-------|:----------------------------------------------------------------------------------|:------------|
-| getStatus() | Returns HTTP status of the geolocation query. 200 is the successful query status. | Integer |
-| getMessage() | Returns error message, if the query was not successful.                           | String |
 | getIPAddress() | Returns IP address of the geolocation.                                            | String |
 | getContinentCode() | Returns 2-letters continent code.                                                 | String |
 | getContinentName() | Returns continent name.                                                           | String |
@@ -366,8 +364,6 @@ IP Geolocation API Java SDK has the following classes that you can use to fully 
 
 | Method | Description                                                                            | Return Type |
 |:-------|:---------------------------------------------------------------------------------------|:------------|
-| getStatus() | Returns HTTP status of the geolocation query. 200 is the successful query status.      | Integer     |
-| getMessage() | Returns error message, if the query was not successful.                                | String      |
 | getTimezone() | Returns time zone ID like "America/New_York".                                          | String      |
 | getTimezoneOffset() | Returns time zone offset from UTC.                                                     | Integer     |
 | getTimezoneOffsetWithDST() | Returns time zone offset with dst value from UTC.                                      | Integer     |

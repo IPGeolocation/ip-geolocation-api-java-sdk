@@ -3,6 +3,8 @@ package io.ipgeolocation.api;
 import java.util.HashMap;
 import java.util.Map;
 
+import static java.util.Objects.isNull;
+
 public class UserAgent {
 
     private String userAgentString;
@@ -18,6 +20,14 @@ public class UserAgent {
     }
 
     public UserAgent(Map<String, Object> json) {
+        if (isNull(json)) {
+            throw new IllegalArgumentException("'json' must not be null.");
+        }
+
+        if (json.isEmpty()) {
+            throw new IllegalArgumentException("'json' must not be empty.");
+        }
+
         this.userAgentString = (String) json.get("userAgentString");
         this.name = (String) json.get("name");
         this.type = (String) json.get("type");

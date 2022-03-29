@@ -11,8 +11,8 @@ public class TimezoneGeo {
     private final String district;
     private final String city;
     private final String zipCode;
-    private final BigDecimal latitude;
-    private final BigDecimal longitude;
+    private BigDecimal latitude;
+    private BigDecimal longitude;
 
     TimezoneGeo(Map<String, Object> json) {
         this.countryCode2 = (String) json.get("country_code2");
@@ -22,8 +22,18 @@ public class TimezoneGeo {
         this.district = (String) json.get("district");
         this.city = (String) json.get("city");
         this.zipCode = (String) json.get("zipcode");
-        this.latitude = (BigDecimal) json.get("latitude");
-        this.longitude = (BigDecimal) json.get("longitude");
+
+        if (json.get("latitude") instanceof String) {
+            this.latitude = new BigDecimal((String) json.get("latitude"));
+        } else if (json.get("latitude") instanceof BigDecimal) {
+            this.latitude = (BigDecimal) json.get("latitude");
+        }
+
+        if (json.get("longitude") instanceof String) {
+            this.longitude = new BigDecimal((String) json.get("longitude"));
+        } else if (json.get("longitude") instanceof BigDecimal) {
+            this.longitude = (BigDecimal) json.get("longitude");
+        }
     }
 
     public String getCountryCode2() {
