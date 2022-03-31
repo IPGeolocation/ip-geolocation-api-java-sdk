@@ -121,7 +121,7 @@ if (geolocation.getStatus() == 200) {
     System.out.println(geolocation.getGeolocationSecurity().getCloudProvider());
     System.out.println(geolocation.getUserAgent().getDevice().getName());
 } else {
-    System.out.printf("Status Code: %d, Message: %s\n",geolocation.getStatus(),geolocation.getMessage());
+    System.out.printf("Status Code: %d, Message: %s\n", geolocation.getStatus(), geolocation.getMessage());
 }
 
 // Get geolocation in Russian** for IP address (1.1.1.1) and all fields
@@ -135,8 +135,8 @@ Geolocation geolocation = api.getGeolocation(geoParams);
 if (geolocation.getStatus() == 200) {
     System.out.println(geolocation.getIPAddress());
     System.out.println(geolocation.getCountryName());
-}else{
-    System.out.printf("Status Code: %d, Message: %s\n",geolocation.getStatus(),geolocation.getMessage());
+} else {
+    System.out.printf("Status Code: %d, Message: %s\n", geolocation.getStatus(), geolocation.getMessage());
 }
 
 // Get geolocation for the calling machine's IP address for all fields
@@ -145,8 +145,8 @@ Geolocation geolocation = api.getGeolocation();
 if (geolocation.getStatus() == 200) {
     System.out.println(geolocation.getCountryCode2());
     System.out.println(geolocation.getTimezone().getCurrentTime());
-}else{     
-    System.out.printf("Status Code: %d, Message: %s\n",geolocation.getStatus(),geolocation.getMessage());
+} else {     
+    System.out.printf("Status Code: %d, Message: %s\n", geolocation.getStatus(), geolocation.getMessage());
 }
 ```
 
@@ -154,7 +154,7 @@ if (geolocation.getStatus() == 200) {
 
 ```java
 // Query geolocation in German** for multiple IP addresses and all fields
-String[]ips=new String[]{"1.1.1.1","2.2.2.2","3.3.3.3"};
+String[] ips = new String[]{"1.1.1.1","2.2.2.2","3.3.3.3"};
 GeolocationParams geoParams = new GeolocationParams();
 geoParams.setIPAddresses(ips);
 geoParams.setLang("de");
@@ -167,7 +167,7 @@ System.out.println(geolocations.get(1).getLanguages());
 System.out.println(geolocations.get(2).getTimezone().getCurrentTime());
 
 // Query geolocations for multiple IP addresses but only geo field
-String[]ips=new String[]{"1.1.1.1","2.2.2.2","3.3.3.3"};
+String[] ips = new String[]{"1.1.1.1","2.2.2.2","3.3.3.3"};
 GeolocationParams geoParams = new GeolocationParams();
 geoParams.setIPAddresses(ips);
 geoParams.setFields("geo");
@@ -187,13 +187,13 @@ System.out.println(geolocations.get(2).getLatitude());
 TimezoneParams tzParams = new TimezoneParams();
 tzParams.setTimezone("America/New_York");
 
-Timezone tz=api.getTimezone(tzParams);
+Timezone tz = api.getTimezone(tzParams);
 
 if (tz.getStatus() == 200) {
     System.out.println(tz.getDateTimeWti());
     System.out.println(tz.getDateTimeTxt());
-}else{
-    System.out.printf("Status Code: %d, Message: %s\n",geolocation.getStatus(),geolocation.getMessage());
+} else {
+    System.out.printf("Status Code: %d, Message: %s\n", geolocation.getStatus(), geolocation.getMessage());
 }
 
 // Get time zone information by coordinates (latitude and longitude) of the location
@@ -204,8 +204,8 @@ Timezone tz = api.getTimezone(tzParams);
 
 if (tz.getStatus() == 200) {
     System.out.println(tz.getTimezone());
-}else{
-    System.out.printf("Status Code: %d, Message: %s\n",geolocation.getStatus(),geolocation.getMessage());
+} else {
+    System.out.printf("Status Code: %d, Message: %s\n", geolocation.getStatus(), geolocation.getMessage());
 }
 
 // Get time zone information for IP address (1.1.1.1) and geolocation information Japanese**
@@ -217,8 +217,8 @@ Timezone tz = api.getTimezone(tzParams);
 
 if (tz.getStatus() == 200) {
     System.out.println(tz.getTimezone());
-}else{
-    System.out.printf("Status Code: %d, Message: %s\n",geolocation.getStatus(),geolocation.getMessage());
+} else {
+    System.out.printf("Status Code: %d, Message: %s\n", geolocation.getStatus(), geolocation.getMessage());
 }
 
 // Query time zone information for calling machine's IP address
@@ -227,8 +227,8 @@ Timezone tz = api.getTimezone();
 if(tz.getMessage()){
     System.out.println(tz.getTimezone());
     System.out.println(tz.getDateTimeYmd());
-}else{
-    System.out.printf("Status Code: %d, Message: %s\n",geolocation.getStatus(),geolocation.getMessage());
+} else {
+    System.out.printf("Status Code: %d, Message: %s\n", geolocation.getStatus(), geolocation.getMessage());
 }
 ```
 
