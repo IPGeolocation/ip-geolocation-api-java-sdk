@@ -1,22 +1,26 @@
 package io.ipgeolocation.api;
 
-import java.util.Arrays;
-
 public class GeolocationParams {
     private String ip;
-    private String fields;
-    private String lang;
-    private boolean includeHostname;
-    private boolean includeSecurity;
     private String[] ips;
+    private String lang;
+    private String fields;
+    private Boolean includeHostname = false;
+    private Boolean includeLiveHostname = false;
+    private Boolean includeHostnameFallbackLive = false;
+    private Boolean includeSecurity = false;
+    private Boolean includeUserAgentDetail = false;
+    private String excludes;
 
     public GeolocationParams() {
         this.ip = "";
-        this.fields = "";
+        this.ips = new String[0];
         this.lang = "en";
+        this.fields = "";
         this.includeHostname = false;
         this.includeSecurity = false;
-        this.ips = new String[0];
+        this.includeUserAgentDetail = false;
+        this.excludes = "";
     }
 
     public void setIPAddress(String ip) {
@@ -43,7 +47,7 @@ public class GeolocationParams {
         return lang;
     }
 
-    public void setIncludeHostname(boolean includeHostname) {
+    public void setIncludeHostname(Boolean includeHostname) {
         this.includeHostname = includeHostname;
     }
 
@@ -51,16 +55,48 @@ public class GeolocationParams {
         return includeHostname;
     }
 
-    public boolean isIncludeSecurity() {
-        return includeSecurity;
+    public void setIncludeLiveHostname(Boolean includeLiveHostname) {
+        this.includeLiveHostname = includeLiveHostname;
     }
 
-    public void setIncludeSecurity(boolean includeSecurity) {
+    public Boolean isIncludeLiveHostname() {
+        return includeLiveHostname;
+    }
+
+    public void setIncludeHostnameFallbackLive(Boolean includeHostnameFallbackLive) {
+        this.includeHostnameFallbackLive = includeHostnameFallbackLive;
+    }
+
+    public Boolean isIncludeHostnameFallbackLive() {
+        return includeHostnameFallbackLive;
+    }
+
+    public void setIncludeSecurity(Boolean includeSecurity) {
         this.includeSecurity = includeSecurity;
     }
 
+    public Boolean isIncludeSecurity() {
+        return includeSecurity;
+    }
+
+    public void setIncludeUserAgentDetail(Boolean includeUserAgentDetail) {
+        this.includeUserAgentDetail = includeUserAgentDetail;
+    }
+
+    public Boolean isIncludeUserAgentDetail() {
+        return includeUserAgentDetail;
+    }
+
+    public void setExcludes(String excludes) {
+        this.excludes = excludes;
+    }
+
+    public String getExcludes() {
+        return excludes;
+    }
+
     public void setIPAddresses(String[] ips) throws IllegalArgumentException {
-        if(ips.length > 50) {
+        if (ips.length > 50) {
             throw new IllegalArgumentException("Max. number of IP addresses cannot be more than 50.");
         } else {
             this.ips = ips;
@@ -69,10 +105,5 @@ public class GeolocationParams {
 
     public String[] getIPAddresses() {
         return ips;
-    }
-
-    @Override
-    public String toString() {
-        return String.format("IP address: '%s', Fields: '%s', Lang: '%s', IP addresses: '%s'", ip, fields, lang, Arrays.toString(ips));
     }
 }

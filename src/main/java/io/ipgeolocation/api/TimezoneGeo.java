@@ -1,19 +1,20 @@
 package io.ipgeolocation.api;
 
+import java.math.BigDecimal;
 import java.util.Map;
 
 public class TimezoneGeo {
-    private String countryCode2;
-    private String countryCode3;
-    private String countryName;
-    private String stateProvince;
-    private String district;
-    private String city;
-    private String zipCode;
-    private String latitude;
-    private String longitude;
+    private final String countryCode2;
+    private final String countryCode3;
+    private final String countryName;
+    private final String stateProvince;
+    private final String district;
+    private final String city;
+    private final String zipCode;
+    private BigDecimal latitude;
+    private BigDecimal longitude;
 
-    TimezoneGeo(Map json) {
+    TimezoneGeo(Map<String, Object> json) {
         this.countryCode2 = (String) json.get("country_code2");
         this.countryCode3 = (String) json.get("country_code3");
         this.countryName = (String) json.get("country_name");
@@ -21,8 +22,18 @@ public class TimezoneGeo {
         this.district = (String) json.get("district");
         this.city = (String) json.get("city");
         this.zipCode = (String) json.get("zipcode");
-        this.latitude = (String) json.get("latitude");
-        this.longitude = (String) json.get("longitude");
+
+        if (json.get("latitude") instanceof String) {
+            this.latitude = new BigDecimal((String) json.get("latitude"));
+        } else if (json.get("latitude") instanceof BigDecimal) {
+            this.latitude = (BigDecimal) json.get("latitude");
+        }
+
+        if (json.get("longitude") instanceof String) {
+            this.longitude = new BigDecimal((String) json.get("longitude"));
+        } else if (json.get("longitude") instanceof BigDecimal) {
+            this.longitude = (BigDecimal) json.get("longitude");
+        }
     }
 
     public String getCountryCode2() {
@@ -53,16 +64,12 @@ public class TimezoneGeo {
         return zipCode;
     }
 
-    public String getLatitude() {
+    public BigDecimal getLatitude() {
         return latitude;
     }
 
-    public String getLongitude() {
+    public BigDecimal getLongitude() {
         return longitude;
     }
 
-    @Override
-    public String toString() {
-        return String.format("country_code2: '%s' \ncountry_code3: '%s' \ncountry_name: '%s' \nstate_prov: '%s' \ndistrict: '%s' \ncity: '%s' \nzipcode: '%s' \nlatitude: '%s' \nlongitude: '%s'", countryCode2, countryCode3, countryName, stateProvince, district, city, zipCode, latitude, longitude);
-    }
 }

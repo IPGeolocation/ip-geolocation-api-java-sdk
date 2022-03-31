@@ -1,29 +1,30 @@
 package io.ipgeolocation.api;
 
+import java.math.BigDecimal;
 import java.util.Map;
 
 public class GeolocationTimezone {
-    private String name;
-    private Double offset;
-    private String currentTime;
-    private Double currentTimeUnix;
-    private Boolean isDST;
-    private Double dstSavings;
+    private final String name;
+    private final Integer offset;
+    private final String currentTime;
+    private final BigDecimal currentTimeUnix;
+    private final Boolean isDST;
+    private final Integer dstSavings;
 
-    GeolocationTimezone(Map json) {
+    GeolocationTimezone(Map<String, Object> json) {
         this.name = (String) json.get("name");
-        this.offset = (Double) json.get("offset");
+        this.offset = (Integer) json.get("offset");
         this.currentTime = (String) json.get("current_time");
-        this.currentTimeUnix = (Double) json.get("current_time_unix");
+        this.currentTimeUnix = (BigDecimal) json.get("current_time_unix");
         this.isDST = (Boolean) json.get("is_dst");
-        this.dstSavings = (Double) json.get("dst_savings");
+        this.dstSavings = (Integer) json.get("dst_savings");
     }
 
     public String getName() {
         return name;
     }
 
-    public Double getOffset() {
+    public Integer getOffset() {
         return offset;
     }
 
@@ -31,7 +32,7 @@ public class GeolocationTimezone {
         return currentTime;
     }
 
-    public Double getCurrentTimeUnix() {
+    public BigDecimal getCurrentTimeUnix() {
         return currentTimeUnix;
     }
 
@@ -39,12 +40,8 @@ public class GeolocationTimezone {
         return isDST;
     }
 
-    public Double getDSTSavings() {
+    public Integer getDSTSavings() {
         return dstSavings;
     }
 
-    @Override
-    public String toString() {
-        return String.format("name: '%s' \noffset: '%s' \ncurrent_time: '%s' \ncurrent_time_unix: '%f' \nis_dst: '%b' \ndst_savings: '%s'", name, offset, currentTime, currentTimeUnix, isDST, dstSavings);
-    }
 }
