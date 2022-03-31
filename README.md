@@ -102,52 +102,52 @@ IPGeolocationAPI api=new IPGeolocationAPI("YOUR_API_KEY");
 
 ```java
 // Get geolocation for IP address (1.1.1.1) and fields (geo, time_zone and currency)
-GeolocationParams geoParams=new GeolocationParams();
-        geoParams.setIPAddress("1.1.1.1");
-        geoParams.setFields("geo,time_zone,currency");
-        geoParams.setIncludeSecurity(true);
-        Geolocation geolocation=api.getGeolocation(geoParams);
+GeolocationParams geoParams = new GeolocationParams();
+geoParams.setIPAddress("1.1.1.1");
+geoParams.setFields("geo,time_zone,currency");
+geoParams.setIncludeSecurity(true);
+Geolocation geolocation = api.getGeolocation(geoParams);
 
 // Check if geolocation lookup was successful
-        if(geolocation.getStatus()==200){
-        System.out.println(geolocation.getCountryName());
-        System.out.println(geolocation.getCurrency().getName());
-        System.out.println(geolocation.getTimezone().getCurrentTime());
-        System.out.println(geolocation.getGeolocationSecurity().getAnonymous());
-        System.out.println(geolocation.getGeolocationSecurity().getKnownAttacker());
-        System.out.println(geolocation.getGeolocationSecurity().getProxy());
-        System.out.println(geolocation.getGeolocationSecurity().getProxyType());
-        System.out.println(geolocation.getGeolocationSecurity().getAnonymous());
-        System.out.println(geolocation.getGeolocationSecurity().getCloudProvider());
-        System.out.println(geolocation.getUserAgent().getDevice().getName());
-        }else{
-        System.out.printf("Status Code: %d, Message: %s\n",geolocation.getStatus(),geolocation.getMessage());
-        }
+if (geolocation.getStatus() == 200) {
+    System.out.println(geolocation.getCountryName());
+    System.out.println(geolocation.getCurrency().getName());
+    System.out.println(geolocation.getTimezone().getCurrentTime());
+    System.out.println(geolocation.getGeolocationSecurity().getAnonymous());
+    System.out.println(geolocation.getGeolocationSecurity().getKnownAttacker());
+    System.out.println(geolocation.getGeolocationSecurity().getProxy());
+    System.out.println(geolocation.getGeolocationSecurity().getProxyType());
+    System.out.println(geolocation.getGeolocationSecurity().getAnonymous());
+    System.out.println(geolocation.getGeolocationSecurity().getCloudProvider());
+    System.out.println(geolocation.getUserAgent().getDevice().getName());
+} else {
+    System.out.printf("Status Code: %d, Message: %s\n",geolocation.getStatus(),geolocation.getMessage());
+}
 
 // Get geolocation in Russian** for IP address (1.1.1.1) and all fields
-        GeolocationParams geoParams=new GeolocationParams();
-        geoParams.setIPAddress("1.1.1.1");
-        geoParams.setLang("ru");
+GeolocationParams geoParams = new GeolocationParams();
+geoParams.setIPAddress("1.1.1.1");
+geoParams.setLang("ru");
 
-        Geolocation geolocation=api.getGeolocation(geoParams);
+Geolocation geolocation = api.getGeolocation(geoParams);
 
 // Check if geolocation lookup was successful
-        if(geolocation.getStatus()==200){
-        System.out.println(geolocation.getIPAddress());
-        System.out.println(geolocation.getCountryName());
-        }else{
-        System.out.printf("Status Code: %d, Message: %s\n",geolocation.getStatus(),geolocation.getMessage());
-        }
+if (geolocation.getStatus() == 200) {
+    System.out.println(geolocation.getIPAddress());
+    System.out.println(geolocation.getCountryName());
+}else{
+    System.out.printf("Status Code: %d, Message: %s\n",geolocation.getStatus(),geolocation.getMessage());
+}
 
 // Get geolocation for the calling machine's IP address for all fields
-        Geolocation geolocation=api.getGeolocation();
+Geolocation geolocation = api.getGeolocation();
 
-        if(geolocation.getStatus()==200){
-        System.out.println(geolocation.getCountryCode2());
-        System.out.println(geolocation.getTimezone().getCurrentTime());
-        }else{
-        System.out.printf("Status Code: %d, Message: %s\n",geolocation.getStatus(),geolocation.getMessage());
-        }
+if (geolocation.getStatus() == 200) {
+    System.out.println(geolocation.getCountryCode2());
+    System.out.println(geolocation.getTimezone().getCurrentTime());
+}else{     
+    System.out.printf("Status Code: %d, Message: %s\n",geolocation.getStatus(),geolocation.getMessage());
+}
 ```
 
 ### Bulk Geolocations Lookup
@@ -155,81 +155,81 @@ GeolocationParams geoParams=new GeolocationParams();
 ```java
 // Query geolocation in German** for multiple IP addresses and all fields
 String[]ips=new String[]{"1.1.1.1","2.2.2.2","3.3.3.3"};
-        GeolocationParams geoParams=new GeolocationParams();
-        geoParams.setIPAddresses(ips);
-        geoParams.setLang("de");
+GeolocationParams geoParams = new GeolocationParams();
+geoParams.setIPAddresses(ips);
+geoParams.setLang("de");
 
-        List<Geolocation> geolocations=api.getBulkGeolocation(geoParams);
+List<Geolocation> geolocations = api.getBulkGeolocation(geoParams);
 
-        System.out.println(geolocations.size());
-        System.out.println(geolocations.get(0).getCountryName());
-        System.out.println(geolocations.get(1).getLanguages());
-        System.out.println(geolocations.get(2).getTimezone().getCurrentTime());
+System.out.println(geolocations.size());
+System.out.println(geolocations.get(0).getCountryName());
+System.out.println(geolocations.get(1).getLanguages());
+System.out.println(geolocations.get(2).getTimezone().getCurrentTime());
 
 // Query geolocations for multiple IP addresses but only geo field
-        String[]ips=new String[]{"1.1.1.1","2.2.2.2","3.3.3.3"};
-        GeolocationParams geoParams=new GeolocationParams();
-        geoParams.setIPAddresses(ips);
-        geoParams.setFields("geo");
+String[]ips=new String[]{"1.1.1.1","2.2.2.2","3.3.3.3"};
+GeolocationParams geoParams = new GeolocationParams();
+geoParams.setIPAddresses(ips);
+geoParams.setFields("geo");
 
-        List<Geolocation> geolocations=api.getBulkGeolocation(geoParams);
+List<Geolocation> geolocations = api.getBulkGeolocation(geoParams);
 
-        System.out.println(geolocations.size());
-        System.out.println(geolocations.get(0).getCountryCode2());
-        System.out.println(geolocations.get(1).getCountryName());
-        System.out.println(geolocations.get(2).getLatitude());
+System.out.println(geolocations.size());
+System.out.println(geolocations.get(0).getCountryCode2());
+System.out.println(geolocations.get(1).getCountryName());
+System.out.println(geolocations.get(2).getLatitude());
 ```
 
 ### Timezone API
 
 ```java
 // Get time zone information by time zone ID
-TimezoneParams tzParams=new TimezoneParams();
-        tzParams.setTimezone("America/New_York");
+TimezoneParams tzParams = new TimezoneParams();
+tzParams.setTimezone("America/New_York");
 
-        Timezone tz=api.getTimezone(tzParams);
+Timezone tz=api.getTimezone(tzParams);
 
-        if(tz.getStatus()==200){
-        System.out.println(tz.getDateTimeWti());
-        System.out.println(tz.getDateTimeTxt());
-        }else{
-        System.out.printf("Status Code: %d, Message: %s\n",geolocation.getStatus(),geolocation.getMessage());
-        }
+if (tz.getStatus() == 200) {
+    System.out.println(tz.getDateTimeWti());
+    System.out.println(tz.getDateTimeTxt());
+}else{
+    System.out.printf("Status Code: %d, Message: %s\n",geolocation.getStatus(),geolocation.getMessage());
+}
 
 // Get time zone information by coordinates (latitude and longitude) of the location
-        TimezoneParams tzParams=new TimezoneParams();
-        tzParams.setCoordinates(37.1838139,-123.8105225);
+TimezoneParams tzParams = new TimezoneParams();
+tzParams.setCoordinates(37.1838139,-123.8105225);
 
-        Timezone tz=api.getTimezone(tzParams);
+Timezone tz = api.getTimezone(tzParams);
 
-        if(tz.getStatus()==200){
-        System.out.println(tz.getTimezone());
-        }else{
-        System.out.printf("Status Code: %d, Message: %s\n",geolocation.getStatus(),geolocation.getMessage());
-        }
+if (tz.getStatus() == 200) {
+    System.out.println(tz.getTimezone());
+}else{
+    System.out.printf("Status Code: %d, Message: %s\n",geolocation.getStatus(),geolocation.getMessage());
+}
 
 // Get time zone information for IP address (1.1.1.1) and geolocation information Japanese**
-        TimezoneParams tzParams=new TimezoneParams();
-        tzParams.setIPAddress("1.1.1.1");
-        tzParams.setLang("ja");
+TimezoneParams tzParams = new TimezoneParams();
+tzParams.setIPAddress("1.1.1.1");
+tzParams.setLang("ja");
 
-        Timezone tz=api.getTimezone(tzParams);
+Timezone tz = api.getTimezone(tzParams);
 
-        if(tz.getStatus()==200){
-        System.out.println(tz.getTimezone());
-        }else{
-        System.out.printf("Status Code: %d, Message: %s\n",geolocation.getStatus(),geolocation.getMessage());
-        }
+if (tz.getStatus() == 200) {
+    System.out.println(tz.getTimezone());
+}else{
+    System.out.printf("Status Code: %d, Message: %s\n",geolocation.getStatus(),geolocation.getMessage());
+}
 
 // Query time zone information for calling machine's IP address
-        Timezone tz=api.getTimezone();
+Timezone tz = api.getTimezone();
 
-        if(tz.getMessage()){
-        System.out.println(tz.getTimezone());
-        System.out.println(tz.getDateTimeYmd());
-        }else{
-        System.out.printf("Status Code: %d, Message: %s\n",geolocation.getStatus(),geolocation.getMessage());
-        }
+if(tz.getMessage()){
+    System.out.println(tz.getTimezone());
+    System.out.println(tz.getDateTimeYmd());
+}else{
+    System.out.printf("Status Code: %d, Message: %s\n",geolocation.getStatus(),geolocation.getMessage());
+}
 ```
 
 ** IPGeolocation provides geolocation information in the following languages:
@@ -271,7 +271,8 @@ IP Geolocation API Java SDK has the following classes that you can use to fully 
 |:--------------------------------------------------------------------|:---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:------------|
 | setIPAddress(String ip)                                             | Sets IP address to lookup geolocation.                                                                                                                                                                                                                                                                                           | void        |
 | getIPAddress()                                                      | Get IP address set to lookup geolocation.                                                                                                                                                                                                                                                                                        | String      |
-| setIPAddresses(String[] ips) throws IllegalArgumentException        | Set IP addresses to lookup multiple geo-locations. Throws IllegalArgumentException if no. of IP addresses are more than 50. **Note:** Multiple IP addresses lookup is only available for paid users.                                                                                                                             | void        |
+| setIPAddresses(String[] ips) throws IllegalArgumentException        | Set IP addresses to lookup multiple geo-locations. Throws IllegalArgumentException if no. of IP addresses are more than 50. **
+Note:** Multiple IP addresses lookup is only available for paid users.                                                                                                                             | void        |
 | getIPAddresses()                                                    | Get IP addresses set to lookup bulk geolocations.                                                                                                                                                                                                                                                                                | String[]    |
 | setLang(String lang)                                                | Set language parameter to lookup geolocation.                                                                                                                                                                                                                                                                                    | void        |
 | getLang()                                                           | Get language set to lookup geolocation.                                                                                                                                                                                                                                                                                          | String      |
