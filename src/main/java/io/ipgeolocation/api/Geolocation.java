@@ -30,7 +30,7 @@ public class Geolocation {
   private final String connectionType;
   private final String organization;
   private final String asn;
-  private final String geonameID;
+  private final Integer geonameID;
   private GeolocationCurrency currency;
   private GeolocationTimezone timezone;
   private GeolocationSecurity geolocationSecurity;
@@ -69,7 +69,7 @@ public class Geolocation {
     this.connectionType = (String) json.get("connection_type");
     this.organization = (String) json.get("organization");
     this.asn = (String) json.get("asn");
-    this.geonameID = (String) json.get("geoname_id");
+    this.geonameID = (Integer) json.get("geoname_id");
     if (json.get("currency") instanceof HashMap) {
       Map<String, Object> currencyJson = (HashMap) json.get("currency");
       this.currency = new GeolocationCurrency(currencyJson);
@@ -187,7 +187,7 @@ public class Geolocation {
     return asn;
   }
 
-  public String getGeonameID() {
+  public Integer getGeonameID() {
     return geonameID;
   }
 
