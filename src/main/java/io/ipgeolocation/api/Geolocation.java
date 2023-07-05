@@ -1,9 +1,8 @@
 package io.ipgeolocation.api;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import static java.util.Objects.isNull;
+import java.math.BigDecimal;
+import java.util.Objects;
+import org.json.JSONObject;
 
 public class Geolocation {
   private final String domain;
@@ -16,12 +15,13 @@ public class Geolocation {
   private final String countryName;
   private final String countryCapital;
   private final String stateProvince;
+  private final String stateCode;
   private final String district;
   private final String city;
   private final String zipCode;
-  private final String latitude;
-  private final String longitude;
-  private final Boolean isEU;
+  private final BigDecimal latitude;
+  private final BigDecimal longitude;
+  private final boolean eu;
   private final String callingCode;
   private final String countryTLD;
   private final String languages;
@@ -30,72 +30,73 @@ public class Geolocation {
   private final String connectionType;
   private final String organization;
   private final String asn;
-  private final String geonameID;
+  private final long geoNameId;
   private GeolocationCurrency currency;
   private GeolocationTimezone timezone;
   private GeolocationSecurity geolocationSecurity;
   private UserAgent userAgent;
+  private final JSONObject json;
 
-  Geolocation(Map<String, Object> json) {
-    if (isNull(json)) {
-      throw new IllegalArgumentException("'json' must not be null.");
+  Geolocation(JSONObject json) {
+    if (Objects.isNull(json)) {
+      throw new IllegalArgumentException("'json' must not be null");
     }
 
     if (json.isEmpty()) {
-      throw new IllegalArgumentException("'json' must not be empty.");
+      throw new IllegalArgumentException("'json' must not be empty");
     }
 
-    this.domain = (String) json.get("domain");
-    this.ip = (String) json.get("ip");
-    this.hostname = (String) json.get("hostname");
-    this.continentCode = (String) json.get("continent_code");
-    this.continentName = (String) json.get("continent_name");
-    this.countryCode2 = (String) json.get("country_code2");
-    this.countryCode3 = (String) json.get("country_code3");
-    this.countryName = (String) json.get("country_name");
-    this.countryCapital = (String) json.get("country_capital");
-    this.stateProvince = (String) json.get("state_prov");
-    this.district = (String) json.get("district");
-    this.city = (String) json.get("city");
-    this.zipCode = (String) json.get("zipcode");
-    this.latitude = (String) json.get("latitude");
-    this.longitude = (String) json.get("longitude");
-    this.isEU = (Boolean) json.get("is_eu");
-    this.callingCode = (String) json.get("calling_code");
-    this.countryTLD = (String) json.get("country_tld");
-    this.languages = (String) json.get("languages");
-    this.countryFlag = (String) json.get("country_flag");
-    this.isp = (String) json.get("isp");
-    this.connectionType = (String) json.get("connection_type");
-    this.organization = (String) json.get("organization");
-    this.asn = (String) json.get("asn");
-    this.geonameID = (String) json.get("geoname_id");
-    if (json.get("currency") instanceof HashMap) {
-      Map<String, Object> currencyJson = (HashMap) json.get("currency");
-      this.currency = new GeolocationCurrency(currencyJson);
+    this.domain = json.optString("domain");
+    this.ip = json.getString("ip");
+    this.hostname = json.optString("hostname");
+    this.continentCode = json.optString("continent_code");
+    this.continentName = json.optString("continent_name");
+    this.countryCode2 = json.optString("country_code2");
+    this.countryCode3 = json.optString("country_code3");
+    this.countryName = json.optString("country_name");
+    this.countryCapital = json.optString("country_capital");
+    this.stateProvince = json.optString("state_prov");
+    this.stateCode = json.optString("state_code");
+    this.district = json.optString("district");
+    this.city = json.optString("city");
+    this.zipCode = json.optString("zipcode");
+    this.latitude = new BigDecimal(json.optString("latitude", "0.0"));
+    this.longitude = new BigDecimal(json.optString("longitude", "0.0"));
+    this.eu = json.optBoolean("is_eu");
+    this.callingCode = json.optString("calling_code");
+    this.countryTLD = json.optString("country_tld");
+    this.languages = json.optString("languages");
+    this.countryFlag = json.optString("country_flag");
+    this.isp = json.optString("isp");
+    this.connectionType = json.optString("connection_type");
+    this.organization = json.optString("organization");
+    this.asn = json.optString("asn");
+    this.geoNameId = Long.parseLong(json.optString("geoname_id", "0"));
+
+    if (json.has("currency")) {
+      this.currency = new GeolocationCurrency(json.getJSONObject("currency"));
     }
 
-    if (json.get("time_zone") instanceof HashMap) {
-      Map<String, Object> timezoneJson = (HashMap) json.get("time_zone");
-      this.timezone = new GeolocationTimezone(timezoneJson);
+    if (json.has("time_zone")) {
+      this.timezone = new GeolocationTimezone(json.getJSONObject("time_zone"));
     }
 
-    if (json.get("security") instanceof HashMap) {
-      Map<String, Object> securityJson = (HashMap) json.get("security");
-      this.geolocationSecurity = new GeolocationSecurity(securityJson);
+    if (json.has("security")) {
+      this.geolocationSecurity = new GeolocationSecurity(json.getJSONObject("security"));
     }
 
-    if (json.get("user_agent") instanceof HashMap) {
-      Map<String, Object> userAgentJson = (HashMap) json.get("user_agent");
-      this.userAgent = new UserAgent(userAgentJson);
+    if (json.has("user_agent")) {
+      this.userAgent = new UserAgent(json.getJSONObject("user_agent"));
     }
+
+    this.json = json;
   }
 
   public String getDomain() {
     return domain;
   }
 
-  public String getIPAddress() {
+  public String getIP() {
     return ip;
   }
 
@@ -131,6 +132,10 @@ public class Geolocation {
     return stateProvince;
   }
 
+  public String getStateCode() {
+    return stateCode;
+  }
+
   public String getDistrict() {
     return district;
   }
@@ -143,16 +148,16 @@ public class Geolocation {
     return zipCode;
   }
 
-  public String getLatitude() {
+  public BigDecimal getLatitude() {
     return latitude;
   }
 
-  public String getLongitude() {
+  public BigDecimal getLongitude() {
     return longitude;
   }
 
-  public Boolean isEU() {
-    return isEU;
+  public boolean isEU() {
+    return eu;
   }
 
   public String getCallingCode() {
@@ -187,8 +192,8 @@ public class Geolocation {
     return asn;
   }
 
-  public String getGeonameID() {
-    return geonameID;
+  public long getGeoNameId() {
+    return geoNameId;
   }
 
   public GeolocationCurrency getCurrency() {
@@ -205,5 +210,10 @@ public class Geolocation {
 
   public UserAgent getUserAgent() {
     return userAgent;
+  }
+
+  @Override
+  public String toString() {
+    return json.toString(2);
   }
 }
