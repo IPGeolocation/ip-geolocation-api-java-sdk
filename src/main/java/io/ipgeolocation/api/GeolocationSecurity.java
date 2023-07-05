@@ -1,64 +1,79 @@
 package io.ipgeolocation.api;
 
-import java.util.Map;
+import java.util.Objects;
+import org.json.JSONObject;
 
 public class GeolocationSecurity {
-    private final Integer threatScore;
-    private final Boolean isTor;
-    private final Boolean isProxy;
-    private final String proxyType;
-    private final Boolean isAnonymous;
-    private final Boolean isKnownAttacker;
-    private final Boolean isBot;
-    private final Boolean isSpam;
-    private final Boolean isCloudProvider;
+  private final int threatScore;
+  private final boolean tor;
+  private final boolean proxy;
+  private final String proxyType;
+  private final boolean anonymous;
+  private final boolean knownAttacker;
+  private final boolean bot;
+  private final boolean spam;
+  private final boolean cloudProvider;
+  private final JSONObject json;
 
-    GeolocationSecurity(Map<String, Object> json) {
-        this.threatScore = (Integer) json.get("threat_score");
-        this.isTor = (Boolean) json.get("is_tor");
-        this.isProxy = (Boolean) json.get("is_proxy");
-        this.proxyType = (String) json.get("proxy_type");
-        this.isAnonymous = (Boolean) json.get("is_anonymous");
-        this.isKnownAttacker = (Boolean) json.get("is_known_attacker");
-        this.isBot = (Boolean) json.get("is_bot");
-        this.isSpam = (Boolean) json.get("is_spam");
-        this.isCloudProvider = (Boolean) json.get("is_cloud_provider");
+  GeolocationSecurity(JSONObject json) {
+    if (Objects.isNull(json)) {
+      throw new IllegalArgumentException("'json' must not be null");
     }
 
-    public Integer getThreatScore() {
-        return threatScore;
+    if (json.isEmpty()) {
+      throw new IllegalArgumentException("'json' must not be empty");
     }
 
-    public Boolean isTor() {
-        return isTor;
-    }
+    this.threatScore = json.getInt("threat_score");
+    this.tor = json.getBoolean("is_tor");
+    this.proxy = json.getBoolean("is_proxy");
+    this.proxyType = json.getString("proxy_type");
+    this.anonymous = json.getBoolean("is_anonymous");
+    this.knownAttacker = json.getBoolean("is_known_attacker");
+    this.bot = json.getBoolean("is_bot");
+    this.spam = json.getBoolean("is_spam");
+    this.cloudProvider = json.getBoolean("is_cloud_provider");
+    this.json = json;
+  }
 
-    public Boolean isProxy() {
-        return isProxy;
-    }
+  public int getThreatScore() {
+    return threatScore;
+  }
 
-    public String getProxyType() {
-        return proxyType;
-    }
+  public boolean isTor() {
+    return tor;
+  }
 
-    public Boolean isAnonymous() {
-        return isAnonymous;
-    }
+  public boolean isProxy() {
+    return proxy;
+  }
 
-    public Boolean isKnownAttacker() {
-        return isKnownAttacker;
-    }
+  public String getProxyType() {
+    return proxyType;
+  }
 
-    public Boolean isBot() {
-        return isBot;
-    }
+  public boolean isAnonymous() {
+    return anonymous;
+  }
 
-    public Boolean isSpam() {
-        return isSpam;
-    }
+  public boolean isKnownAttacker() {
+    return knownAttacker;
+  }
 
-    public Boolean isCloudProvider() {
-        return isCloudProvider;
-    }
+  public boolean isBot() {
+    return bot;
+  }
 
+  public boolean isSpam() {
+    return spam;
+  }
+
+  public boolean isCloudProvider() {
+    return cloudProvider;
+  }
+
+  @Override
+  public String toString() {
+    return json.toString(2);
+  }
 }
