@@ -1,33 +1,49 @@
 package io.ipgeolocation.api;
 
-import java.util.Map;
+import java.util.Objects;
+import org.json.JSONObject;
 
 public class UserAgentOperatingSystem {
-    private final String name;
-    private final String type;
-    private final String version;
-    private final String versionMajor;
+  private final String name;
+  private final String type;
+  private final String version;
+  private final String versionMajor;
+  private final JSONObject json;
 
-    public UserAgentOperatingSystem(Map<String, Object> json) {
-        this.name = (String) json.get("name");
-        this.type = (String) json.get("type");
-        this.version = (String) json.get("version");
-        this.versionMajor = (String) json.get("versionMajor");
+  UserAgentOperatingSystem(JSONObject json) {
+    if (Objects.isNull(json)) {
+      throw new IllegalArgumentException("'json' must not be null");
     }
 
-    public String getName() {
-        return name;
+    if (json.isEmpty()) {
+      throw new IllegalArgumentException("'json' must not be empty");
     }
 
-    public String getType() {
-        return type;
-    }
+    this.name = json.getString("name");
+    this.type = json.getString("type");
+    this.version = json.getString("version");
+    this.versionMajor = json.getString("versionMajor");
+    this.json = json;
+  }
 
-    public String getVersion() {
-        return version;
-    }
+  public String getName() {
+    return name;
+  }
 
-    public String getVersionMajor() {
-        return versionMajor;
-    }
+  public String getType() {
+    return type;
+  }
+
+  public String getVersion() {
+    return version;
+  }
+
+  public String getVersionMajor() {
+    return versionMajor;
+  }
+
+  @Override
+  public String toString() {
+    return json.toString(2);
+  }
 }
