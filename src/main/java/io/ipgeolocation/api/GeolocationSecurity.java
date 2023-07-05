@@ -27,7 +27,7 @@ public class GeolocationSecurity {
     this.threatScore = json.getInt("threat_score");
     this.tor = json.getBoolean("is_tor");
     this.proxy = json.getBoolean("is_proxy");
-    this.proxyType = json.getString("proxy_type");
+    this.proxyType = json.optString("proxy_type");
     this.anonymous = json.getBoolean("is_anonymous");
     this.knownAttacker = json.getBoolean("is_known_attacker");
     this.bot = json.getBoolean("is_bot");
