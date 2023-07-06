@@ -302,18 +302,18 @@ IP Geolocation API Java SDK has the following classes that you can use to fully 
 
 ### Class: io.ipgeolocation.api.GeolocationParams
 
-| Method                          | Description                                                                                 | Return Type               |
-|:--------------------------------|:--------------------------------------------------------------------------------------------|:--------------------------|
-| getIPAddress()                  | Get IP address set to lookup geolocation.                                                   | String                    |
-| getLang()                       | Get language set to lookup geolocation.                                                     | String                    |
-| getFields()                     | Get fields set to lookup geolocation.                                                       | String                    |
-| isIncludeHostname()             | Returns Boolean object whether hostname is included in response or not.                     | boolean                   |
-| isIncludeHostnameFallbackLive() | Returns Boolean object whether hostname with fall-back-live is included in response or not. | boolean                   |
-| isIncludeLiveHostname()         | Returns Boolean object whether live hostname is included in response or not.                | boolean                   |
-| isIncludeSecurity()             | Returns Boolean object whether Security object is included in response or not.              | boolean                   |
-| isIncludeUserAgentDetail()      | Returns Boolean object whether UserAgent object is included in response or not.             | boolean                   |
-| getExcludes()                   | Get fields (as a comma separated value) that have been excluded from response.              | String                    |
-| builder()                       | Returns an instance of GeolocationParamsBuilder.                                            | GeolocationParamsBuilder  |
+| Method                          | Description                                                                                 | Return Type                     |
+|:--------------------------------|:--------------------------------------------------------------------------------------------|:--------------------------------|
+| getIPAddress()                  | Get IP address set to lookup geolocation.                                                   | String                          |
+| getLang()                       | Get language set to lookup geolocation.                                                     | String                          |
+| getFields()                     | Get fields set to lookup geolocation.                                                       | String                          |
+| isIncludeHostname()             | Returns Boolean object whether hostname is included in response or not.                     | boolean                         |
+| isIncludeHostnameFallbackLive() | Returns Boolean object whether hostname with fall-back-live is included in response or not. | boolean                         |
+| isIncludeLiveHostname()         | Returns Boolean object whether live hostname is included in response or not.                | boolean                         |
+| isIncludeSecurity()             | Returns Boolean object whether Security object is included in response or not.              | boolean                         |
+| isIncludeUserAgentDetail()      | Returns Boolean object whether UserAgent object is included in response or not.             | boolean                         |
+| getExcludes()                   | Get fields (as a comma separated value) that have been excluded from response.              | String                          |
+| builder()                       | Returns an instance of GeolocationParamsBuilder.                                            | static GeolocationParamsBuilder |
 
 ### Class: io.ipgeolocation.api.GeolocationParamsBuilder
 
@@ -328,7 +328,7 @@ IP Geolocation API Java SDK has the following classes that you can use to fully 
 | includeSecurity()             | Returns Boolean object whether Security object is included in response or not.                                                                                                                                                                                                                                                   | GeolocationParamsBuilder     |
 | includeUserAgentDetail()      | Returns Boolean object whether UserAgent object is included in response or not.                                                                                                                                                                                                                                                  | GeolocationParamsBuilder     |
 | withExcludes(String excludes) | Set fields (as a comma separated value) to exclude from response.                                                                                                                                                                                                                                                                | GeolocationParamsBuilder     |
-| build()                       | Returns an instance of GeolocationParams with the set values.                                                                                                                                                                                                                                                                    | GeolocationParams            |
+| build()                       | Returns an instance of GeolocationParams with the values set earlier.                                                                                                                                                                                                                                                            | GeolocationParams            |
 
 ### Class: io.ipgeolocation.api.Geolocation
 
@@ -400,15 +400,15 @@ IP Geolocation API Java SDK has the following classes that you can use to fully 
 
 ### Class: io.ipgeolocation.api.TimezoneParams
 
-| Method         | Description                                                               | Return Type            |
-|:---------------|:--------------------------------------------------------------------------|:-----------------------|
-| getTimezone()  | Get time zone ID set to query time zone information.                      | String                 |
-| getIPAddress() | Get IP address set to query time zone information.                        | String                 |
-| getLatitude()  | Returns latitude set to query time zone information.                      | BigDecimal             |
-| getLongitude() | Returns longitude set to query time zone information.                     | BigDecimal             |
-| getLocation()  | Get location parameter value to get timezone details.                     | String                 |
-| getLang()      | Get language set to lookup geolocation.                                   | String                 |
-| builder()      | Returns an instance of TimezoneParamsBuilder.                             | TimezoneParamsBuilder  |
+| Method         | Description                                                               | Return Type                  |
+|:---------------|:--------------------------------------------------------------------------|:-----------------------------|
+| getTimezone()  | Get time zone ID set to query time zone information.                      | String                       |
+| getIPAddress() | Get IP address set to query time zone information.                        | String                       |
+| getLatitude()  | Returns latitude set to query time zone information.                      | BigDecimal                   |
+| getLongitude() | Returns longitude set to query time zone information.                     | BigDecimal                   |
+| getLocation()  | Get location parameter value to get timezone details.                     | String                       |
+| getLang()      | Get language set to lookup geolocation.                                   | String                       |
+| builder()      | Returns an instance of TimezoneParamsBuilder.                             | static TimezoneParamsBuilder |
 
 ### Class: io.ipgeolocation.api.TimezoneParamsBuilder
 
@@ -419,7 +419,7 @@ IP Geolocation API Java SDK has the following classes that you can use to fully 
 | withCoordinates(BigDecimal latitude, BigDecimal longitude) | Sets latitude and longitude of a location to query time zone information. | TimezoneParamsBuilder |
 | withLocation(String location)                              | Set location parameter to get timezone details.                           | TimezoneParamsBuilder |
 | withLang(String lang)                                      | Set language parameter to lookup geolocation. Default is 'en'.            | TimezoneParamsBuilder |
-| build()                                                    | Returns an instance of TimezoneParams with the set values.                | TimezoneParams        |
+| build()                                                    | Returns an instance of TimezoneParams with the values set earlier.        | TimezoneParams        |
 
 ### Class: io.ipgeolocation.api.Timezone
 
