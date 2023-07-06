@@ -1,363 +1,332 @@
 package io.ipgeolocation.api;
 
+import io.ipgeolocation.api.exceptions.IPGeolocationError;
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.util.*;
-import java.util.stream.Collectors;
-
-import static io.ipgeolocation.api.Strings.*;
-import static java.util.Objects.isNull;
-
 public class IPGeolocationAPI {
-    private final String apiKey;
+  private final List<String> NON_BODY_HTTP_METHODS =
+      Arrays.asList("GET", "DELETE", "TRACE", "OPTIONS", "HEAD");
+  private final String apiKey;
 
-    public IPGeolocationAPI(String apiKey) throws IllegalArgumentException {
-        if (isNullOrEmpty(apiKey)) {
-            throw new IllegalArgumentException("API key must not be null or empty");
+  public IPGeolocationAPI(String apiKey) throws IllegalArgumentException {
+    if (Strings.isNullOrEmpty(apiKey)) {
+      throw new IllegalArgumentException("API key must not be null or empty");
+    } else {
+      this.apiKey = apiKey.trim();
+    }
+  }
+
+  public String getApiKey() {
+    return apiKey;
+  }
+
+  public Geolocation getGeolocation() {
+    return getGeolocation(null);
+  }
+
+  public Geolocation getGeolocation(GeolocationParams params) {
+    final JSONObject apiResponse =
+        (JSONObject)
+            callAPIEndpoint("ipgeo", buildGeolocationUrlParams(params), "GET", null, false);
+    final Geolocation geolocation;
+
+    try {
+      geolocation = new Geolocation(apiResponse);
+    } catch (IllegalArgumentException e) {
+      throw new IPGeolocationError(e);
+    }
+
+    return geolocation;
+  }
+
+  public List<Geolocation> getBulkGeolocation(String[] ipAddresses) {
+    return getBulkGeolocation(ipAddresses, null);
+  }
+
+  public List<Geolocation> getBulkGeolocation(String[] ipAddresses, GeolocationParams params) {
+    if (Objects.isNull(ipAddresses) || ipAddresses.length == 0) {
+      throw new IPGeolocationError("IP addresses list must not be null or empty");
+    }
+
+    if (ipAddresses.length > 50) {
+      throw new IPGeolocationError("Maximum number of IP addresses cannot be more than 50");
+    }
+
+    final JSONArray apiResponseList =
+        (JSONArray)
+            callAPIEndpoint(
+                "ipgeo-bulk",
+                buildGeolocationUrlParams(params),
+                "POST",
+                new JSONObject().put("ips", ipAddresses),
+                true);
+    final List<Geolocation> geolocations = new ArrayList<>(apiResponseList.length());
+    int i = 0;
+
+    while (i < apiResponseList.length()) {
+      try {
+        geolocations.add(new Geolocation(apiResponseList.getJSONObject(i++)));
+      } catch (IllegalArgumentException e) {
+        throw new IPGeolocationError(e);
+      }
+    }
+
+    return geolocations;
+  }
+
+  public Timezone getTimezone() {
+    return getTimezone(null);
+  }
+
+  public Timezone getTimezone(TimezoneParams params) {
+    final JSONObject apiResponse =
+        (JSONObject)
+            callAPIEndpoint("timezone", buildTimezoneUrlParams(params), "GET", null, false);
+    final Timezone timezone;
+
+    try {
+      timezone = new Timezone(apiResponse);
+    } catch (IllegalArgumentException e) {
+      throw new IPGeolocationError(e);
+    }
+
+    return timezone;
+  }
+
+  public UserAgent getUserAgent(String uaString) {
+    uaString = uaString.trim();
+
+    if (Strings.isNullOrEmpty(uaString)) {
+      throw new IPGeolocationError("User-Agent string must not be empty or null");
+    }
+
+    final JSONObject apiResponse =
+        (JSONObject)
+            callAPIEndpoint(
+                "user-agent",
+                buildGeolocationUrlParams(null),
+                "POST",
+                new JSONObject().put("uaString", uaString),
+                false);
+    final UserAgent userAgent;
+
+    try {
+      userAgent = new UserAgent(apiResponse);
+    } catch (IllegalArgumentException e) {
+      throw new IPGeolocationError(e);
+    }
+
+    return userAgent;
+  }
+
+  public List<UserAgent> getBulkUserAgent(String[] uaStrings) {
+    if (Objects.isNull(uaStrings) || uaStrings.length == 0) {
+      throw new IPGeolocationError("User-Agents list must not be null or empty");
+    }
+
+    if (uaStrings.length > 50) {
+      throw new IPGeolocationError("Maximum number of User-Agents cannot be more than 50");
+    }
+
+    final JSONArray apiResponseList =
+        (JSONArray)
+            callAPIEndpoint(
+                "user-agent-bulk",
+                buildGeolocationUrlParams(null),
+                "POST",
+                new JSONObject().put("uaStrings", uaStrings),
+                true);
+    final List<UserAgent> userAgents = new ArrayList<>(apiResponseList.length());
+    int i = 0;
+
+    while (i < apiResponseList.length()) {
+      try {
+        userAgents.add(new UserAgent(apiResponseList.getJSONObject(i++)));
+      } catch (IllegalArgumentException e) {
+        throw new IPGeolocationError(e);
+      }
+    }
+
+    return userAgents;
+  }
+
+  private String buildGeolocationUrlParams(final GeolocationParams params) {
+    final StringBuilder urlParams = new StringBuilder();
+
+    urlParams.append("apiKey=");
+    urlParams.append(apiKey);
+
+    if (!Objects.isNull(params)) {
+      if (!Strings.isNullOrEmpty(params.getIPAddress())) {
+        urlParams.append("&ip=");
+        urlParams.append(params.getIPAddress());
+      }
+
+      if (!Strings.isNullOrEmpty(params.getFields())) {
+        urlParams.append("&fields=");
+        urlParams.append(params.getFields());
+      }
+
+      boolean includeHost = false;
+
+      if (params.isIncludeHostname()) {
+        urlParams.append("&include=hostname");
+        includeHost = true;
+      } else if (params.isIncludeHostnameFallbackLive()) {
+        urlParams.append("&include=hostnameFallbackLive");
+        includeHost = true;
+      } else if (params.isIncludeLiveHostname()) {
+        urlParams.append("&include=liveHostname");
+        includeHost = true;
+      }
+
+      if (params.isIncludeSecurity()) {
+        if (includeHost) {
+          urlParams.append(",security");
         } else {
-            this.apiKey = apiKey.trim();
+          urlParams.append("&include=security");
         }
-    }
+      }
 
-    public String getApiKey() {
-        return this.apiKey;
-    }
-
-    public Map<String, Object> getGeolocation() {
-        Map<String, Object> apiResponse = callAPIEndpoint("ipgeo", "apiKey=" + apiKey, "GET", Optional.empty());
-
-        return prepareResponseForUser(apiResponse, "geolocation");
-    }
-
-    public Map<String, Object> getGeolocation(GeolocationParams params) {
-        Map<String, Object> apiResponse = callAPIEndpoint("ipgeo", buildGeolocationUrlParams(params), "GET", Optional.empty());
-
-        return prepareResponseForUser(apiResponse, "geolocation");
-    }
-
-    public Map<String, Object> getBulkGeolocation(GeolocationParams params) {
-        String url = "https://api.ipgeolocation.io/ipgeo-bulk" + "?" + buildGeolocationUrlParams(params);
-        List<Map<String, Object>> apiResponseList = callBulkAPIEndpoint(url, Optional.of(new JSONObject().put("ips", params.getIPAddresses())));
-
-        return prepareBulkResponseForUser(apiResponseList, "geolocation");
-    }
-
-    public Map<String, Object> getTimezone() {
-        Map<String, Object> apiResponse = callAPIEndpoint("timezone", "apiKey=" + apiKey, "GET", Optional.empty());
-
-        return prepareResponseForUser(apiResponse, "timezone");
-    }
-
-    public Map<String, Object> getTimezone(TimezoneParams params) {
-        Map<String, Object> apiResponse = callAPIEndpoint("timezone", buildTimezoneUrlParams(params), "GET", Optional.empty());
-
-        return prepareResponseForUser(apiResponse, "timezone");
-    }
-
-    public Map<String, Object> getUserAgent(String uaString) {
-        Map<String, Object> apiResponse = new HashMap<>();
-
-        uaString = uaString.trim();
-
-        if (isNullOrEmpty(uaString)) {
-            apiResponse.put("status", 400);
-            apiResponse.put("message", "User-Agent string must not be empty.");
+      if (params.isIncludeUserAgentDetail()) {
+        if (includeHost || params.isIncludeSecurity()) {
+          urlParams.append(",useragent");
         } else {
-            apiResponse = callAPIEndpoint("user-agent", "apiKey=" + apiKey, "POST", Optional.of(new JSONObject().put("uaString", uaString)));
+          urlParams.append("&include=useragent");
+        }
+      }
+
+      if (!Strings.isNullOrEmpty(params.getLang())) {
+        urlParams.append("&lang=");
+        urlParams.append(params.getLang());
+      }
+
+      if (!Strings.isNullOrEmpty(params.getExcludes())) {
+        urlParams.append("&excludes=");
+        urlParams.append(params.getExcludes());
+      }
+    }
+
+    return urlParams.toString();
+  }
+
+  private String buildTimezoneUrlParams(final TimezoneParams params) {
+    final StringBuilder urlParams = new StringBuilder();
+
+    urlParams.append("apiKey=");
+    urlParams.append(apiKey);
+
+    if (!Objects.isNull(params)) {
+      if (!Strings.isNullOrEmpty(params.getIPAddress())) {
+        urlParams.append("&ip=");
+        urlParams.append(params.getIPAddress());
+      }
+
+      if (!Strings.isNullOrEmpty(params.getTimeZone())) {
+        urlParams.append("&tz=");
+        urlParams.append(params.getTimeZone());
+      }
+
+      if (!Objects.isNull(params.getLatitude()) && !Objects.isNull(params.getLongitude())) {
+        urlParams.append("&lat=");
+        urlParams.append(params.getLatitude());
+        urlParams.append("&long=");
+        urlParams.append(params.getLongitude());
+      }
+
+      if (!Strings.isNullOrEmpty(params.getLang())) {
+        urlParams.append("&lang=");
+        urlParams.append(params.getLang());
+      }
+
+      if (!Strings.isNullOrEmpty(params.getLocation())) {
+        urlParams.append("&location=");
+        urlParams.append(params.getLocation());
+      }
+    }
+
+    return urlParams.toString();
+  }
+
+  private Object callAPIEndpoint(
+      final String endpoint,
+      final String requestParams,
+      final String requestMethod,
+      final JSONObject requestBody,
+      final boolean arrayResponseExpected) {
+    final String uri = String.format("https://api.ipgeolocation.io/%s?%s", endpoint, requestParams);
+    final Object response;
+
+    try {
+      final URL url = new URL(uri);
+      final HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+
+      connection.setRequestMethod(requestMethod);
+      connection.setRequestProperty("Accept", "application/json");
+      connection.setReadTimeout(60000);
+      connection.setConnectTimeout(60000);
+
+      if (!NON_BODY_HTTP_METHODS.contains(requestMethod.toUpperCase())
+          && !Objects.isNull(requestBody)) {
+        connection.setRequestProperty("Content-Type", "application/json");
+        connection.setDoOutput(true);
+
+        DataOutputStream dataOutputStream = new DataOutputStream(connection.getOutputStream());
+        dataOutputStream.writeBytes(requestBody.toString());
+        dataOutputStream.flush();
+        dataOutputStream.close();
+      }
+
+      final int responseCode = connection.getResponseCode();
+      final StringBuilder responseBuilder = new StringBuilder();
+      final BufferedReader reader;
+
+      if (responseCode == HttpURLConnection.HTTP_OK) {
+        reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+        String line;
+
+        while (!Objects.isNull(line = reader.readLine())) {
+          responseBuilder.append(line);
         }
 
-        return prepareResponseForUser(apiResponse, "useragent");
-    }
+        if (arrayResponseExpected) {
+          response = new JSONArray(responseBuilder.toString());
+        } else {
+          response = new JSONObject(responseBuilder.toString());
+        }
+      } else {
+        reader = new BufferedReader(new InputStreamReader(connection.getErrorStream()));
+        String line;
 
-    public Map<String, Object> getBulkUserAgent(List<String> uaStrings) {
-        String url = "https://api.ipgeolocation.io/user-agent-bulk?apiKey=" + apiKey;
-        List<Map<String, Object>> apiResponseList = callBulkAPIEndpoint(url, Optional.of(new JSONObject().put("uaStrings", uaStrings)));
-
-        return prepareBulkResponseForUser(apiResponseList, "useragent");
-    }
-
-    private Map<String, Object> prepareResponseForUser(Map<String, Object> apiResponse, String type) {
-        Integer httpStatus = (Integer) apiResponse.get("status");
-        String errorMessage = (String) apiResponse.get("message");
-        Map<String, Object> response = new HashMap<>();
-
-        response.put("status", httpStatus);
-        response.put("message", nullToEmpty(errorMessage));
-
-        if (httpStatus == 200 && type.equals("geolocation")) {
-            response.put("response", new Geolocation(apiResponse));
-        } else if (httpStatus == 200 && type.equals("timezone")) {
-            response.put("response", new Timezone(apiResponse));
-        } else if (httpStatus == 200 && type.equals("useragent")) {
-            response.put("response", new UserAgent(apiResponse));
+        while (!Objects.isNull(line = reader.readLine())) {
+          responseBuilder.append(line);
         }
 
-        return response;
+        throw new IPGeolocationError(
+            responseCode, new JSONObject(responseBuilder.toString()).getString("message"));
+      }
+
+      reader.close();
+
+      if (responseBuilder.length() == 0) {
+        throw new IPGeolocationError(
+            "There was an error in reading response from ipgeolocation.io API. Please open an issue at https://github.com/IPGeolocation/ip-geolocation-api-java-sdk");
+      }
+    } catch (IOException e) {
+      throw new IPGeolocationError(e);
     }
 
-    private Map<String, Object> prepareBulkResponseForUser(List<Map<String, Object>> apiResponseList, String type) {
-        Map<String, Object> firstApiResponse = apiResponseList.get(0);
-        Integer httpStatus = (Integer) firstApiResponse.get("status");
-        String errorMessage = (String) firstApiResponse.get("message");
-        Map<String, Object> response = new HashMap<>();
-
-        response.put("status", httpStatus);
-        response.put("message", nullToEmpty(errorMessage));
-
-        if (httpStatus == 200 && type.equals("geolocation")) {
-            response.put("response", apiResponseList.stream().map(Geolocation::new).collect(Collectors.toList()));
-        } else if (httpStatus == 200 && type.equals("useragent")) {
-            response.put("response", apiResponseList.stream().map(UserAgent::new).collect(Collectors.toList()));
-        }
-
-        return response;
-    }
-
-    private String buildGeolocationUrlParams(GeolocationParams params) {
-        StringBuilder urlParams = new StringBuilder();
-
-        urlParams.append("apiKey=");
-        urlParams.append(apiKey);
-
-        if (params != null) {
-            if (!isNullOrEmpty(params.getIPAddress())) {
-                urlParams.append("&ip=");
-                urlParams.append(params.getIPAddress());
-            }
-
-            if (!isNullOrEmpty(params.getFields())) {
-                urlParams.append("&fields=");
-                urlParams.append(params.getFields());
-            }
-
-            boolean includeHost = false;
-
-            if (params.isIncludeHostname()) {
-                urlParams.append("&include=hostname");
-                includeHost = true;
-            } else if (params.isIncludeHostnameFallbackLive()) {
-                urlParams.append("&include=hostnameFallbackLive");
-                includeHost = true;
-            } else if (params.isIncludeLiveHostname()) {
-                urlParams.append("&include=liveHostname");
-                includeHost = true;
-            }
-
-            if (params.isIncludeSecurity()) {
-                if (includeHost) {
-                    urlParams.append(",security");
-                } else {
-                    urlParams.append("&include=security");
-                }
-            }
-
-            if (params.isIncludeUserAgentDetail()) {
-                if (includeHost || params.isIncludeSecurity()) {
-                    urlParams.append(",useragent");
-                } else {
-                    urlParams.append("&include=useragent");
-                }
-            }
-
-            if (!isNullOrEmpty(params.getLang())) {
-                urlParams.append("&lang=");
-                urlParams.append(params.getLang());
-            }
-
-            if (!isNullOrEmpty(params.getExcludes())) {
-                urlParams.append("&excludes=");
-                urlParams.append(params.getExcludes());
-            }
-        }
-
-        return urlParams.toString();
-    }
-
-    private String buildTimezoneUrlParams(TimezoneParams params) {
-        StringBuilder urlParams = new StringBuilder();
-
-        urlParams.append("apiKey=");
-        urlParams.append(apiKey);
-
-        if (!isNull(params)) {
-            if (!isNullOrEmpty(params.getIPAddress())) {
-                urlParams.append("&ip=");
-                urlParams.append(params.getIPAddress());
-            }
-
-            if (!isNullOrEmpty(params.getTimezone())) {
-                urlParams.append("&tz=");
-                urlParams.append(params.getTimezone());
-            }
-
-            Double latitude = params.getLatitude();
-            Double longitude = params.getLongitude();
-
-            if ((latitude >= -90 && latitude <= 90) && (longitude >= -180 && longitude <= 180)) {
-                urlParams.append("&lat=");
-                urlParams.append(latitude);
-                urlParams.append("&long=");
-                urlParams.append(longitude);
-            }
-
-            if (!isNullOrEmpty(params.getLang())) {
-                urlParams.append("&lang=");
-                urlParams.append(params.getLang());
-            }
-
-            if (!isNullOrEmpty(params.getLocation())) {
-                urlParams.append("&location=");
-                urlParams.append(params.getLocation());
-            }
-        }
-
-        return urlParams.toString();
-    }
-
-    private Map<String, Object> callAPIEndpoint(String endpoint, String urlParams, String requestType, Optional<JSONObject> requestBody) {
-        String url = "https://api.ipgeolocation.io/" + endpoint + "?" + urlParams;
-
-        int responseCode;
-        String jsonString;
-
-        try {
-            Map<String, String> responseMap = getResponseMap(url, requestType, requestBody);
-
-            responseCode = Integer.parseInt(responseMap.get("code"));
-            jsonString = responseMap.get("json");
-
-            if (responseCode == 0 || isNullOrEmpty(jsonString)) {
-                responseCode = 422;
-                jsonString = "{\"message\":\"Could not get any response from ipgeolocation.io API.\"}";
-            } else if (!isJsonString(jsonString)) {
-                responseCode = 422;
-                jsonString = "{\"message\":\"Got invalid response from ipgeolocation.io API.\"}";
-            }
-        } catch (Exception e) {
-            responseCode = 422;
-            jsonString = "{\"message\":\"Could not connect to ipgeolocation.io API.\"}";
-        }
-
-        return convertJSONStringToMap(responseCode, jsonString);
-    }
-
-    private List<Map<String, Object>> callBulkAPIEndpoint(String url, Optional<JSONObject> requestBody) {
-        int responseCode;
-        String jsonString;
-
-        try {
-            Map<String, String> responseMap = getResponseMap(url, "POST", requestBody);
-
-            responseCode = Integer.parseInt(responseMap.get("code"));
-            jsonString = responseMap.get("json");
-
-            if (responseCode == 0 || isNullOrEmpty(jsonString)) {
-                responseCode = 422;
-                jsonString = "{\"message\":\"Could not get any response from ipgeolocation.io API.\"}";
-            }
-        } catch (Exception e) {
-            responseCode = 422;
-            jsonString = "{\"message\":\"Could not connect to ipgeolocation.io API.\"}";
-        }
-
-        return convertJSONStringToListMap(responseCode, jsonString);
-    }
-
-    private Map<String, String> getResponseMap(String url, String requestType, Optional<JSONObject> requestBody) {
-        Map<String, String> responseMap = null;
-
-        try {
-            URL obj = new URL(url);
-            HttpURLConnection connection = (HttpURLConnection) obj.openConnection();
-
-            connection.setReadTimeout(10000);
-            connection.setConnectTimeout(10000);
-            connection.setRequestMethod(requestType);
-            connection.setRequestProperty("Accept", "application/json");
-
-            if (requestType.equalsIgnoreCase("post")) {
-                connection.setRequestProperty("Content-Type", "application/json");
-                connection.setDoOutput(true);
-
-                requestBody.ifPresent(
-                        body -> {
-                            try {
-                                DataOutputStream outputStream = new DataOutputStream(connection.getOutputStream());
-                                outputStream.writeBytes(body.toString());
-                                outputStream.flush();
-                                outputStream.close();
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-                        });
-            }
-
-            responseMap = parseConnectionResponse(connection);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return responseMap;
-    }
-
-    private Map<String, String> parseConnectionResponse(HttpURLConnection connection) {
-        if (isNull(connection)) {
-            throw new IllegalArgumentException("Pre-condition violated: connection must not be null");
-        }
-
-        Map<String, String> responseMap = new HashMap<>();
-
-        try {
-            int responseCode = connection.getResponseCode();
-            String jsonString = null;
-
-            if (responseCode == 200) {
-                jsonString = new Scanner(connection.getInputStream()).useDelimiter("\\A").next();
-            } else {
-                Scanner scanner = new Scanner(connection.getErrorStream());
-
-                if (scanner.useDelimiter("\\A").hasNextLine()) {
-                    jsonString = scanner.useDelimiter("\\A").next();
-                }
-            }
-
-            if (isNullOrEmpty(jsonString)) {
-                responseMap.put("code", String.valueOf(422));
-                responseMap.put("json", "{\"message\":\"Could not get any response from ipgeolocation.io API.\"}");
-            } else {
-                responseMap.put("code", String.valueOf(responseCode));
-                responseMap.put("json", jsonString);
-            }
-        } catch (IOException e) {
-            responseMap.put("code", String.valueOf(422));
-            responseMap.put("json", "{\"message\":\"Could not connect to ipgeolocation.io API.\"}");
-        }
-
-        return responseMap;
-    }
-
-    private Map<String, Object> convertJSONStringToMap(int responseCode, String response) {
-        Map<String, Object> map = new JSONObject(response).toMap();
-
-        map.put("status", responseCode);
-        return map;
-    }
-
-    private List<Map<String, Object>> convertJSONStringToListMap(int responseCode, String response) {
-        if (responseCode != 200) {
-            response = "[" + response + "]";
-        }
-
-        return new JSONArray(response)
-                .toList().stream().map(it -> {
-                    Map<String, Object> apiResponse = (Map<String, Object>) it;
-
-                    apiResponse.put("status", responseCode);
-                    return apiResponse;
-                }).collect(Collectors.toList());
-    }
+    return response;
+  }
 }

@@ -6,16 +6,36 @@
 
     <groupId>io.ipgeolocation</groupId>
     <artifactId>ipgeolocation</artifactId>
-    <version>1.0.13</version>
+    <version>1.0.15</version>
 
     <packaging>jar</packaging>
     <name>ipgeolocation-java-sdk</name>
     <description>Java SDK to lookup IP location, time zone detail, currency and security information using
         ipgeolocation.io API
     </description>
-
-    <!-- Publishing: Project path -->
     <url>https://github.com/IPGeolocation/ip-geolocation-api-java-sdk</url>
+
+    <developers>
+        <developer>
+            <name>ipgeolocation.io</name>
+            <email>support@ipgeolocation.io</email>
+            <url>https://ipgeolocation.io</url>
+        </developer>
+    </developers>
+
+    <licenses>
+        <license>
+            <name>MIT License</name>
+            <url>https://opensource.org/license/mit/</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <scm>
+        <connection>scm:git:git://github.com:IPGeolocation/ip-geolocation-api-java-sdk.git</connection>
+        <developerConnection>scm:git:ssh://github.com:IPGeolocation/ip-geolocation-api-java-sdk.git</developerConnection>
+        <url>https://github.com/IPGeolocation/ip-geolocation-api-java-sdk/tree/master</url>
+    </scm>
 
     <properties>
         <java.version>1.8</java.version>
@@ -26,9 +46,16 @@
         <dependency>
             <groupId>org.json</groupId>
             <artifactId>json</artifactId>
-            <version>20211205</version>
+            <version>20230618</version>
         </dependency>
     </dependencies>
+
+    <distributionManagement>
+        <snapshotRepository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
+    </distributionManagement>
 
     <build>
         <pluginManagement>
@@ -49,15 +76,57 @@
                     <target>8</target>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>2.2.1</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar-no-fork</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>2.9.1</version>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-gpg-plugin</artifactId>
+                <version>1.5</version>
+                <executions>
+                    <execution>
+                        <id>sign-artifacts</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>sign</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.sonatype.plugins</groupId>
+                <artifactId>nexus-staging-maven-plugin</artifactId>
+                <version>1.6.7</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <serverId>ossrh</serverId>
+                    <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+                    <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
-
-    <distributionManagement>
-        <repository>
-            <id>bintray-ipgeolocation-ipgeolocation</id>
-            <name>ipgeolocation-ipgeolocation</name>
-            <url>https://api.bintray.com/maven/ipgeolocation/ipgeolocation/io.ipgeolocation/;publish=1</url>
-        </repository>
-    </distributionManagement>
-
 </project>

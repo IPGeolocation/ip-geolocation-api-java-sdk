@@ -1,85 +1,83 @@
 package io.ipgeolocation.api;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import static java.util.Objects.isNull;
+import java.util.Objects;
+import org.json.JSONObject;
 
 public class UserAgent {
+  private final String userAgentString;
+  private final String name;
+  private final String type;
+  private final String version;
+  private final String versionMajor;
+  public UserAgentDevice device;
+  private UserAgentEngine engine;
+  private UserAgentOperatingSystem operatingSystem;
+  private final JSONObject json;
 
-    private String userAgentString;
-    private String name;
-    private String type;
-    private String version;
-    private String versionMajor;
-    public UserAgentDevice device;
-    private UserAgentEngine engine;
-    private UserAgentOperatingSystem operatingSystem;
-
-    public UserAgent() {
+  UserAgent(JSONObject json) {
+    if (Objects.isNull(json)) {
+      throw new IllegalArgumentException("'json' must not be null");
     }
 
-    public UserAgent(Map<String, Object> json) {
-        if (isNull(json)) {
-            throw new IllegalArgumentException("'json' must not be null.");
-        }
-
-        if (json.isEmpty()) {
-            throw new IllegalArgumentException("'json' must not be empty.");
-        }
-
-        this.userAgentString = (String) json.get("userAgentString");
-        this.name = (String) json.get("name");
-        this.type = (String) json.get("type");
-        this.version = (String) json.get("version");
-        this.versionMajor = (String) json.get("versionMajor");
-        if (json.get("device") instanceof HashMap) {
-            Map<String, Object> deviceJson = (HashMap) json.get("device");
-            this.device = new UserAgentDevice(deviceJson);
-        }
-
-        if (json.get("engine") instanceof HashMap) {
-            Map<String, Object> engineJson = (HashMap) json.get("engine");
-            this.engine = new UserAgentEngine(engineJson);
-        }
-
-        if (json.get("operatingSystem") instanceof HashMap) {
-            Map<String, Object> operatingSystemJson = (HashMap) json.get("operatingSystem");
-            this.operatingSystem = new UserAgentOperatingSystem(operatingSystemJson);
-        }
-
+    if (json.isEmpty()) {
+      throw new IllegalArgumentException("'json' must not be empty");
     }
 
-    public String getUserAgentString() {
-        return userAgentString;
+    this.userAgentString = json.getString("userAgentString");
+    this.name = json.getString("name");
+    this.type = json.getString("type");
+    this.version = json.getString("version");
+    this.versionMajor = json.getString("versionMajor");
+
+    if (json.has("device")) {
+      this.device = new UserAgentDevice(json.getJSONObject("device"));
     }
 
-    public String getName() {
-        return name;
+    if (json.has("engine")) {
+      this.engine = new UserAgentEngine(json.getJSONObject("engine"));
     }
 
-    public String getType() {
-        return type;
+    if (json.has("operatingSystem")) {
+      this.operatingSystem = new UserAgentOperatingSystem(json.getJSONObject("operatingSystem"));
     }
 
-    public String getVersion() {
-        return version;
-    }
+    this.json = json;
+  }
 
-    public String getVersionMajor() {
-        return versionMajor;
-    }
+  public String getUserAgentString() {
+    return userAgentString;
+  }
 
-    public UserAgentDevice getDevice() {
-        return device;
-    }
+  public String getName() {
+    return name;
+  }
 
-    public UserAgentEngine getEngine() {
-        return engine;
-    }
+  public String getType() {
+    return type;
+  }
 
-    public UserAgentOperatingSystem getOperatingSystem() {
-        return operatingSystem;
-    }
+  public String getVersion() {
+    return version;
+  }
 
+  public String getVersionMajor() {
+    return versionMajor;
+  }
+
+  public UserAgentDevice getDevice() {
+    return device;
+  }
+
+  public UserAgentEngine getEngine() {
+    return engine;
+  }
+
+  public UserAgentOperatingSystem getOperatingSystem() {
+    return operatingSystem;
+  }
+
+  @Override
+  public String toString() {
+    return json.toString(2);
+  }
 }

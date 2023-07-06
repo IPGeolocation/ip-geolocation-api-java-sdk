@@ -1,109 +1,151 @@
 package io.ipgeolocation.api;
 
 public class GeolocationParams {
-    private String ip;
-    private String[] ips;
+  private final String ipAddress;
+  private final String lang;
+  private final String fields;
+  private final Boolean includeHostname;
+  private final boolean includeLiveHostname;
+  private final boolean includeHostnameFallbackLive;
+  private final boolean includeSecurity;
+  private final boolean includeUserAgentDetail;
+  private final String excludes;
+
+  public GeolocationParams(
+      String ipAddress,
+      String lang,
+      String fields,
+      String excludes,
+      boolean includeHostname,
+      boolean includeLiveHostname,
+      boolean includeHostnameFallbackLive,
+      boolean includeSecurity,
+      boolean includeUserAgentDetail) {
+    this.ipAddress = ipAddress;
+    this.lang = lang;
+    this.fields = fields;
+    this.includeHostname = includeHostname;
+    this.includeLiveHostname = includeLiveHostname;
+    this.includeHostnameFallbackLive = includeHostnameFallbackLive;
+    this.includeSecurity = includeSecurity;
+    this.includeUserAgentDetail = includeUserAgentDetail;
+    this.excludes = excludes;
+  }
+
+  public String getIPAddress() {
+    return ipAddress;
+  }
+
+  public String getFields() {
+    return fields;
+  }
+
+  public String getLang() {
+    return lang;
+  }
+
+  public boolean isIncludeHostname() {
+    return includeHostname;
+  }
+
+  public boolean isIncludeLiveHostname() {
+    return includeLiveHostname;
+  }
+
+  public boolean isIncludeHostnameFallbackLive() {
+    return includeHostnameFallbackLive;
+  }
+
+  public boolean isIncludeSecurity() {
+    return includeSecurity;
+  }
+
+  public boolean isIncludeUserAgentDetail() {
+    return includeUserAgentDetail;
+  }
+
+  public String getExcludes() {
+    return excludes;
+  }
+
+  public static GeolocationParamsBuilder builder() {
+    return new GeolocationParamsBuilder();
+  }
+
+  public static class GeolocationParamsBuilder {
+    private String ipAddress;
     private String lang;
     private String fields;
-    private Boolean includeHostname = false;
-    private Boolean includeLiveHostname = false;
-    private Boolean includeHostnameFallbackLive = false;
-    private Boolean includeSecurity = false;
-    private Boolean includeUserAgentDetail = false;
+    private boolean includeHostname;
+    private boolean includeLiveHostname;
+    private boolean includeHostnameFallbackLive;
+    private boolean includeSecurity;
+    private boolean includeUserAgentDetail;
     private String excludes;
 
-    public GeolocationParams() {
-        this.ip = "";
-        this.ips = new String[0];
-        this.lang = "en";
-        this.fields = "";
-        this.includeHostname = false;
-        this.includeSecurity = false;
-        this.includeUserAgentDetail = false;
-        this.excludes = "";
+    private GeolocationParamsBuilder() {
+      ipAddress = "";
+      lang = "en";
+      fields = "*";
+      excludes = "";
     }
 
-    public void setIPAddress(String ip) {
-        this.ip = Strings.nullToEmpty(ip);
+    public GeolocationParamsBuilder withIPAddress(String ipAddress) {
+      this.ipAddress = ipAddress;
+      return this;
     }
 
-    public String getIPAddress() {
-        return ip;
+    public GeolocationParamsBuilder withLang(String lang) {
+      this.lang = lang;
+      return this;
     }
 
-    public void setFields(String fields) {
-        this.fields = Strings.nullToEmpty(fields);
+    public GeolocationParamsBuilder withFields(String fields) {
+      this.fields = fields;
+      return this;
     }
 
-    public String getFields() {
-        return fields;
+    public GeolocationParamsBuilder withExcludes(String excludes) {
+      this.excludes = excludes;
+      return this;
     }
 
-    public void setLang(String lang) {
-        this.lang = lang;
+    public GeolocationParamsBuilder includeHostname() {
+      this.includeHostname = Boolean.TRUE;
+      return this;
     }
 
-    public String getLang() {
-        return lang;
+    public GeolocationParamsBuilder includeLiveHostname() {
+      this.includeLiveHostname = Boolean.TRUE;
+      return this;
     }
 
-    public void setIncludeHostname(Boolean includeHostname) {
-        this.includeHostname = includeHostname;
+    public GeolocationParamsBuilder includeHostnameFallbackLive() {
+      this.includeHostnameFallbackLive = Boolean.TRUE;
+      return this;
     }
 
-    public boolean isIncludeHostname() {
-        return includeHostname;
+    public GeolocationParamsBuilder includeSecurity() {
+      this.includeSecurity = Boolean.TRUE;
+      return this;
     }
 
-    public void setIncludeLiveHostname(Boolean includeLiveHostname) {
-        this.includeLiveHostname = includeLiveHostname;
+    public GeolocationParamsBuilder includeUserAgentDetail() {
+      this.includeUserAgentDetail = Boolean.TRUE;
+      return this;
     }
 
-    public Boolean isIncludeLiveHostname() {
-        return includeLiveHostname;
+    public GeolocationParams build() {
+      return new GeolocationParams(
+          ipAddress,
+          lang,
+          fields,
+          excludes,
+          includeHostname,
+          includeLiveHostname,
+          includeHostnameFallbackLive,
+          includeSecurity,
+          includeUserAgentDetail);
     }
-
-    public void setIncludeHostnameFallbackLive(Boolean includeHostnameFallbackLive) {
-        this.includeHostnameFallbackLive = includeHostnameFallbackLive;
-    }
-
-    public Boolean isIncludeHostnameFallbackLive() {
-        return includeHostnameFallbackLive;
-    }
-
-    public void setIncludeSecurity(Boolean includeSecurity) {
-        this.includeSecurity = includeSecurity;
-    }
-
-    public Boolean isIncludeSecurity() {
-        return includeSecurity;
-    }
-
-    public void setIncludeUserAgentDetail(Boolean includeUserAgentDetail) {
-        this.includeUserAgentDetail = includeUserAgentDetail;
-    }
-
-    public Boolean isIncludeUserAgentDetail() {
-        return includeUserAgentDetail;
-    }
-
-    public void setExcludes(String excludes) {
-        this.excludes = excludes;
-    }
-
-    public String getExcludes() {
-        return excludes;
-    }
-
-    public void setIPAddresses(String[] ips) throws IllegalArgumentException {
-        if (ips.length > 50) {
-            throw new IllegalArgumentException("Max. number of IP addresses cannot be more than 50.");
-        } else {
-            this.ips = ips;
-        }
-    }
-
-    public String[] getIPAddresses() {
-        return ips;
-    }
+  }
 }

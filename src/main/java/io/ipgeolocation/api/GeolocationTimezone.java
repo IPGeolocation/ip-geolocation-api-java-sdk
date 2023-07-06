@@ -1,47 +1,62 @@
 package io.ipgeolocation.api;
 
 import java.math.BigDecimal;
-import java.util.Map;
+import java.util.Objects;
+import org.json.JSONObject;
 
 public class GeolocationTimezone {
-    private final String name;
-    private final Integer offset;
-    private final String currentTime;
-    private final BigDecimal currentTimeUnix;
-    private final Boolean isDST;
-    private final Integer dstSavings;
+  private final String name;
+  private final int offset;
+  private final String currentTime;
+  private final BigDecimal currentTimeUnix;
+  private final boolean dst;
+  private final int dstSavings;
+  private final JSONObject json;
 
-    GeolocationTimezone(Map<String, Object> json) {
-        this.name = (String) json.get("name");
-        this.offset = (Integer) json.get("offset");
-        this.currentTime = (String) json.get("current_time");
-        this.currentTimeUnix = (BigDecimal) json.get("current_time_unix");
-        this.isDST = (Boolean) json.get("is_dst");
-        this.dstSavings = (Integer) json.get("dst_savings");
+  GeolocationTimezone(JSONObject json) {
+    if (Objects.isNull(json)) {
+      throw new IllegalArgumentException("'json' must not be null");
     }
 
-    public String getName() {
-        return name;
+    if (json.isEmpty()) {
+      throw new IllegalArgumentException("'json' must not be empty");
     }
 
-    public Integer getOffset() {
-        return offset;
-    }
+    this.name = json.getString("name");
+    this.offset = json.getInt("offset");
+    this.currentTime = json.getString("current_time");
+    this.currentTimeUnix = json.getBigDecimal("current_time_unix");
+    this.dst = json.getBoolean("is_dst");
+    this.dstSavings = json.getInt("dst_savings");
+    this.json = json;
+  }
 
-    public String getCurrentTime() {
-        return currentTime;
-    }
+  public String getName() {
+    return name;
+  }
 
-    public BigDecimal getCurrentTimeUnix() {
-        return currentTimeUnix;
-    }
+  public int getOffset() {
+    return offset;
+  }
 
-    public Boolean isDST() {
-        return isDST;
-    }
+  public String getCurrentTime() {
+    return currentTime;
+  }
 
-    public Integer getDSTSavings() {
-        return dstSavings;
-    }
+  public BigDecimal getCurrentTimeUnix() {
+    return currentTimeUnix;
+  }
 
+  public boolean isDst() {
+    return dst;
+  }
+
+  public int getDstSavings() {
+    return dstSavings;
+  }
+
+  @Override
+  public String toString() {
+    return json.toString(2);
+  }
 }

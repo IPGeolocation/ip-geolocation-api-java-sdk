@@ -1,133 +1,138 @@
 package io.ipgeolocation.api;
 
 import java.math.BigDecimal;
-import java.util.HashMap;
-import java.util.Map;
-
-import static java.util.Objects.isNull;
+import java.util.Objects;
+import org.json.JSONObject;
 
 public class Timezone {
-    private final String timezone;
-    private final Integer timezoneOffset;
-    private final Integer timezoneOffsetWithDST;
-    private final String date;
-    private final String dateTime;
-    private final String dateTimeTxt;
-    private final String dateTimeWti;
-    private final String dateTimeYmd;
-    private final BigDecimal dateTimeUnix;
-    private final String time24;
-    private final String time12;
-    private final Integer week;
-    private final Integer month;
-    private final Integer year;
-    private final String yearAbbr;
-    private final Boolean isDST;
-    private final Integer dstSavings;
-    private TimezoneGeo timezoneGeo;
+  private final String timezone;
+  private final int timezoneOffset;
+  private final int timezoneOffsetWithDST;
+  private final String date;
+  private final String dateTime;
+  private final String dateTimeTxt;
+  private final String dateTimeWti;
+  private final String dateTimeYmd;
+  private final BigDecimal dateTimeUnix;
+  private final String time24;
+  private final String time12;
+  private final int week;
+  private final int month;
+  private final int year;
+  private final String yearAbbr;
+  private final boolean isDST;
+  private final int dstSavings;
+  private TimezoneGeo geo;
+  private final JSONObject json;
 
-    Timezone(Map<String, Object> json) {
-        if (isNull(json)) {
-            throw new IllegalArgumentException("'json' must not be null.");
-        }
-
-        if (json.isEmpty()) {
-            throw new IllegalArgumentException("'json' must not be empty.");
-        }
-
-        this.timezone = (String) json.get("timezone");
-        this.timezoneOffset = (Integer) json.get("timezone_offset");
-        this.timezoneOffsetWithDST = (Integer) json.get("timezone_offset_with_dst");
-        this.date = (String) json.get("date");
-        this.dateTime = (String) json.get("date_time");
-        this.dateTimeTxt = (String) json.get("date_time_txt");
-        this.dateTimeWti = (String) json.get("date_time_wti");
-        this.dateTimeYmd = (String) json.get("date_time_ymd");
-        this.dateTimeUnix = (BigDecimal) json.get("date_time_unix");
-        this.time24 = (String) json.get("time_24");
-        this.time12 = (String) json.get("time_12");
-        this.week = (Integer) json.get("week");
-        this.month = (Integer) json.get("month");
-        this.year = (Integer) json.get("year");
-        this.yearAbbr = (String) json.get("year_abbr");
-        this.isDST = (Boolean) json.get("is_dst");
-        this.dstSavings = (Integer) json.get("dst_savings");
-        if (json.get("geo") instanceof HashMap) {
-            Map<String, Object> geoJson = (HashMap) json.get("geo");
-            this.timezoneGeo = new TimezoneGeo(geoJson);
-        }
+  Timezone(JSONObject json) {
+    if (Objects.isNull(json)) {
+      throw new IllegalArgumentException("'json' must not be null");
     }
 
-    public String getTimezone() {
-        return timezone;
+    if (json.isEmpty()) {
+      throw new IllegalArgumentException("'json' must not be empty");
     }
 
-    public Integer getTimezoneOffset() {
-        return timezoneOffset;
+    this.timezone = json.getString("timezone");
+    this.timezoneOffset = json.getInt("timezone_offset");
+    this.timezoneOffsetWithDST = json.getInt("timezone_offset_with_dst");
+    this.date = json.getString("date");
+    this.dateTime = json.getString("date_time");
+    this.dateTimeTxt = json.getString("date_time_txt");
+    this.dateTimeWti = json.getString("date_time_wti");
+    this.dateTimeYmd = json.getString("date_time_ymd");
+    this.dateTimeUnix = json.getBigDecimal("date_time_unix");
+    this.time24 = json.getString("time_24");
+    this.time12 = json.getString("time_12");
+    this.week = json.getInt("week");
+    this.month = json.getInt("month");
+    this.year = json.getInt("year");
+    this.yearAbbr = json.getString("year_abbr");
+    this.isDST = json.getBoolean("is_dst");
+    this.dstSavings = json.getInt("dst_savings");
+
+    if (json.has("geo")) {
+      this.geo = new TimezoneGeo(json.getJSONObject("geo"));
     }
 
-    public Integer getTimezoneOffsetWithDST() {
-        return timezoneOffsetWithDST;
-    }
+    this.json = json;
+  }
 
-    public String getDate() {
-        return date;
-    }
+  public String getTimezone() {
+    return timezone;
+  }
 
-    public String getDateTime() {
-        return dateTime;
-    }
+  public int getTimezoneOffset() {
+    return timezoneOffset;
+  }
 
-    public String getDateTimeTxt() {
-        return dateTimeTxt;
-    }
+  public int getTimezoneOffsetWithDST() {
+    return timezoneOffsetWithDST;
+  }
 
-    public String getDateTimeWti() {
-        return dateTimeWti;
-    }
+  public String getDate() {
+    return date;
+  }
 
-    public String getDateTimeYmd() {
-        return dateTimeYmd;
-    }
+  public String getDateTime() {
+    return dateTime;
+  }
 
-    public BigDecimal getDateTimeUnix() {
-        return dateTimeUnix;
-    }
+  public String getDateTimeTxt() {
+    return dateTimeTxt;
+  }
 
-    public String getTime24() {
-        return time24;
-    }
+  public String getDateTimeWti() {
+    return dateTimeWti;
+  }
 
-    public String getTime12() {
-        return time12;
-    }
+  public String getDateTimeYmd() {
+    return dateTimeYmd;
+  }
 
-    public Integer getWeek() {
-        return week;
-    }
+  public BigDecimal getDateTimeUnix() {
+    return dateTimeUnix;
+  }
 
-    public Integer getMonth() {
-        return month;
-    }
+  public String getTime24() {
+    return time24;
+  }
 
-    public Integer getYear() {
-        return year;
-    }
+  public String getTime12() {
+    return time12;
+  }
 
-    public String getYearAbbr() {
-        return yearAbbr;
-    }
+  public int getWeek() {
+    return week;
+  }
 
-    public Boolean isDST() {
-        return isDST;
-    }
+  public int getMonth() {
+    return month;
+  }
 
-    public Integer getDSTSavings() {
-        return dstSavings;
-    }
+  public int getYear() {
+    return year;
+  }
 
-    public TimezoneGeo getTimezoneGeo() {
-        return timezoneGeo;
-    }
+  public String getYearAbbr() {
+    return yearAbbr;
+  }
 
+  public boolean isDST() {
+    return isDST;
+  }
+
+  public int getDSTSavings() {
+    return dstSavings;
+  }
+
+  public TimezoneGeo getGeo() {
+    return geo;
+  }
+
+  @Override
+  public String toString() {
+    return json.toString(2);
+  }
 }

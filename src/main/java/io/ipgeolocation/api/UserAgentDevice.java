@@ -1,33 +1,49 @@
 package io.ipgeolocation.api;
 
-import java.util.Map;
+import java.util.Objects;
+import org.json.JSONObject;
 
 public class UserAgentDevice {
-    private final String name;
-    private final String type;
-    private final String brand;
-    private final String cpu;
+  private final String name;
+  private final String type;
+  private final String brand;
+  private final String cpu;
+  private final JSONObject json;
 
-    public UserAgentDevice(Map<String, Object> json) {
-        this.name = (String) json.get("name");
-        this.type = (String) json.get("type");
-        this.brand = (String) json.get("brand");
-        this.cpu = (String) json.get("CPU");
+  UserAgentDevice(JSONObject json) {
+    if (Objects.isNull(json)) {
+      throw new IllegalArgumentException("'json' must not be null");
     }
 
-    public String getName() {
-        return name;
+    if (json.isEmpty()) {
+      throw new IllegalArgumentException("'json' must not be empty");
     }
 
-    public String getType() {
-        return type;
-    }
+    this.name = json.getString("name");
+    this.type = json.getString("type");
+    this.brand = json.getString("brand");
+    this.cpu = json.getString("cpu");
+    this.json = json;
+  }
 
-    public String getBrand() {
-        return brand;
-    }
+  public String getName() {
+    return name;
+  }
 
-    public String getCpu() {
-        return cpu;
-    }
+  public String getType() {
+    return type;
+  }
+
+  public String getBrand() {
+    return brand;
+  }
+
+  public String getCpu() {
+    return cpu;
+  }
+
+  @Override
+  public String toString() {
+    return json.toString(2);
+  }
 }

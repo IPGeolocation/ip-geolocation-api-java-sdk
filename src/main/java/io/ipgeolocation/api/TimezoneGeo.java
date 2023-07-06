@@ -1,75 +1,86 @@
 package io.ipgeolocation.api;
 
 import java.math.BigDecimal;
-import java.util.Map;
+import java.util.Objects;
+import org.json.JSONObject;
 
 public class TimezoneGeo {
-    private final String countryCode2;
-    private final String countryCode3;
-    private final String countryName;
-    private final String stateProvince;
-    private final String district;
-    private final String city;
-    private final String zipCode;
-    private BigDecimal latitude;
-    private BigDecimal longitude;
+  private final String countryCode2;
+  private final String countryCode3;
+  private final String countryName;
+  private final String stateProvince;
+  private final String district;
+  private final String city;
+  private final String locality;
+  private final String zipCode;
+  private final BigDecimal latitude;
+  private final BigDecimal longitude;
+  private final JSONObject json;
 
-    TimezoneGeo(Map<String, Object> json) {
-        this.countryCode2 = (String) json.get("country_code2");
-        this.countryCode3 = (String) json.get("country_code3");
-        this.countryName = (String) json.get("country_name");
-        this.stateProvince = (String) json.get("state_prov");
-        this.district = (String) json.get("district");
-        this.city = (String) json.get("city");
-        this.zipCode = (String) json.get("zipcode");
-
-        if (json.get("latitude") instanceof String) {
-            this.latitude = new BigDecimal((String) json.get("latitude"));
-        } else if (json.get("latitude") instanceof BigDecimal) {
-            this.latitude = (BigDecimal) json.get("latitude");
-        }
-
-        if (json.get("longitude") instanceof String) {
-            this.longitude = new BigDecimal((String) json.get("longitude"));
-        } else if (json.get("longitude") instanceof BigDecimal) {
-            this.longitude = (BigDecimal) json.get("longitude");
-        }
+  TimezoneGeo(JSONObject json) {
+    if (Objects.isNull(json)) {
+      throw new IllegalArgumentException("'json' must not be null");
     }
 
-    public String getCountryCode2() {
-        return countryCode2;
+    if (json.isEmpty()) {
+      throw new IllegalArgumentException("'json' must not be empty");
     }
 
-    public String getCountryCode3() {
-        return countryCode3;
-    }
+    this.countryCode2 = json.optString("country_code2");
+    this.countryCode3 = json.optString("country_code3");
+    this.countryName = json.optString("country_name", json.optString("country"));
+    this.stateProvince = json.optString("state_prov", json.optString("state"));
+    this.district = json.optString("district");
+    this.city = json.getString("city");
+    this.locality = json.optString("locality");
+    this.zipCode = json.optString("zipcode");
+    this.latitude = json.getBigDecimal("latitude");
+    this.longitude = json.getBigDecimal("longitude");
+    this.json = json;
+  }
 
-    public String getCountryName() {
-        return countryName;
-    }
+  public String getCountryCode2() {
+    return countryCode2;
+  }
 
-    public String getStateProvince() {
-        return stateProvince;
-    }
+  public String getCountryCode3() {
+    return countryCode3;
+  }
 
-    public String getDistrict() {
-        return district;
-    }
+  public String getCountryName() {
+    return countryName;
+  }
 
-    public String getCity() {
-        return city;
-    }
+  public String getStateProvince() {
+    return stateProvince;
+  }
 
-    public String getZipCode() {
-        return zipCode;
-    }
+  public String getDistrict() {
+    return district;
+  }
 
-    public BigDecimal getLatitude() {
-        return latitude;
-    }
+  public String getCity() {
+    return city;
+  }
 
-    public BigDecimal getLongitude() {
-        return longitude;
-    }
+  public String getLocality() {
+    return locality;
+  }
 
+  public String getZipCode() {
+    return zipCode;
+  }
+
+  public BigDecimal getLatitude() {
+    return latitude;
+  }
+
+  public BigDecimal getLongitude() {
+    return longitude;
+  }
+
+  @Override
+  public String toString() {
+    return json.toString(2);
+  }
 }
