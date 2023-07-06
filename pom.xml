@@ -50,14 +50,6 @@
         </dependency>
     </dependencies>
 
-<!--    <distributionManagement>-->
-<!--        <repository>-->
-<!--            <id>bintray-ipgeolocation-ipgeolocation</id>-->
-<!--            <name>ipgeolocation-ipgeolocation</name>-->
-<!--            <url>https://api.bintray.com/maven/ipgeolocation/ipgeolocation/io.ipgeolocation/;publish=1</url>-->
-<!--        </repository>-->
-<!--    </distributionManagement>-->
-
     <distributionManagement>
         <snapshotRepository>
             <id>ossrh</id>
