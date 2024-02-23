@@ -26,7 +26,7 @@ You need a valid 'IPGeolocation API key' to use this SDK. [Sign up](https://ipge
 free API key if you don’t have one.
 
 **Note:** Complete documentation to use this SDK is also available
-at [IP Geolocation API JAVA SDK Documentation](https://ipgeolocation.io/documentation/ip-geolocation-api-java-sdk-20180807094025)
+at [IP Geolocation API JAVA SDK Documentation](https://ipgeolocation.io/documentation/ip-geolocation-api-java-sdk.html)
 .
 
 ## System Requirements
@@ -90,7 +90,7 @@ Basic Usage
 
 ```java
 // Create IPGeolocationAPI object, passing your valid API key
-IPGeolocationAPI api = new IPGeolocationAPI("YOUR_API_KEY");
+IPGeolocationAPI ipGeolocationAPI = new IPGeolocationAPI("YOUR_API_KEY");
 ```
 
 ### Geolocation Lookup
@@ -107,15 +107,21 @@ GeolocationParams geolocationParams =
 try {
     Geolocation geolocation = ipGeolocationAPI.getGeolocation(geolocationParams);
 
-    System.out.println(geolocation.getCountryName());
-    System.out.println(geolocation.getCurrency().getName());
-    System.out.println(geolocation.getTimezone().getCurrentTime());
-    System.out.println(geolocation.getGeolocationSecurity().getAnonymous());
-    System.out.println(geolocation.getGeolocationSecurity().getKnownAttacker());
-    System.out.println(geolocation.getGeolocationSecurity().getProxy());
-    System.out.println(geolocation.getGeolocationSecurity().getProxyType());
-    System.out.println(geolocation.getGeolocationSecurity().getAnonymous());
-    System.out.println(geolocation.getGeolocationSecurity().getCloudProvider());
+    // Geolocation Info
+    System.out.println("Country: " + geolocation.getCountryName());
+    System.out.println("Currency: " + geolocation.getCurrency().getName());
+    System.out.println("Location time: " + geolocation.getTimezone().getCurrentTime());
+
+    // Security Info
+    System.out.println("Is Anonymous: " + geolocation.getGeolocationSecurity().isAnonymous());
+    System.out.println("Is Known Attacker: " + geolocation.getGeolocationSecurity().isKnownAttacker());
+    System.out.println("Is Proxy: " + geolocation.getGeolocationSecurity().isProxy());
+    System.out.println("Proxy Type: " + geolocation.getGeolocationSecurity().getProxyType());
+    System.out.println("IP Threat Score: " + geolocation.getGeolocationSecurity().getThreatScore());
+    System.out.println("Is Bot: " + geolocation.getGeolocationSecurity().isBot());
+    System.out.println("Is Spam: " + geolocation.getGeolocationSecurity().isSpam());
+    System.out.println("Is Tor: " + geolocation.getGeolocationSecurity().isTor());
+    System.out.println("Is Cloud Provider: " + geolocation.getGeolocationSecurity().isCloudProvider());
 } catch (IPGeolocationError e) {
     // on unsuccessful lookup or invalid input IPGeolocationError is thrown
     System.err.println("HTTP status: " + e.getStatus() + " Error: " + e.getMessage());
@@ -132,8 +138,8 @@ GeolocationParams geolocationParams =
 try {
     Geolocation geolocation = ipGeolocationAPI.getGeolocation(geolocationParams);
 
-    System.out.println(geolocation.getIP());
-    System.out.println(geolocation.getCountryName());
+    System.out.println("IP Address: " + geolocation.getIP());
+    System.out.println("Country: " + geolocation.getCountryName());
 } catch (IPGeolocationError e) {
     // on unsuccessful lookup or invalid input IPGeolocationError is thrown
     System.err.println("HTTP status: " + e.getStatus() + " Error: " + e.getMessage());
@@ -144,9 +150,9 @@ try {
 try {
     Geolocation geolocation = ipGeolocationAPI.getGeolocation();
 
-    System.out.println(geolocation.getIP());
-    System.out.println(geolocation.getCountryCode2());
-    System.out.println(geolocation.getTimezone().getCurrentTime());
+    System.out.println("IP Address: " + geolocation.getIP());
+    System.out.println("Country Code ISO2: " + geolocation.getCountryCode2());
+    System.out.println("Location time: " + geolocation.getTimezone().getCurrentTime());
 } catch (IPGeolocationError e) {
     // on unsuccessful lookup or invalid input IPGeolocationError is thrown
     System.err.println("HTTP status: " + e.getStatus() + " Error: " + e.getMessage());
@@ -159,16 +165,16 @@ try {
 String[] ips = new String[]{"1.1.1.1", "2.2.2.2", "3.3.3.3"};
 GeolocationParams geolocationParams =
         GeolocationParams.builder()
-            .withLand("de")
+            .withLang("de")
             .build();
 
 try {
-    List<Geolocation> geolocations = ipGeolocationAPI.getBulkGeolocation(ips, geoParams);
+    List<Geolocation> geolocations = ipGeolocationAPI.getBulkGeolocation(ips, geolocationParams);
 
-    System.out.println(geolocations.size());
-    System.out.println(geolocations.get(0).getCountryName());
-    System.out.println(geolocations.get(1).getLanguages());
-    System.out.println(geolocations.get(2).getTimezone().getCurrentTime());
+    System.out.println("No. of Requests: " + geolocations.size());
+    System.out.println("1st IP's Country: " + geolocations.get(0).getCountryName());
+    System.out.println("2nd IP's Language: " + geolocations.get(1).getLanguages());
+    System.out.println("3rd IP's location time: " + geolocations.get(2).getTimezone().getCurrentTime());
 } catch (IPGeolocationError e) {
     // on unsuccessful lookup or invalid input IPGeolocationError is thrown
     System.err.println("HTTP status: " + e.getStatus() + " Error: " + e.getMessage());
@@ -183,12 +189,12 @@ GeolocationParams geolocationParams =
             .build();
 
 try {
-    List<Geolocation> geolocations = ipGeolocationAPI.getBulkGeolocation(ips, geoParams);
+    List<Geolocation> geolocations = ipGeolocationAPI.getBulkGeolocation(ips, geolocationParams);
 
-    System.out.println(geolocations.size());
-    System.out.println(geolocations.get(0).getCountryName());
-    System.out.println(geolocations.get(1).getLanguages());
-    System.out.println(geolocations.get(2).getTimezone().getCurrentTime());
+    System.out.println("No. of Requests: " + geolocations.size());
+    System.out.println("1st IP's Country: " + geolocations.get(0).getCountryName());
+    System.out.println("2nd IP's City: "+geolocations.get(1).getCity());
+    System.out.println("3rd IP's City Zipcode: " + geolocations.get(2).getZipCode());
 } catch (IPGeolocationError e) {
     // on unsuccessful lookup or invalid input IPGeolocationError is thrown
     System.err.println("HTTP status: " + e.getStatus() + " Error: " + e.getMessage());
@@ -202,10 +208,10 @@ TimezoneParams timezoneParams =
         TimezoneParams.builder().withTimeZone("America/New_York").build();
 
 try {
-    Timezone tz = ipGeolocationAPI.getTimezone(tzParams);
+    Timezone tz = ipGeolocationAPI.getTimezone(timezoneParams);
     
-    System.out.println(tz.getDateTimeWti());
-    System.out.println(tz.getDateTimeTxt());
+    System.out.println("Format 'EEEE, MMMM dd, yyyy HH:mm:ss': " + tz.getDateTimeTxt());
+    System.out.println("Format 'EEE, dd MMM yyyy HH:mm:ss Z': " + tz.getDateTimeWti());
 } catch (IPGeolocationError e) {
     // on unsuccessful lookup or invalid input IPGeolocationError is thrown
     System.err.println("HTTP status: " + e.getStatus() + " Error: " + e.getMessage());
@@ -219,18 +225,18 @@ TimezoneParams timezoneParams =
             .build();
 
 try {
-    Timezone tz = ipGeolocationAPI.getTimezone(tzParams);
+    Timezone tz = ipGeolocationAPI.getTimezone(timezoneParams);
 
-    System.out.println(tz.getTimezone());
-    System.out.println(tz.getDateTimeWti());
-    System.out.println(tz.getDateTimeTxt());
+    System.out.println("Timezone: " + tz.getTimezone());
+    System.out.println("Timezone in Unix: " + tz.getDateTimeUnix());
+    System.out.println("Time in 24 format: " + tz.getTime24());
 } catch (IPGeolocationError e) {
     // on unsuccessful lookup or invalid input IPGeolocationError is thrown
     System.err.println("HTTP status: " + e.getStatus() + " Error: " + e.getMessage());
 }
 ```
 ```java
-// Get time zone information for IP address (1.1.1.1) and geolocation information Japanese**
+// Get time zone information for IP address (1.1.1.1) and geolocation information in Japanese**
 TimezoneParams timezoneParams =
         TimezoneParams.builder()
             .withIPAddress("1.1.1.1")
@@ -238,11 +244,17 @@ TimezoneParams timezoneParams =
             .build();
 
 try {
-    Timezone tz = ipGeolocationAPI.getTimezone(tzParams);
+    Timezone tz = ipGeolocationAPI.getTimezone(timezoneParams);
 
-    System.out.println(tz.getTimezone());
-    System.out.println(tz.getDateTimeWti());
-    System.out.println(tz.getDateTimeTxt());
+    // Timezone Info
+    System.out.println("Timezone: " + tz.getTimezone());
+    System.out.println("Format 'EEEE, MMMM dd, yyyy HH:mm:ss': " + tz.getDateTimeTxt());
+    System.out.println("Format 'yyyy-MM-dd'T'HH:mm:ssZ': " + tz.getDateTimeYmd());
+
+    // Geo Info
+    System.out.println("City: " + tz.getGeo().getCity());
+    System.out.println("State/Province: " + tz.getGeo().getStateProvince());
+    System.out.println("Country: " + tz.getGeo().getCountryName());
 } catch (IPGeolocationError e) {
     // on unsuccessful lookup or invalid input IPGeolocationError is thrown
     System.err.println("HTTP status: " + e.getStatus() + " Error: " + e.getMessage());
@@ -253,9 +265,15 @@ try {
 try {
     Timezone tz = ipGeolocationAPI.getTimezone();
 
-    System.out.println(tz.getTimezone());
-    System.out.println(tz.getDateTimeWti());
-    System.out.println(tz.getDateTimeYmd());
+    // Timezone Info
+    System.out.println("Timezone Offset: " + tz.getTimezoneOffset());
+    System.out.println("Date: " + tz.getDate());
+    System.out.println("Month (No.): " + tz.getMonth());
+
+    // Geo Info
+    System.out.println("City: " + tz.getGeo().getCity());
+    System.out.println("Country Code ISO3: " + tz.getGeo().getCountryCode3());
+    System.out.println("Lat/Lon: " + tz.getGeo().getLatitude() + "/" + tz.getGeo().getLongitude());
 } catch (IPGeolocationError e) {
     // on unsuccessful lookup or invalid input IPGeolocationError is thrown
     System.err.println("HTTP status: " + e.getStatus() + " Error: " + e.getMessage());
