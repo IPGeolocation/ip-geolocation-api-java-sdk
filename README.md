@@ -279,6 +279,77 @@ try {
     System.err.println("HTTP status: " + e.getStatus() + " Error: " + e.getMessage());
 }
 ```
+```java
+// Get time zone information by location (city, country, etc.)
+TimezoneParams timezoneParams = 
+        TimezoneParams.builder().withLocation("Syria, Damascus").build();
+
+try {
+    Timezone tz = ipGeolocationAPI.getTimezone(timezoneParams);
+
+    System.out.println("Format 'EEEE, MMMM dd, yyyy HH:mm:ss': " + tz.getDateTimeTxt());
+    System.out.println("Country: " + tz.getGeo().getCountryName());
+} catch (IPGeolocationError e) {
+    // on unsuccessful lookup or invalid input IPGeolocationError is thrown
+    System.err.println("HTTP status: " + e.getStatus() + " Error: " + e.getMessage());
+}
+```
+
+### UserAgent API
+```java
+// Query/Parse user agent information for Provided the provided string
+try {
+    String uaString = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_2) AppleWebKit/601.3.9 (KHTML, like Gecko) Version/9.0.2 Safari/601.3.9";
+    UserAgent ua = ipGeolocationAPI.getUserAgent(uaString);
+
+    System.out.println("Device name: " + ua.getDevice().getName());
+    System.out.println("OS name: " + ua.getOperatingSystem().getName());
+    System.out.println("OS version: " + ua.getOperatingSystem().getVersion());
+    System.out.println("CPU: " + ua.getDevice().getCpu());
+} catch (IPGeolocationError e) {
+    // on unsuccessful lookup or invalid input IPGeolocationError is thrown
+    System.err.println("HTTP status: " + e.getStatus() + " Error: " + e.getMessage());
+}
+```
+```java
+// Query/Parse user agent information for the provided strings
+String[] uaStrings = new String[]
+        {"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_2) AppleWebKit/601.3.9 (KHTML, like Gecko) Version/9.0.2 Safari/601.3.9",
+                "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/47.0.2526.111 Safari/537.36",
+                "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:40.0) Gecko/20100101 Firefox/40.1"};
+
+try {
+    List<UserAgent> uas = ipGeolocationAPI.getBulkUserAgent(uaStrings);
+
+    System.out.println("No. of Requests: " + uas.size());
+    System.out.println("1st UA's Device name: " + uas.get(0).getDevice().getName());
+    System.out.println("2nd UA's OS name: " + uas.get(1).getOperatingSystem().getName());
+    System.out.println("3rd UA's Browser: " + uas.get(2).getName());
+} catch (IPGeolocationError e) {
+    System.err.println("HTTP status: " + e.getStatus() + " Error: " + e.getMessage());
+}
+```
+```java
+// Query useragent of the machine IP Address along with Geolocation
+GeolocationParams geolocationParams = 
+        GeolocationParams.builder()
+                .includeUserAgentDetail()
+               .build();
+try {
+    Geolocation geolocation = ipGeolocationAPI.getGeolocation(geolocationParams);
+
+    System.out.println("IP: " + geolocation.getIP());
+    System.out.println("City: " + geolocation.getCity());
+    System.out.println("UserAgent OS: " + geolocation.getUserAgent().getOperatingSystem().getName());
+    System.out.println("UserAgent Browser:" + geolocation.getUserAgent().getName());
+    System.out.println("UserAgent Device: " + geolocation.getUserAgent().getDevice().getName());
+
+} catch (IPGeolocationError e) {
+    // on unsuccessful lookup or invalid input IPGeolocationError is thrown
+    System.err.println("HTTP status: " + e.getStatus() + " Error: " + e.getMessage());
+}
+```
+
 
 ** IPGeolocation provides geolocation information in the following languages:
 
