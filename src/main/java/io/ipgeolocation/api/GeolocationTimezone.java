@@ -11,6 +11,7 @@ public class GeolocationTimezone {
   private final BigDecimal currentTimeUnix;
   private final boolean dst;
   private final int dstSavings;
+  private final int offsetWithDst;
   private final JSONObject json;
 
   GeolocationTimezone(JSONObject json) {
@@ -28,6 +29,7 @@ public class GeolocationTimezone {
     this.currentTimeUnix = json.getBigDecimal("current_time_unix");
     this.dst = json.getBoolean("is_dst");
     this.dstSavings = json.getInt("dst_savings");
+    this.offsetWithDst = json.getInt("offset_with_dst");
     this.json = json;
   }
 
@@ -53,6 +55,10 @@ public class GeolocationTimezone {
 
   public int getDstSavings() {
     return dstSavings;
+  }
+
+  public int getOffsetWithDst() {
+    return offsetWithDst;
   }
 
   @Override
