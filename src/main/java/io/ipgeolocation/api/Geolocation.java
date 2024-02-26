@@ -13,6 +13,7 @@ public class Geolocation {
   private final String countryCode2;
   private final String countryCode3;
   private final String countryName;
+  private final String countryNameOfficial;
   private final String countryCapital;
   private final String stateProvince;
   private final String stateCode;
@@ -54,6 +55,7 @@ public class Geolocation {
     this.countryCode2 = json.optString("country_code2");
     this.countryCode3 = json.optString("country_code3");
     this.countryName = json.optString("country_name");
+    this.countryNameOfficial = json.optString("country_name_official");
     this.countryCapital = json.optString("country_capital");
     this.stateProvince = json.optString("state_prov");
     this.stateCode = json.optString("state_code");
@@ -122,6 +124,10 @@ public class Geolocation {
 
   public String getCountryName() {
     return countryName;
+  }
+
+  public String getCountryNameOfficial() {
+    return countryNameOfficial;
   }
 
   public String getCountryCapital() {
