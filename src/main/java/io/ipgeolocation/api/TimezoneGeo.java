@@ -12,6 +12,7 @@ public class TimezoneGeo {
   private final String district;
   private final String city;
   private final String locality;
+  private final String location;
   private final String zipCode;
   private final BigDecimal latitude;
   private final BigDecimal longitude;
@@ -33,6 +34,7 @@ public class TimezoneGeo {
     this.district = json.optString("district");
     this.city = json.getString("city");
     this.locality = json.optString("locality");
+    this.location = json.optString("location");
     this.zipCode = json.optString("zipcode");
     this.latitude = json.getBigDecimal("latitude");
     this.longitude = json.getBigDecimal("longitude");
@@ -65,6 +67,10 @@ public class TimezoneGeo {
 
   public String getLocality() {
     return locality;
+  }
+
+  public String getLocation() {
+    return location;
   }
 
   public String getZipCode() {
