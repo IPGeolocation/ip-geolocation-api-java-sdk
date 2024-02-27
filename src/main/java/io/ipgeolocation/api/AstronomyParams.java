@@ -118,7 +118,7 @@ public class AstronomyParams {
         }
     }
     // Method to validate date format
-    public static boolean isValidDateFormat(String date) {
+    private static boolean isValidDateFormat(String date) {
         String regex = "\\d{4}-\\d{2}-\\d{2}";
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(date);
