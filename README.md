@@ -581,3 +581,66 @@ IP Geolocation API Java SDK has the following classes that you can use to fully 
 | getType()         | Returns user-agent's operating system type.          | String      |
 | getVersion()      | Returns user-agent's operating system version.       | String      |
 | getVersionMajor() | Returns user-agent's operating system version major. | String      |
+
+### Class: io.ipgeolocation.api.AstronomyParams
+
+| Method            | Description                                                        | Return Type                   |
+|:------------------|:-------------------------------------------------------------------|:------------------------------|
+| getLocation()     | Returns location parameter value to get astronomy information.     | String                        |
+| getLatitude()     | Returns latitude parameter value to get astronomy information.     | BigDecimal                    |
+| getLongitude()    | Returns longitude parameter value to get astronomy information.    | BigDecimal                    |
+| getIpAddress()    | Returns IP address parameter value to get astronomy information.   | String                        |
+| getDate()         | Returns date parameter value to get astronomy information.         | String                        |
+| getLang()         | Returns language set to get the astronomy information.             | String                        |
+| builder()         | Returns an instance of AstronomyParamsBuilder class.               | static AstronomyParamsBuilder |
+
+### Class: io.ipgeolocation.api.AstronomyParams.AstronomyParamsBuilder
+| Method            | Description                                                               | Return Type              |
+|:------------------|:--------------------------------------------------------------------------|:-------------------------|
+| withLocation()    | Sets location to query astronomy information.                             | AstronomyParamsBuilder   |
+| withCoordinates() | Sets latitude and longitude of a location to query astronomy information. | AstronomyParamsBuilder   |
+| withIPAddress()   | Sets IP address of which to query astronomy information.                  | AstronomyParamsBuilder   | 
+| withDate()        | Sets date of which to query astronomy information.                        | AstronomyParamsBuilder   |
+| withLang()        | Sets language in which to query information.                              | AstronomyParamsBuilder   |
+| build()           | Returns an instance of AstronomyParams with the above specified value(s). | AstronomyParamsBuilder   |
+
+### Class: io.ipgeolocation.api.Astronomy
+| Method                    | Description                                                                              | Return Type       |
+|:--------------------------|:-----------------------------------------------------------------------------------------|:------------------|
+| getDate()                 | Returns the date of which the information is queried in "yyyy-MM-dd" format.             | String            |
+| getCurrentTime()          | Returns the current time in the format "HH:mm:ss".                                       | String            |
+| getSunrise()              | Returns the time at which sun rises in format "HH:mm".                                   | String            |
+| getSunset()               | Returns the time at which sun sets in format "HH:mm".                                    | String            |
+| getSunStatus()            | Returns the status of sunrise and sunset as "-", if these values are not available.      | String            |
+| getSolarNoon()            | Returns the solar noon time in the format "HH:mm".                                       | String            |
+| getDayLength()            | Returns the day length in the format "HH:mm".                                            | String            |
+| getSunAltitude()          | Returns the altitude of the sun in degrees.                                              | BigDecimal        |
+| getSunDistance()          | Returns the distance from the sun in km.                                                 | BidDecimal        |
+| getSunAzimuth()           | Returns the azimuth of the sun in degrees.                                               | BigDecimal        |
+| getMoonrise()             | Returns the moon rise time in the format "HH:mm".                                        | BigDecimal        |
+| getMoonset()              | Returns the moon set time in the format "HH:mm".                                         | BigDecimal        |
+| getMoonStatus()           | Returns the status of moon rise and moon set as "-", if these values are not available.  | BigDecimal        |
+| getMoonAltitude()         | Returns the altitude of the moon in degrees.                                             | BigDecimal        |
+| getMoonDistance()         | Returns the distance from the moon in km.                                                | BigDecimal        |
+| getMoonAzimuth()          | Returns the azimuth of the moon in degrees.                                              | BigDecimal        |
+| getMoonParallacticAngle() | Returns the Moon Parallactic angle of the moon in degrees.                               | BigDecimal        |
+| getLocation()             | Returns the instance of the AstronomyLocation related to astronomy information.          | AstronomyLocation |
+| toString()                | Returns the fetched JSON from the API in formatted way.                                  | String            |
+
+### Class: io.ipgeolocation.api.AstronomyLocation
+| Method                    | Description                                                                               | Return Type |
+|:--------------------------|:------------------------------------------------------------------------------------------|:------------|
+| getLocation()             | Returns the input location i.e., street address.                                          | String      |
+| getLatitude()             | Returns the latitude value for which the astronomy information was queried.               | BigDecimal  |
+| getLongitude()            | Returns the longitude value for which the astronomy information was queried.              | BigDecimal  |
+| getZipcode()              | Returns the zip code related to the queried astronomy information.                        | String      |
+| getCountryCode2()         | Returns the two letter country code for queried astronomy information. e.g. 'PK'.         | String      |
+| getCountryCode3()         | Returns the three letter country code for the queried astronomy information. e.g., 'PAK'. | String      |
+| getCountryName()          | Returns the general country name of the queried astronomy information.                    | String      |
+| getCountryNameOfficial()  | Returns the official country name of the queried astronomy information.                   | String      |
+| getStateProv()            | Returns the State/Province of the queried astronomy information.                          | String      |
+| getStateCode()            | Returns the state code of the queried astronomy information. e.g., 'PK-PB'                | String      |
+| getDistrict()             | Returns the district of the queried astronomy information.                                | String      |
+| getLocality()             | Returns the locality of the queried astronomy information.                                | String      |
+| getCity()                 | Returns the city of the queried astronomy information.                                    | String      |
+| toString()                | Returns the fetched JSON from the API in the formatted way.                               | String      |
