@@ -349,7 +349,88 @@ try {
     System.err.println("HTTP status: " + e.getStatus() + " Error: " + e.getMessage());
 }
 ```
+### Astronomy API
+```java
+// Query astronomy information for location (city, country, etc.)
+AstronomyParams astronomyParams =
+        AstronomyParams.builder()
+                .withLocation("Amsterdam, Netherlands")
+                .build();
 
+try {
+    Astronomy astronomy = ipGeolocationAPI.getAstronomy(astronomyParams);
+
+    System.out.println("City: " + astronomy.getLocation().getCity());
+    System.out.println("Country: " + astronomy.getLocation().getCountryName());
+    System.out.println("Locality: " + astronomy.getLocation().getLocality());
+
+    System.out.println("Sun Distance: " + astronomy.getSunDistance());
+    System.out.println("Sun Altitude: " + astronomy.getSunAltitude());
+    System.out.println("Day length: " + astronomy.getDayLength());
+} catch (IPGeolocationError e) {
+    // on unsuccessful lookup or invalid input IPGeolocationError is thrown
+    System.err.println("HTTP status: " + e.getStatus() + " Error: " + e.getMessage());
+}
+```
+```java
+// Query astronomy information for given geo coordinates (latitude/longitude)
+AstronomyParams astronomyParams = 
+        AstronomyParams.builder()
+                .withCoordinates(BigDecimal.valueOf(51.507277), BigDecimal.valueOf(-0.1290644))
+                .withDate("2024-02-29")
+                .build();
+
+try {
+    Astronomy astronomy = ipGeolocationAPI.getAstronomy(astronomyParams);
+
+    System.out.println("Lat/Lon: " + astronomy.getLocation().getLatitude() + "/" + astronomy.getLocation().getLongitude());
+
+    System.out.println("Date: " + astronomy.getDate());
+    System.out.println("Moonset: " + astronomy.getMoonset());
+    System.out.println("Sun Azimuth: " + astronomy.getSunAzimuth());
+} catch (IPGeolocationError e) {
+    // on unsuccessful lookup or invalid input IPGeolocationError is thrown
+    System.err.println("HTTP status: " + e.getStatus() + " Error: " + e.getMessage());
+}
+```
+```java
+// Query astronomy information for machine IP
+try {
+    Astronomy astronomy = ipGeolocationAPI.getAstronomy();
+
+    System.out.println("Zipcode: " + astronomy.getLocation().getCity());
+    System.out.println("State code: " + astronomy.getLocation().getStateCode());
+    System.out.println("City: " + astronomy.getLocation().getCity());
+
+    System.out.println("Sunrise: " + astronomy.getSunrise());
+    System.out.println("Sunset: " + astronomy.getSunset());
+    System.out.println("Moonrise: " + astronomy.getMoonrise());
+} catch (IPGeolocationError e) {
+    // on unsuccessful lookup or invalid input IPGeolocationError is thrown
+    System.err.println("HTTP status: " + e.getStatus() + " Error: " + e.getMessage());
+}
+```
+```java
+// Query astronomy information for specific IP in Chinese Language
+AstronomyParams astronomyParams = AstronomyParams.builder()
+        .withIPAddress("1.1.1.1")
+        .withLang("cn")
+        .build();
+
+try {
+    Astronomy astronomy = ipGeolocationAPI.getAstronomy(astronomyParams);
+
+    System.out.println("Zipcode: " + astronomy.getLocation().getCity());
+    System.out.println("Country Name: " + astronomy.getLocation().getCountryName());
+
+    System.out.println("Sun distance: " + astronomy.getSunDistance());
+    System.out.println("Moonrise: " + astronomy.getMoonrise());
+    System.out.println("Moon Parallactic Angle: " + astronomy.getMoonParallacticAngle());
+} catch (IPGeolocationError e) {
+    // on unsuccessful lookup or invalid input IPGeolocationError is thrown
+    System.err.println("HTTP status: " + e.getStatus() + " Error: " + e.getMessage());
+}
+```
 
 ** IPGeolocation provides geolocation information in the following languages:
 
