@@ -161,6 +161,28 @@ public class IPGeolocationAPI {
     return userAgents;
   }
 
+  public Astronomy getAstronomy() {
+    return getAstronomy(null);
+  }
+
+  public Astronomy getAstronomy(AstronomyParams params) {
+    final JSONObject apiResponse =
+            (JSONObject)
+                    callAPIEndpoint("astronomy",
+                            buildAstronomyUrlParams(params),
+                            "GET",
+                            null,
+                            false);
+    final Astronomy astronomy;
+
+    try {
+      astronomy = new Astronomy(apiResponse);
+    } catch (IllegalArgumentException e) {
+      throw new IPGeolocationError(e);
+    }
+    return astronomy;
+  }
+
   private String buildGeolocationUrlParams(final GeolocationParams params) {
     final StringBuilder urlParams = new StringBuilder();
 
@@ -256,6 +278,43 @@ public class IPGeolocationAPI {
       }
     }
 
+    return urlParams.toString();
+  }
+
+  private String buildAstronomyUrlParams(final AstronomyParams params) {
+    final StringBuilder urlParams = new StringBuilder();
+
+    urlParams.append("apiKey=");
+    urlParams.append(apiKey);
+
+    if (!Objects.isNull(params)) {
+      if (!Strings.isNullOrEmpty(params.getIpAddress())) {
+        urlParams.append("&ip=");
+        urlParams.append(params.getIpAddress());
+      }
+
+      if (!Strings.isNullOrEmpty(params.getLocation())) {
+        urlParams.append("&location=");
+        urlParams.append(params.getLocation());
+      }
+
+      if (!Objects.isNull(params.getLatitude()) && !Objects.isNull(params.getLongitude())) {
+        urlParams.append("&lat=");
+        urlParams.append(params.getLatitude());
+        urlParams.append("&long=");
+        urlParams.append(params.getLongitude());
+      }
+
+      if (!Strings.isNullOrEmpty(params.getLang())) {
+        urlParams.append("&lang=");
+        urlParams.append(params.getLang());
+      }
+
+      if (!Strings.isNullOrEmpty(params.getDate())) {
+        urlParams.append("&date=");
+        urlParams.append(params.getDate());
+      }
+    }
     return urlParams.toString();
   }
 
