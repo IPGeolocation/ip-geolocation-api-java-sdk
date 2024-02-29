@@ -50,7 +50,7 @@ public class GeolocationParams {
    * @param includeSecurity             Whether to include security information in the response.
    * @param includeUserAgentDetail      Whether to include user agent detail in the response.
    * */
-  public GeolocationParams(
+  private GeolocationParams(
       String ipAddress,
       String lang,
       String fields,
