@@ -431,6 +431,66 @@ try {
     System.err.println("HTTP status: " + e.getStatus() + " Error: " + e.getMessage());
 }
 ```
+### Time Conversion API
+```java
+// Convert time using timezone ID with the provided time
+TimezoneConvertParams timezoneConvertParams =
+        TimezoneConvertParams.builder()
+                .withTimeZone("America/New_York", "Asia/Karachi")
+                .withDateTime("2024-02-29 16:40")
+                .build();
+
+try {
+    TimezoneConvert tzConverted = ipGeolocationAPI.convertTimeZone(timezoneConvertParams);
+
+    System.out.println("Original time: " + tzConverted.getOriginalTime());
+    System.out.println("Converted time: " + tzConverted.getConvertedTime());
+    System.out.println("Difference in hours: " + tzConverted.getDiffHour());
+}catch (IPGeolocationError e) {
+    // on unsuccessful lookup or invalid input IPGeolocationError is thrown
+    System.err.println("HTTP status: " + e.getStatus() + " Error: " + e.getMessage());
+}
+```
+```java
+// Convert time using locations with current time
+TimezoneConvertParams timezoneConvertParams =
+        TimezoneConvertParams.builder()
+                .withLocation("Lahore, Pakistan", "London, United Kingdom")
+                .build();
+
+try {
+    TimezoneConvert tzConverted = ipGeolocationAPI.convertTimeZone(timezoneConvertParams);
+
+    System.out.println("Original time: " + tzConverted.getOriginalTime());
+    System.out.println("Converted time: " + tzConverted.getConvertedTime());
+    System.out.println("Difference in minutes: " + tzConverted.getDiffMin());
+}catch (IPGeolocationError e) {
+    // on unsuccessful lookup or invalid input IPGeolocationError is thrown
+    System.err.println("HTTP status: " + e.getStatus() + " Error: " + e.getMessage());
+}
+```
+```java
+// Convert time using Geo Coordinates of locations with the provided time
+TimezoneConvertParams timezoneConvertParams =
+        TimezoneConvertParams.builder()
+                .withCoordinates(
+                        BigDecimal.valueOf(31.522165), BigDecimal.valueOf(74.358422),
+                        BigDecimal.valueOf(38.907084), BigDecimal.valueOf(-77.03449))
+                .withDateTime("2024-02-29 16:40:40")
+                .build();
+
+try {
+    TimezoneConvert tzConverted = ipGeolocationAPI.convertTimeZone(timezoneConvertParams);
+
+    System.out.println("Original time: " + tzConverted.getOriginalTime());
+    System.out.println("Converted time: " + tzConverted.getConvertedTime());
+    System.out.println("Difference in hours: " + tzConverted.getDiffHour());
+}catch (IPGeolocationError e) {
+    // on unsuccessful lookup or invalid input IPGeolocationError is thrown
+    System.err.println("HTTP status: " + e.getStatus() + " Error: " + e.getMessage());
+}
+```
+
 
 ** IPGeolocation provides geolocation information in the following languages:
 
