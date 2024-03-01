@@ -194,6 +194,37 @@ public class IPGeolocationAPI {
   }
 
   /**
+   * Converts a time from one timezone to another using the IP Geolocation API.
+   *
+   * @param params The parameters for timezone conversion, including the source and target timezones,
+   *               as well as the time to convert.
+   * @return A {@code TimezoneConvert} object representing the converted time.
+   * @throws IPGeolocationError If an error occurs during the timezone conversion process,
+   *                            such as an invalid API response or parameters.
+   * @see TimezoneConvertParams
+   * @see TimezoneConvert
+   */
+  public TimezoneConvert convertTimeZone(TimezoneConvertParams params) {
+    final JSONObject apiResponse =
+        (JSONObject)
+            callAPIEndpoint(
+                "timezone/convert",
+                buildTimezoneConvertUrlParams(params),
+                "GET",
+                null,
+                false);
+    final TimezoneConvert timezoneConvert;
+
+    try {
+      timezoneConvert = new TimezoneConvert(apiResponse);
+    } catch (IllegalArgumentException e) {
+      throw new IPGeolocationError(e);
+    }
+
+    return timezoneConvert;
+  }
+
+  /**
    * Retrieves user-agent information based on the provided user-agent string.
    *
    * @param uaString The user-agent string for which information will be retrieved.
@@ -392,6 +423,51 @@ public class IPGeolocationAPI {
       if (!Strings.isNullOrEmpty(params.getLocation())) {
         urlParams.append("&location=");
         urlParams.append(params.getLocation());
+      }
+    }
+
+    return urlParams.toString();
+  }
+
+  private String buildTimezoneConvertUrlParams(final TimezoneConvertParams params) {
+    final StringBuilder urlParams = new StringBuilder();
+
+    urlParams.append("apiKey=");
+    urlParams.append(apiKey);
+
+    if (!Objects.isNull(params)) {
+      if ((!Strings.isNullOrEmpty(params.getTimezoneFrom())) && (!Strings.isNullOrEmpty(params.getTimezoneTo()))) {
+        urlParams.append("&tz_from=");
+        urlParams.append(params.getTimezoneFrom());
+
+        urlParams.append("&tz_to=");
+        urlParams.append(params.getTimezoneTo());
+      }
+
+      if ((!Objects.isNull(params.getLatitudeFrom()) && !Objects.isNull(params.getLongitudeFrom()))
+              && ((!Objects.isNull(params.getLatitudeTo()) && !Objects.isNull(params.getLongitudeTo())))) {
+        urlParams.append("&lat_from=");
+        urlParams.append(params.getLatitudeFrom());
+        urlParams.append("&long_from=");
+        urlParams.append(params.getLongitudeFrom());
+
+        urlParams.append("&lat_to=");
+        urlParams.append(params.getLatitudeTo());
+        urlParams.append("&long_to=");
+        urlParams.append(params.getLongitudeTo());
+      }
+
+      if ((!Strings.isNullOrEmpty(params.getLocationFrom())) && (!Strings.isNullOrEmpty(params.getLocationTo()))) {
+        urlParams.append("&location_from=");
+        urlParams.append(params.getLocationFrom());
+
+        urlParams.append("&location_to=");
+        urlParams.append(params.getLocationTo());
+      }
+
+      if (!Strings.isNullOrEmpty(params.getTime())) {
+        urlParams.append("&time=");
+        urlParams.append(params.getTime());
       }
     }
 
