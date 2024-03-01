@@ -3,8 +3,6 @@ package io.ipgeolocation.api;
 import io.ipgeolocation.api.exceptions.IPGeolocationError;
 
 import java.math.BigDecimal;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * The {@code AstronomyParams} class represents parameters used for querying Astronomy
@@ -204,7 +202,7 @@ public class AstronomyParams {
          * @throws IPGeolocationError if the date format is invalid.
          */
         public AstronomyParamsBuilder withDate(String date) {
-            if (Strings.isNullOrEmpty(date) || !isValidDateFormat(date)) {
+            if (Strings.isNullOrEmpty(date) || !Strings.isValidDateFormatForAstronomy(date)) {
                 throw new IPGeolocationError("'date' must be in YYYY-MM-DD format");
             }
             this.date = date;
@@ -231,13 +229,4 @@ public class AstronomyParams {
             return new AstronomyParams(location, latitude, longitude, ipAddress, date, lang);
         }
     }
-    /** Method to validate date format as "YYYY-MM-DD".
-     * */
-    private static boolean isValidDateFormat(String date) {
-        String regex = "\\d{4}-\\d{2}-\\d{2}";
-        Pattern pattern = Pattern.compile(regex);
-        Matcher matcher = pattern.matcher(date);
-        return matcher.matches();
-    }
-
 }
