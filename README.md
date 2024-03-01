@@ -453,17 +453,21 @@ IP Geolocation API Java SDK has the following classes that you can use to fully 
 
 ### Class: io.ipgeolocation.api.IPGeolocationAPI
 
-| Method                                                          | Description                                                                                                                                     | Return Type       |
-|:----------------------------------------------------------------|:------------------------------------------------------------------------------------------------------------------------------------------------|:------------------|
-| IPGeolocationAPI(String apiKey) throws IllegalArgumentException | Constructs the IPGeolocationAPI object. It takes a valid apiKey as a parameter and throws IllegalArgumentException if apiKey is empty or null.  |                   |
-| getApiKey()                                                     | Return the API key that you set to query the IPGeolocation API.                                                                                 | String            |
-| getGeolocation()                                                | Query Geolocation API.                                                                                                                          | Geolocation       |
-| getGeolocation(GeolocationParams params)                        | Query Geolocation API based on the parameters passed.                                                                                           | Geolocation       |
-| getBulkGeolocation(String[] ips, GeolocationParams params)      | Query Geolocation API to lookup multiple IP addresses (max. 50).                                                                                | List<Geolocation> |
-| getTimezone()                                                   | Query Timezone API based on calling machine's IP address.                                                                                       | Timezone          |
-| getTimezone(TimezoneParams params)                              | Query Timezone API based on the parameters passed.                                                                                              | Timezone          |
-| getUserAgent(String uaString)                                   | Query UserAgent API.                                                                                                                            | UserAgent         |
-| getBulkUserAgent(String[] uaStrings)                            | Query UserAgent API to lookup multiple user-agent strings (max. 50).                                                                            | List<UserAgent>   |
+| Method                                                          | Description                                                                                                                                    | Return Type       |
+|:----------------------------------------------------------------|:-----------------------------------------------------------------------------------------------------------------------------------------------|:------------------|
+| IPGeolocationAPI(String apiKey) throws IllegalArgumentException | Constructs the IPGeolocationAPI object. It takes a valid apiKey as a parameter and throws IllegalArgumentException if apiKey is empty or null. |                   |
+| getApiKey()                                                     | Return the API key that you set to query the IPGeolocation API.                                                                                | String            |
+| getGeolocation()                                                | Query Geolocation API.                                                                                                                         | Geolocation       |
+| getGeolocation(GeolocationParams params)                        | Query Geolocation API based on the parameters passed.                                                                                          | Geolocation       |
+| getBulkGeolocation(String[] ips)                                | Query Geolocation API to lookup multiple IP addresses (max. 50).                                                                               | List<Geolocation> |
+| getBulkGeolocation(String[] ips, GeolocationParams params)      | Query Geolocation API to lookup multiple IP addresses (max. 50) based upon the parameters passed.                                              | List<Geolocation> |
+| getTimezone()                                                   | Query Timezone API based on calling machine's IP address.                                                                                      | Timezone          |
+| getTimezone(TimezoneParams params)                              | Query Timezone API based on the parameters passed.                                                                                             | Timezone          |
+| convertTimeZone(TimezoneConvertParams params)                   | Convert between different timezones.                                                                                                           | TimezoneConvert   |
+| getUserAgent(String uaString)                                   | Query UserAgent API.                                                                                                                           | UserAgent         |
+| getBulkUserAgent(String[] uaStrings)                            | Query UserAgent API to lookup multiple user-agent strings (max. 50).                                                                           | List<UserAgent>   |
+| getAstronomy()                                                  | Query Astronomy API with default the parameters.                                                                                               | Astronomy         |
+| getAstronomy(AstronomyParams params)                            | Query Astronomy API based upon the parameters passed.                                                                                          | Astronomy         |
 
 ### Class: io.ipgeolocation.api.GeolocationParams
 
@@ -524,7 +528,7 @@ IP Geolocation API Java SDK has the following classes that you can use to fully 
 | getConnectionType()      | Returns connection type of the IP address.                   | String              |
 | getOrganization()        | Returns organization of the IP address.                      | String              |
 | getAsn()                 | Returns AS number of the IP address.                         | String              |
-| getGeoNameId()           | Returns geoname ID from geonames.org database.               | String              |
+| getGeoNameId()           | Returns Geo Name ID from geonames.org database.              | String              |
 | getCurrency()            | Returns currency information of the country.                 | GeolocationCurrency |
 | getTimezone()            | Returns time zone information of the country.                | GeolocationTimezone |
 | getGeolocationSecurity() | Returns security details of the ip address.                  | GeolocationSecurity |
@@ -540,14 +544,15 @@ IP Geolocation API Java SDK has the following classes that you can use to fully 
 
 ### Class: io.ipgeolocation.api.GeolocationTimezone
 
-| Method               | Description                                                                    | Return Type |
-|:---------------------|:-------------------------------------------------------------------------------|:------------|
-| getName()            | Returns standard time zone ID like "America/New_York".                         | String      |
-| getOffset()          | Returns time zone offset from UTC.                                             | int         |
-| getCurrentTime()     | Returns current date-time string in the format "yyyy-MM-dd HH:mm:ss.SSSZ"      | String      |
-| getCurrentTimeUnix() | Returns current date-time as a unix time                                       | BigDecimal  |
-| isDST()              | Returns is the country observing daylight saving time.                         | Boolean     |
-| getDSTSavings()      | Returns daylight savings time (in hours).                                      | int         |
+| Method               | Description                                                               | Return Type |
+|:---------------------|:--------------------------------------------------------------------------|:------------|
+| getName()            | Returns standard time zone ID like "America/New_York".                    | String      |
+| getOffset()          | Returns time zone offset from UTC.                                        | int         |
+| getCurrentTime()     | Returns current date-time string in the format "yyyy-MM-dd HH:mm:ss.SSSZ" | String      |
+| getCurrentTimeUnix() | Returns current date-time as a unix time                                  | BigDecimal  |
+| isDST()              | Returns is the country observing daylight saving time.                    | Boolean     |
+| getDSTSavings()      | Returns daylight savings time (in hours).                                 | int         |
+| getOffsetWithDst()   | Returns daylight savings time offset with UTC (in hours).                 | int         |
 
 ### Class: io.ipgeolocation.api.GeolocationSecurity
 
@@ -579,8 +584,8 @@ IP Geolocation API Java SDK has the following classes that you can use to fully 
 
 | Method                                                     | Description                                                               | Return Type           |
 |:-----------------------------------------------------------|:--------------------------------------------------------------------------|:----------------------|
-| withTimezone(String timezone)                              | Sets time zone ID to query time zone information.                         | TimezoneParamsBuilder |
-| withIPAddress(String ip)                                   | Sets IP address to query time zone information.                           | TimezoneParamsBuilder |
+| withTimezone(String timeZone)                              | Sets time zone ID to query time zone information.                         | TimezoneParamsBuilder |
+| withIPAddress(String ipAddress)                            | Sets IP address to query time zone information.                           | TimezoneParamsBuilder |
 | withCoordinates(BigDecimal latitude, BigDecimal longitude) | Sets latitude and longitude of a location to query time zone information. | TimezoneParamsBuilder |
 | withLocation(String location)                              | Set location parameter to get timezone details.                           | TimezoneParamsBuilder |
 | withLang(String lang)                                      | Set language parameter to lookup geolocation. Default is 'en'.            | TimezoneParamsBuilder |
@@ -607,7 +612,7 @@ IP Geolocation API Java SDK has the following classes that you can use to fully 
 | getYearAbbr()              | Returns 2-letters year abbreviation like "18".                                         | String      |
 | isDST()                    | Returns is the country observing Daylight Saving time.                                 | boolean     |
 | getDSTSavings()            | Returns daylight savings time (in hours).                                              | int         |
-| getTimezoneGeo()           | Returns geolocation of timezone if you lookup timezone information from an IP address. | TimezoneGeo |
+| getGeo()                   | Returns geolocation of timezone if you lookup timezone information from an IP address. | TimezoneGeo |
 
 ### Class: io.ipgeolocation.api.TimezoneGeo
 
@@ -676,14 +681,14 @@ IP Geolocation API Java SDK has the following classes that you can use to fully 
 | builder()         | Returns an instance of AstronomyParamsBuilder class.               | static AstronomyParamsBuilder |
 
 ### Class: io.ipgeolocation.api.AstronomyParams.AstronomyParamsBuilder
-| Method            | Description                                                               | Return Type              |
-|:------------------|:--------------------------------------------------------------------------|:-------------------------|
-| withLocation()    | Sets location to query astronomy information.                             | AstronomyParamsBuilder   |
-| withCoordinates() | Sets latitude and longitude of a location to query astronomy information. | AstronomyParamsBuilder   |
-| withIPAddress()   | Sets IP address of which to query astronomy information.                  | AstronomyParamsBuilder   | 
-| withDate()        | Sets date of which to query astronomy information.                        | AstronomyParamsBuilder   |
-| withLang()        | Sets language in which to query information.                              | AstronomyParamsBuilder   |
-| build()           | Returns an instance of AstronomyParams with the above specified value(s). | AstronomyParamsBuilder   |
+| Method                                                     | Description                                                               | Return Type            |
+|:-----------------------------------------------------------|:--------------------------------------------------------------------------|:-----------------------|
+| withLocation(String location)                              | Sets location to query astronomy information.                             | AstronomyParamsBuilder |
+| withCoordinates(BigDecimal latitude, BigDecimal longitude) | Sets latitude and longitude of a location to query astronomy information. | AstronomyParamsBuilder |
+| withIPAddress(String ipAddress)                            | Sets IP address of which to query astronomy information.                  | AstronomyParamsBuilder | 
+| withDate(String date)                                      | Sets date of which to query astronomy information.                        | AstronomyParamsBuilder |
+| withLang(String lang)                                      | Sets language in which to query information.                              | AstronomyParamsBuilder |
+| build()                                                    | Returns an instance of AstronomyParams with the above specified value(s). | AstronomyParams        |
 
 ### Class: io.ipgeolocation.api.Astronomy
 | Method                    | Description                                                                              | Return Type       |
@@ -725,3 +730,26 @@ IP Geolocation API Java SDK has the following classes that you can use to fully 
 | getLocality()             | Returns the locality of the queried astronomy information.                                | String      |
 | getCity()                 | Returns the city of the queried astronomy information.                                    | String      |
 | toString()                | Returns the fetched JSON from the API in the formatted way.                               | String      |
+
+### Class: io.ipgeolocation.api.TimezoneConvertParams
+| Method             | Description                                                                                                                             | Return Type                  |
+|:-------------------|:----------------------------------------------------------------------------------------------------------------------------------------|:-----------------------------|
+| getTimezoneFrom()  | Returns the source [timezone ID](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones) for which conversion would be performed. | String                       |
+| getTimezoneTo()    | Returns the target timezone ID for which conversion would be performed.                                                                 | String                       |
+| getTime()          | Returns the dateTime which would be used for conversion.                                                                                | String                       |
+| getLatitudeFrom()  | Returns the source latitude for which conversion would be performed.                                                                    | BigDecimal                   |
+| getLongitudeFrom() | Returns the source longitude for which conversion would be performed.                                                                   | BigDecimal                   |
+| getLatitudeTo()    | Returns the target latitude for which conversion would be performed.                                                                    | BigDecimal                   |
+| getLongitudeTo()   | Returns the target longitude for which conversion would be performed.                                                                   | BigDecimal                   |
+| getLocationFrom()  | Returns the source location (i.e., city, country) for which conversion would be performed.                                              | String                       |
+| getLocationTo()    | Returns the target location (i.e., city, country) for which conversion would be performed.                                              | String                       |
+| builder()          | Returns an instance of TimezoneConvertParamsBuilder class to create TimezoneConvertParams object with custom parameters.                | static TimezoneConvertParams |
+
+### Class: io.ipgeolocation.api.TimezoneConvertParams.TimezoneConvertParamsBuilder
+| Method                                                                                        | Description                                                                                                                | Return Type                  |
+|:----------------------------------------------------------------------------------------------|:---------------------------------------------------------------------------------------------------------------------------|:-----------------------------|
+| withTimeZone(String timezoneFrom, String timezoneTo)                                          | Sets source and target [timezone IDs](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones) to perform conversion. | TimezoneConvertParamsBuilder |
+| withDateTime(String dateTime)                                                                 | Sets dateTime which would be used for conversion.                                                                          | TimezoneConvertParamsBuilder |
+| withCoordinates(BigDecimal latFrom, BigDecimal longFrom, BigDecimal latTo, BigDecimal longTo) | Sets the source and target geo coordinates.                                                                                | TimezoneConvertParamsBuilder |
+| withLocation(String locationFrom, String locationTo)                                          | Sets the source and target locations (i.e., city, country).                                                                | TimezoneConvertParamsBuilder |
+| build()                                                                                       | Returns an instance of the TimezoneConvertParams with the above specified value(s).                                        | TimezoneConvertParams        |
