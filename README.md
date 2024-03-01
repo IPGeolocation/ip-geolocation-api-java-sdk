@@ -26,7 +26,7 @@ You need a valid 'IPGeolocation API key' to use this SDK. [Sign up](https://ipge
 free API key if you don’t have one.
 
 **Note:** Complete documentation to use this SDK is also available
-at [IP Geolocation API JAVA SDK Documentation](https://ipgeolocation.io/documentation/ip-geolocation-api-java-sdk-20180807094025)
+at [IP Geolocation API JAVA SDK Documentation](https://ipgeolocation.io/documentation/ip-geolocation-api-java-sdk.html)
 .
 
 ## System Requirements
@@ -90,7 +90,7 @@ Basic Usage
 
 ```java
 // Create IPGeolocationAPI object, passing your valid API key
-IPGeolocationAPI api = new IPGeolocationAPI("YOUR_API_KEY");
+IPGeolocationAPI ipGeolocationAPI = new IPGeolocationAPI("YOUR_API_KEY");
 ```
 
 ### Geolocation Lookup
@@ -107,15 +107,21 @@ GeolocationParams geolocationParams =
 try {
     Geolocation geolocation = ipGeolocationAPI.getGeolocation(geolocationParams);
 
-    System.out.println(geolocation.getCountryName());
-    System.out.println(geolocation.getCurrency().getName());
-    System.out.println(geolocation.getTimezone().getCurrentTime());
-    System.out.println(geolocation.getGeolocationSecurity().getAnonymous());
-    System.out.println(geolocation.getGeolocationSecurity().getKnownAttacker());
-    System.out.println(geolocation.getGeolocationSecurity().getProxy());
-    System.out.println(geolocation.getGeolocationSecurity().getProxyType());
-    System.out.println(geolocation.getGeolocationSecurity().getAnonymous());
-    System.out.println(geolocation.getGeolocationSecurity().getCloudProvider());
+    // Geolocation Info
+    System.out.println("Country: " + geolocation.getCountryName());
+    System.out.println("Currency: " + geolocation.getCurrency().getName());
+    System.out.println("Location time: " + geolocation.getTimezone().getCurrentTime());
+
+    // Security Info
+    System.out.println("Is Anonymous: " + geolocation.getGeolocationSecurity().isAnonymous());
+    System.out.println("Is Known Attacker: " + geolocation.getGeolocationSecurity().isKnownAttacker());
+    System.out.println("Is Proxy: " + geolocation.getGeolocationSecurity().isProxy());
+    System.out.println("Proxy Type: " + geolocation.getGeolocationSecurity().getProxyType());
+    System.out.println("IP Threat Score: " + geolocation.getGeolocationSecurity().getThreatScore());
+    System.out.println("Is Bot: " + geolocation.getGeolocationSecurity().isBot());
+    System.out.println("Is Spam: " + geolocation.getGeolocationSecurity().isSpam());
+    System.out.println("Is Tor: " + geolocation.getGeolocationSecurity().isTor());
+    System.out.println("Is Cloud Provider: " + geolocation.getGeolocationSecurity().isCloudProvider());
 } catch (IPGeolocationError e) {
     // on unsuccessful lookup or invalid input IPGeolocationError is thrown
     System.err.println("HTTP status: " + e.getStatus() + " Error: " + e.getMessage());
@@ -132,8 +138,8 @@ GeolocationParams geolocationParams =
 try {
     Geolocation geolocation = ipGeolocationAPI.getGeolocation(geolocationParams);
 
-    System.out.println(geolocation.getIP());
-    System.out.println(geolocation.getCountryName());
+    System.out.println("IP Address: " + geolocation.getIP());
+    System.out.println("Country: " + geolocation.getCountryName());
 } catch (IPGeolocationError e) {
     // on unsuccessful lookup or invalid input IPGeolocationError is thrown
     System.err.println("HTTP status: " + e.getStatus() + " Error: " + e.getMessage());
@@ -144,9 +150,9 @@ try {
 try {
     Geolocation geolocation = ipGeolocationAPI.getGeolocation();
 
-    System.out.println(geolocation.getIP());
-    System.out.println(geolocation.getCountryCode2());
-    System.out.println(geolocation.getTimezone().getCurrentTime());
+    System.out.println("IP Address: " + geolocation.getIP());
+    System.out.println("Country Code ISO2: " + geolocation.getCountryCode2());
+    System.out.println("Location time: " + geolocation.getTimezone().getCurrentTime());
 } catch (IPGeolocationError e) {
     // on unsuccessful lookup or invalid input IPGeolocationError is thrown
     System.err.println("HTTP status: " + e.getStatus() + " Error: " + e.getMessage());
@@ -159,16 +165,16 @@ try {
 String[] ips = new String[]{"1.1.1.1", "2.2.2.2", "3.3.3.3"};
 GeolocationParams geolocationParams =
         GeolocationParams.builder()
-            .withLand("de")
+            .withLang("de")
             .build();
 
 try {
-    List<Geolocation> geolocations = ipGeolocationAPI.getBulkGeolocation(ips, geoParams);
+    List<Geolocation> geolocations = ipGeolocationAPI.getBulkGeolocation(ips, geolocationParams);
 
-    System.out.println(geolocations.size());
-    System.out.println(geolocations.get(0).getCountryName());
-    System.out.println(geolocations.get(1).getLanguages());
-    System.out.println(geolocations.get(2).getTimezone().getCurrentTime());
+    System.out.println("No. of Requests: " + geolocations.size());
+    System.out.println("1st IP's Country: " + geolocations.get(0).getCountryName());
+    System.out.println("2nd IP's Language: " + geolocations.get(1).getLanguages());
+    System.out.println("3rd IP's location time: " + geolocations.get(2).getTimezone().getCurrentTime());
 } catch (IPGeolocationError e) {
     // on unsuccessful lookup or invalid input IPGeolocationError is thrown
     System.err.println("HTTP status: " + e.getStatus() + " Error: " + e.getMessage());
@@ -183,12 +189,12 @@ GeolocationParams geolocationParams =
             .build();
 
 try {
-    List<Geolocation> geolocations = ipGeolocationAPI.getBulkGeolocation(ips, geoParams);
+    List<Geolocation> geolocations = ipGeolocationAPI.getBulkGeolocation(ips, geolocationParams);
 
-    System.out.println(geolocations.size());
-    System.out.println(geolocations.get(0).getCountryName());
-    System.out.println(geolocations.get(1).getLanguages());
-    System.out.println(geolocations.get(2).getTimezone().getCurrentTime());
+    System.out.println("No. of Requests: " + geolocations.size());
+    System.out.println("1st IP's Country: " + geolocations.get(0).getCountryName());
+    System.out.println("2nd IP's City: "+geolocations.get(1).getCity());
+    System.out.println("3rd IP's City Zipcode: " + geolocations.get(2).getZipCode());
 } catch (IPGeolocationError e) {
     // on unsuccessful lookup or invalid input IPGeolocationError is thrown
     System.err.println("HTTP status: " + e.getStatus() + " Error: " + e.getMessage());
@@ -202,10 +208,10 @@ TimezoneParams timezoneParams =
         TimezoneParams.builder().withTimeZone("America/New_York").build();
 
 try {
-    Timezone tz = ipGeolocationAPI.getTimezone(tzParams);
+    Timezone tz = ipGeolocationAPI.getTimezone(timezoneParams);
     
-    System.out.println(tz.getDateTimeWti());
-    System.out.println(tz.getDateTimeTxt());
+    System.out.println("Format 'EEEE, MMMM dd, yyyy HH:mm:ss': " + tz.getDateTimeTxt());
+    System.out.println("Format 'EEE, dd MMM yyyy HH:mm:ss Z': " + tz.getDateTimeWti());
 } catch (IPGeolocationError e) {
     // on unsuccessful lookup or invalid input IPGeolocationError is thrown
     System.err.println("HTTP status: " + e.getStatus() + " Error: " + e.getMessage());
@@ -219,18 +225,18 @@ TimezoneParams timezoneParams =
             .build();
 
 try {
-    Timezone tz = ipGeolocationAPI.getTimezone(tzParams);
+    Timezone tz = ipGeolocationAPI.getTimezone(timezoneParams);
 
-    System.out.println(tz.getTimezone());
-    System.out.println(tz.getDateTimeWti());
-    System.out.println(tz.getDateTimeTxt());
+    System.out.println("Timezone: " + tz.getTimezone());
+    System.out.println("Timezone in Unix: " + tz.getDateTimeUnix());
+    System.out.println("Time in 24 format: " + tz.getTime24());
 } catch (IPGeolocationError e) {
     // on unsuccessful lookup or invalid input IPGeolocationError is thrown
     System.err.println("HTTP status: " + e.getStatus() + " Error: " + e.getMessage());
 }
 ```
 ```java
-// Get time zone information for IP address (1.1.1.1) and geolocation information Japanese**
+// Get time zone information for IP address (1.1.1.1) and geolocation information in Japanese**
 TimezoneParams timezoneParams =
         TimezoneParams.builder()
             .withIPAddress("1.1.1.1")
@@ -238,11 +244,17 @@ TimezoneParams timezoneParams =
             .build();
 
 try {
-    Timezone tz = ipGeolocationAPI.getTimezone(tzParams);
+    Timezone tz = ipGeolocationAPI.getTimezone(timezoneParams);
 
-    System.out.println(tz.getTimezone());
-    System.out.println(tz.getDateTimeWti());
-    System.out.println(tz.getDateTimeTxt());
+    // Timezone Info
+    System.out.println("Timezone: " + tz.getTimezone());
+    System.out.println("Format 'EEEE, MMMM dd, yyyy HH:mm:ss': " + tz.getDateTimeTxt());
+    System.out.println("Format 'yyyy-MM-dd'T'HH:mm:ssZ': " + tz.getDateTimeYmd());
+
+    // Geo Info
+    System.out.println("City: " + tz.getGeo().getCity());
+    System.out.println("State/Province: " + tz.getGeo().getStateProvince());
+    System.out.println("Country: " + tz.getGeo().getCountryName());
 } catch (IPGeolocationError e) {
     // on unsuccessful lookup or invalid input IPGeolocationError is thrown
     System.err.println("HTTP status: " + e.getStatus() + " Error: " + e.getMessage());
@@ -253,14 +265,232 @@ try {
 try {
     Timezone tz = ipGeolocationAPI.getTimezone();
 
-    System.out.println(tz.getTimezone());
-    System.out.println(tz.getDateTimeWti());
-    System.out.println(tz.getDateTimeYmd());
+    // Timezone Info
+    System.out.println("Timezone Offset: " + tz.getTimezoneOffset());
+    System.out.println("Date: " + tz.getDate());
+    System.out.println("Month (No.): " + tz.getMonth());
+
+    // Geo Info
+    System.out.println("City: " + tz.getGeo().getCity());
+    System.out.println("Country Code ISO3: " + tz.getGeo().getCountryCode3());
+    System.out.println("Lat/Lon: " + tz.getGeo().getLatitude() + "/" + tz.getGeo().getLongitude());
 } catch (IPGeolocationError e) {
     // on unsuccessful lookup or invalid input IPGeolocationError is thrown
     System.err.println("HTTP status: " + e.getStatus() + " Error: " + e.getMessage());
 }
 ```
+```java
+// Get time zone information by location (city, country, etc.)
+TimezoneParams timezoneParams = 
+        TimezoneParams.builder().withLocation("Syria, Damascus").build();
+
+try {
+    Timezone tz = ipGeolocationAPI.getTimezone(timezoneParams);
+
+    System.out.println("Format 'EEEE, MMMM dd, yyyy HH:mm:ss': " + tz.getDateTimeTxt());
+    System.out.println("Country: " + tz.getGeo().getCountryName());
+} catch (IPGeolocationError e) {
+    // on unsuccessful lookup or invalid input IPGeolocationError is thrown
+    System.err.println("HTTP status: " + e.getStatus() + " Error: " + e.getMessage());
+}
+```
+
+### UserAgent API
+```java
+// Query/Parse user agent information for Provided the provided string
+try {
+    String uaString = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_2) AppleWebKit/601.3.9 (KHTML, like Gecko) Version/9.0.2 Safari/601.3.9";
+    UserAgent ua = ipGeolocationAPI.getUserAgent(uaString);
+
+    System.out.println("Device name: " + ua.getDevice().getName());
+    System.out.println("OS name: " + ua.getOperatingSystem().getName());
+    System.out.println("OS version: " + ua.getOperatingSystem().getVersion());
+    System.out.println("CPU: " + ua.getDevice().getCpu());
+} catch (IPGeolocationError e) {
+    // on unsuccessful lookup or invalid input IPGeolocationError is thrown
+    System.err.println("HTTP status: " + e.getStatus() + " Error: " + e.getMessage());
+}
+```
+```java
+// Query/Parse user agent information for the provided strings
+String[] uaStrings = new String[]
+        {"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_2) AppleWebKit/601.3.9 (KHTML, like Gecko) Version/9.0.2 Safari/601.3.9",
+                "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/47.0.2526.111 Safari/537.36",
+                "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:40.0) Gecko/20100101 Firefox/40.1"};
+
+try {
+    List<UserAgent> uas = ipGeolocationAPI.getBulkUserAgent(uaStrings);
+
+    System.out.println("No. of Requests: " + uas.size());
+    System.out.println("1st UA's Device name: " + uas.get(0).getDevice().getName());
+    System.out.println("2nd UA's OS name: " + uas.get(1).getOperatingSystem().getName());
+    System.out.println("3rd UA's Browser: " + uas.get(2).getName());
+} catch (IPGeolocationError e) {
+    System.err.println("HTTP status: " + e.getStatus() + " Error: " + e.getMessage());
+}
+```
+```java
+// Query useragent of the machine IP Address along with Geolocation
+GeolocationParams geolocationParams = 
+        GeolocationParams.builder()
+                .includeUserAgentDetail()
+               .build();
+try {
+    Geolocation geolocation = ipGeolocationAPI.getGeolocation(geolocationParams);
+
+    System.out.println("IP: " + geolocation.getIP());
+    System.out.println("City: " + geolocation.getCity());
+    System.out.println("UserAgent OS: " + geolocation.getUserAgent().getOperatingSystem().getName());
+    System.out.println("UserAgent Browser:" + geolocation.getUserAgent().getName());
+    System.out.println("UserAgent Device: " + geolocation.getUserAgent().getDevice().getName());
+
+} catch (IPGeolocationError e) {
+    // on unsuccessful lookup or invalid input IPGeolocationError is thrown
+    System.err.println("HTTP status: " + e.getStatus() + " Error: " + e.getMessage());
+}
+```
+### Astronomy API
+```java
+// Query astronomy information for location (city, country, etc.)
+AstronomyParams astronomyParams =
+        AstronomyParams.builder()
+                .withLocation("Amsterdam, Netherlands")
+                .build();
+
+try {
+    Astronomy astronomy = ipGeolocationAPI.getAstronomy(astronomyParams);
+
+    System.out.println("City: " + astronomy.getLocation().getCity());
+    System.out.println("Country: " + astronomy.getLocation().getCountryName());
+    System.out.println("Locality: " + astronomy.getLocation().getLocality());
+
+    System.out.println("Sun Distance: " + astronomy.getSunDistance());
+    System.out.println("Sun Altitude: " + astronomy.getSunAltitude());
+    System.out.println("Day length: " + astronomy.getDayLength());
+} catch (IPGeolocationError e) {
+    // on unsuccessful lookup or invalid input IPGeolocationError is thrown
+    System.err.println("HTTP status: " + e.getStatus() + " Error: " + e.getMessage());
+}
+```
+```java
+// Query astronomy information for given geo coordinates (latitude/longitude)
+AstronomyParams astronomyParams = 
+        AstronomyParams.builder()
+                .withCoordinates(BigDecimal.valueOf(51.507277), BigDecimal.valueOf(-0.1290644))
+                .withDate("2024-02-29")
+                .build();
+
+try {
+    Astronomy astronomy = ipGeolocationAPI.getAstronomy(astronomyParams);
+
+    System.out.println("Lat/Lon: " + astronomy.getLocation().getLatitude() + "/" + astronomy.getLocation().getLongitude());
+
+    System.out.println("Date: " + astronomy.getDate());
+    System.out.println("Moonset: " + astronomy.getMoonset());
+    System.out.println("Sun Azimuth: " + astronomy.getSunAzimuth());
+} catch (IPGeolocationError e) {
+    // on unsuccessful lookup or invalid input IPGeolocationError is thrown
+    System.err.println("HTTP status: " + e.getStatus() + " Error: " + e.getMessage());
+}
+```
+```java
+// Query astronomy information for machine IP
+try {
+    Astronomy astronomy = ipGeolocationAPI.getAstronomy();
+
+    System.out.println("Zipcode: " + astronomy.getLocation().getCity());
+    System.out.println("State code: " + astronomy.getLocation().getStateCode());
+    System.out.println("City: " + astronomy.getLocation().getCity());
+
+    System.out.println("Sunrise: " + astronomy.getSunrise());
+    System.out.println("Sunset: " + astronomy.getSunset());
+    System.out.println("Moonrise: " + astronomy.getMoonrise());
+} catch (IPGeolocationError e) {
+    // on unsuccessful lookup or invalid input IPGeolocationError is thrown
+    System.err.println("HTTP status: " + e.getStatus() + " Error: " + e.getMessage());
+}
+```
+```java
+// Query astronomy information for specific IP in Chinese Language
+AstronomyParams astronomyParams = AstronomyParams.builder()
+        .withIPAddress("1.1.1.1")
+        .withLang("cn")
+        .build();
+
+try {
+    Astronomy astronomy = ipGeolocationAPI.getAstronomy(astronomyParams);
+
+    System.out.println("Zipcode: " + astronomy.getLocation().getCity());
+    System.out.println("Country Name: " + astronomy.getLocation().getCountryName());
+
+    System.out.println("Sun distance: " + astronomy.getSunDistance());
+    System.out.println("Moonrise: " + astronomy.getMoonrise());
+    System.out.println("Moon Parallactic Angle: " + astronomy.getMoonParallacticAngle());
+} catch (IPGeolocationError e) {
+    // on unsuccessful lookup or invalid input IPGeolocationError is thrown
+    System.err.println("HTTP status: " + e.getStatus() + " Error: " + e.getMessage());
+}
+```
+### Time Conversion API
+```java
+// Convert time using timezone ID with the provided time
+TimezoneConvertParams timezoneConvertParams =
+        TimezoneConvertParams.builder()
+                .withTimeZone("America/New_York", "Asia/Karachi")
+                .withDateTime("2024-02-29 16:40")
+                .build();
+
+try {
+    TimezoneConvert tzConverted = ipGeolocationAPI.convertTimeZone(timezoneConvertParams);
+
+    System.out.println("Original time: " + tzConverted.getOriginalTime());
+    System.out.println("Converted time: " + tzConverted.getConvertedTime());
+    System.out.println("Difference in hours: " + tzConverted.getDiffHour());
+}catch (IPGeolocationError e) {
+    // on unsuccessful lookup or invalid input IPGeolocationError is thrown
+    System.err.println("HTTP status: " + e.getStatus() + " Error: " + e.getMessage());
+}
+```
+```java
+// Convert time using locations with current time
+TimezoneConvertParams timezoneConvertParams =
+        TimezoneConvertParams.builder()
+                .withLocation("Lahore, Pakistan", "London, United Kingdom")
+                .build();
+
+try {
+    TimezoneConvert tzConverted = ipGeolocationAPI.convertTimeZone(timezoneConvertParams);
+
+    System.out.println("Original time: " + tzConverted.getOriginalTime());
+    System.out.println("Converted time: " + tzConverted.getConvertedTime());
+    System.out.println("Difference in minutes: " + tzConverted.getDiffMin());
+}catch (IPGeolocationError e) {
+    // on unsuccessful lookup or invalid input IPGeolocationError is thrown
+    System.err.println("HTTP status: " + e.getStatus() + " Error: " + e.getMessage());
+}
+```
+```java
+// Convert time using Geo Coordinates of locations with the provided time
+TimezoneConvertParams timezoneConvertParams =
+        TimezoneConvertParams.builder()
+                .withCoordinates(
+                        BigDecimal.valueOf(31.522165), BigDecimal.valueOf(74.358422),
+                        BigDecimal.valueOf(38.907084), BigDecimal.valueOf(-77.03449))
+                .withDateTime("2024-02-29 16:40:40")
+                .build();
+
+try {
+    TimezoneConvert tzConverted = ipGeolocationAPI.convertTimeZone(timezoneConvertParams);
+
+    System.out.println("Original time: " + tzConverted.getOriginalTime());
+    System.out.println("Converted time: " + tzConverted.getConvertedTime());
+    System.out.println("Difference in hours: " + tzConverted.getDiffHour());
+}catch (IPGeolocationError e) {
+    // on unsuccessful lookup or invalid input IPGeolocationError is thrown
+    System.err.println("HTTP status: " + e.getStatus() + " Error: " + e.getMessage());
+}
+```
+
 
 ** IPGeolocation provides geolocation information in the following languages:
 
@@ -283,17 +513,21 @@ IP Geolocation API Java SDK has the following classes that you can use to fully 
 
 ### Class: io.ipgeolocation.api.IPGeolocationAPI
 
-| Method                                                          | Description                                                                                                                                     | Return Type       |
-|:----------------------------------------------------------------|:------------------------------------------------------------------------------------------------------------------------------------------------|:------------------|
-| IPGeolocationAPI(String apiKey) throws IllegalArgumentException | Constructs the IPGeolocationAPI object. It takes a valid apiKey as a parameter and throws IllegalArgumentException if apiKey is empty or null.  |                   |
-| getApiKey()                                                     | Return the API key that you set to query the IPGeolocation API.                                                                                 | String            |
-| getGeolocation()                                                | Query Geolocation API.                                                                                                                          | Geolocation       |
-| getGeolocation(GeolocationParams params)                        | Query Geolocation API based on the parameters passed.                                                                                           | Geolocation       |
-| getBulkGeolocation(String[] ips, GeolocationParams params)      | Query Geolocation API to lookup multiple IP addresses (max. 50).                                                                                | List<Geolocation> |
-| getTimezone()                                                   | Query Timezone API based on calling machine's IP address.                                                                                       | Timezone          |
-| getTimezone(TimezoneParams params)                              | Query Timezone API based on the parameters passed.                                                                                              | Timezone          |
-| getUserAgent(String uaString)                                   | Query UserAgent API.                                                                                                                            | UserAgent         |
-| getBulkUserAgent(String[] uaStrings)                            | Query UserAgent API to lookup multiple user-agent strings (max. 50).                                                                            | List<UserAgent>   |
+| Method                                                          | Description                                                                                                                                    | Return Type       |
+|:----------------------------------------------------------------|:-----------------------------------------------------------------------------------------------------------------------------------------------|:------------------|
+| IPGeolocationAPI(String apiKey) throws IllegalArgumentException | Constructs the IPGeolocationAPI object. It takes a valid apiKey as a parameter and throws IllegalArgumentException if apiKey is empty or null. |                   |
+| getApiKey()                                                     | Return the API key that you set to query the IPGeolocation API.                                                                                | String            |
+| getGeolocation()                                                | Query Geolocation API.                                                                                                                         | Geolocation       |
+| getGeolocation(GeolocationParams params)                        | Query Geolocation API based on the parameters passed.                                                                                          | Geolocation       |
+| getBulkGeolocation(String[] ips)                                | Query Geolocation API to lookup multiple IP addresses (max. 50).                                                                               | List<Geolocation> |
+| getBulkGeolocation(String[] ips, GeolocationParams params)      | Query Geolocation API to lookup multiple IP addresses (max. 50) based upon the parameters passed.                                              | List<Geolocation> |
+| getTimezone()                                                   | Query Timezone API based on calling machine's IP address.                                                                                      | Timezone          |
+| getTimezone(TimezoneParams params)                              | Query Timezone API based on the parameters passed.                                                                                             | Timezone          |
+| convertTimeZone(TimezoneConvertParams params)                   | Convert between different timezones.                                                                                                           | TimezoneConvert   |
+| getUserAgent(String uaString)                                   | Query UserAgent API.                                                                                                                           | UserAgent         |
+| getBulkUserAgent(String[] uaStrings)                            | Query UserAgent API to lookup multiple user-agent strings (max. 50).                                                                           | List<UserAgent>   |
+| getAstronomy()                                                  | Query Astronomy API with default the parameters.                                                                                               | Astronomy         |
+| getAstronomy(AstronomyParams params)                            | Query Astronomy API based upon the parameters passed.                                                                                          | Astronomy         |
 
 ### Class: io.ipgeolocation.api.GeolocationParams
 
@@ -354,7 +588,7 @@ IP Geolocation API Java SDK has the following classes that you can use to fully 
 | getConnectionType()      | Returns connection type of the IP address.                   | String              |
 | getOrganization()        | Returns organization of the IP address.                      | String              |
 | getAsn()                 | Returns AS number of the IP address.                         | String              |
-| getGeoNameId()           | Returns geoname ID from geonames.org database.               | String              |
+| getGeoNameId()           | Returns Geo Name ID from geonames.org database.              | String              |
 | getCurrency()            | Returns currency information of the country.                 | GeolocationCurrency |
 | getTimezone()            | Returns time zone information of the country.                | GeolocationTimezone |
 | getGeolocationSecurity() | Returns security details of the ip address.                  | GeolocationSecurity |
@@ -370,14 +604,15 @@ IP Geolocation API Java SDK has the following classes that you can use to fully 
 
 ### Class: io.ipgeolocation.api.GeolocationTimezone
 
-| Method               | Description                                                                    | Return Type |
-|:---------------------|:-------------------------------------------------------------------------------|:------------|
-| getName()            | Returns standard time zone ID like "America/New_York".                         | String      |
-| getOffset()          | Returns time zone offset from UTC.                                             | int         |
-| getCurrentTime()     | Returns current date-time string in the format "yyyy-MM-dd HH:mm:ss.SSSZ"      | String      |
-| getCurrentTimeUnix() | Returns current date-time as a unix time                                       | BigDecimal  |
-| isDST()              | Returns is the country observing daylight saving time.                         | Boolean     |
-| getDSTSavings()      | Returns daylight savings time (in hours).                                      | int         |
+| Method               | Description                                                               | Return Type |
+|:---------------------|:--------------------------------------------------------------------------|:------------|
+| getName()            | Returns standard time zone ID like "America/New_York".                    | String      |
+| getOffset()          | Returns time zone offset from UTC.                                        | int         |
+| getCurrentTime()     | Returns current date-time string in the format "yyyy-MM-dd HH:mm:ss.SSSZ" | String      |
+| getCurrentTimeUnix() | Returns current date-time as a unix time                                  | BigDecimal  |
+| isDST()              | Returns is the country observing daylight saving time.                    | Boolean     |
+| getDSTSavings()      | Returns daylight savings time (in hours).                                 | int         |
+| getOffsetWithDst()   | Returns daylight savings time offset with UTC (in hours).                 | int         |
 
 ### Class: io.ipgeolocation.api.GeolocationSecurity
 
@@ -409,8 +644,8 @@ IP Geolocation API Java SDK has the following classes that you can use to fully 
 
 | Method                                                     | Description                                                               | Return Type           |
 |:-----------------------------------------------------------|:--------------------------------------------------------------------------|:----------------------|
-| withTimezone(String timezone)                              | Sets time zone ID to query time zone information.                         | TimezoneParamsBuilder |
-| withIPAddress(String ip)                                   | Sets IP address to query time zone information.                           | TimezoneParamsBuilder |
+| withTimezone(String timeZone)                              | Sets time zone ID to query time zone information.                         | TimezoneParamsBuilder |
+| withIPAddress(String ipAddress)                            | Sets IP address to query time zone information.                           | TimezoneParamsBuilder |
 | withCoordinates(BigDecimal latitude, BigDecimal longitude) | Sets latitude and longitude of a location to query time zone information. | TimezoneParamsBuilder |
 | withLocation(String location)                              | Set location parameter to get timezone details.                           | TimezoneParamsBuilder |
 | withLang(String lang)                                      | Set language parameter to lookup geolocation. Default is 'en'.            | TimezoneParamsBuilder |
@@ -437,7 +672,7 @@ IP Geolocation API Java SDK has the following classes that you can use to fully 
 | getYearAbbr()              | Returns 2-letters year abbreviation like "18".                                         | String      |
 | isDST()                    | Returns is the country observing Daylight Saving time.                                 | boolean     |
 | getDSTSavings()            | Returns daylight savings time (in hours).                                              | int         |
-| getTimezoneGeo()           | Returns geolocation of timezone if you lookup timezone information from an IP address. | TimezoneGeo |
+| getGeo()                   | Returns geolocation of timezone if you lookup timezone information from an IP address. | TimezoneGeo |
 
 ### Class: io.ipgeolocation.api.TimezoneGeo
 
@@ -492,3 +727,89 @@ IP Geolocation API Java SDK has the following classes that you can use to fully 
 | getType()         | Returns user-agent's operating system type.          | String      |
 | getVersion()      | Returns user-agent's operating system version.       | String      |
 | getVersionMajor() | Returns user-agent's operating system version major. | String      |
+
+### Class: io.ipgeolocation.api.AstronomyParams
+
+| Method            | Description                                                        | Return Type                   |
+|:------------------|:-------------------------------------------------------------------|:------------------------------|
+| getLocation()     | Returns location parameter value to get astronomy information.     | String                        |
+| getLatitude()     | Returns latitude parameter value to get astronomy information.     | BigDecimal                    |
+| getLongitude()    | Returns longitude parameter value to get astronomy information.    | BigDecimal                    |
+| getIpAddress()    | Returns IP address parameter value to get astronomy information.   | String                        |
+| getDate()         | Returns date parameter value to get astronomy information.         | String                        |
+| getLang()         | Returns language set to get the astronomy information.             | String                        |
+| builder()         | Returns an instance of AstronomyParamsBuilder class.               | static AstronomyParamsBuilder |
+
+### Class: io.ipgeolocation.api.AstronomyParams.AstronomyParamsBuilder
+| Method                                                     | Description                                                               | Return Type            |
+|:-----------------------------------------------------------|:--------------------------------------------------------------------------|:-----------------------|
+| withLocation(String location)                              | Sets location to query astronomy information.                             | AstronomyParamsBuilder |
+| withCoordinates(BigDecimal latitude, BigDecimal longitude) | Sets latitude and longitude of a location to query astronomy information. | AstronomyParamsBuilder |
+| withIPAddress(String ipAddress)                            | Sets IP address of which to query astronomy information.                  | AstronomyParamsBuilder | 
+| withDate(String date)                                      | Sets date of which to query astronomy information.                        | AstronomyParamsBuilder |
+| withLang(String lang)                                      | Sets language in which to query information.                              | AstronomyParamsBuilder |
+| build()                                                    | Returns an instance of AstronomyParams with the above specified value(s). | AstronomyParams        |
+
+### Class: io.ipgeolocation.api.Astronomy
+| Method                    | Description                                                                              | Return Type       |
+|:--------------------------|:-----------------------------------------------------------------------------------------|:------------------|
+| getDate()                 | Returns the date of which the information is queried in "yyyy-MM-dd" format.             | String            |
+| getCurrentTime()          | Returns the current time in the format "HH:mm:ss".                                       | String            |
+| getSunrise()              | Returns the time at which sun rises in format "HH:mm".                                   | String            |
+| getSunset()               | Returns the time at which sun sets in format "HH:mm".                                    | String            |
+| getSunStatus()            | Returns the status of sunrise and sunset as "-", if these values are not available.      | String            |
+| getSolarNoon()            | Returns the solar noon time in the format "HH:mm".                                       | String            |
+| getDayLength()            | Returns the day length in the format "HH:mm".                                            | String            |
+| getSunAltitude()          | Returns the altitude of the sun in degrees.                                              | BigDecimal        |
+| getSunDistance()          | Returns the distance from the sun in km.                                                 | BidDecimal        |
+| getSunAzimuth()           | Returns the azimuth of the sun in degrees.                                               | BigDecimal        |
+| getMoonrise()             | Returns the moon rise time in the format "HH:mm".                                        | BigDecimal        |
+| getMoonset()              | Returns the moon set time in the format "HH:mm".                                         | BigDecimal        |
+| getMoonStatus()           | Returns the status of moon rise and moon set as "-", if these values are not available.  | BigDecimal        |
+| getMoonAltitude()         | Returns the altitude of the moon in degrees.                                             | BigDecimal        |
+| getMoonDistance()         | Returns the distance from the moon in km.                                                | BigDecimal        |
+| getMoonAzimuth()          | Returns the azimuth of the moon in degrees.                                              | BigDecimal        |
+| getMoonParallacticAngle() | Returns the Moon Parallactic angle of the moon in degrees.                               | BigDecimal        |
+| getLocation()             | Returns the instance of the AstronomyLocation related to astronomy information.          | AstronomyLocation |
+| toString()                | Returns the fetched JSON from the API in formatted way.                                  | String            |
+
+### Class: io.ipgeolocation.api.AstronomyLocation
+| Method                    | Description                                                                               | Return Type |
+|:--------------------------|:------------------------------------------------------------------------------------------|:------------|
+| getLocation()             | Returns the input location i.e., street address.                                          | String      |
+| getLatitude()             | Returns the latitude value for which the astronomy information was queried.               | BigDecimal  |
+| getLongitude()            | Returns the longitude value for which the astronomy information was queried.              | BigDecimal  |
+| getZipcode()              | Returns the zip code related to the queried astronomy information.                        | String      |
+| getCountryCode2()         | Returns the two letter country code for queried astronomy information. e.g. 'PK'.         | String      |
+| getCountryCode3()         | Returns the three letter country code for the queried astronomy information. e.g., 'PAK'. | String      |
+| getCountryName()          | Returns the general country name of the queried astronomy information.                    | String      |
+| getCountryNameOfficial()  | Returns the official country name of the queried astronomy information.                   | String      |
+| getStateProv()            | Returns the State/Province of the queried astronomy information.                          | String      |
+| getStateCode()            | Returns the state code of the queried astronomy information. e.g., 'PK-PB'                | String      |
+| getDistrict()             | Returns the district of the queried astronomy information.                                | String      |
+| getLocality()             | Returns the locality of the queried astronomy information.                                | String      |
+| getCity()                 | Returns the city of the queried astronomy information.                                    | String      |
+| toString()                | Returns the fetched JSON from the API in the formatted way.                               | String      |
+
+### Class: io.ipgeolocation.api.TimezoneConvertParams
+| Method             | Description                                                                                                                             | Return Type                  |
+|:-------------------|:----------------------------------------------------------------------------------------------------------------------------------------|:-----------------------------|
+| getTimezoneFrom()  | Returns the source [timezone ID](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones) for which conversion would be performed. | String                       |
+| getTimezoneTo()    | Returns the target timezone ID for which conversion would be performed.                                                                 | String                       |
+| getTime()          | Returns the dateTime which would be used for conversion.                                                                                | String                       |
+| getLatitudeFrom()  | Returns the source latitude for which conversion would be performed.                                                                    | BigDecimal                   |
+| getLongitudeFrom() | Returns the source longitude for which conversion would be performed.                                                                   | BigDecimal                   |
+| getLatitudeTo()    | Returns the target latitude for which conversion would be performed.                                                                    | BigDecimal                   |
+| getLongitudeTo()   | Returns the target longitude for which conversion would be performed.                                                                   | BigDecimal                   |
+| getLocationFrom()  | Returns the source location (i.e., city, country) for which conversion would be performed.                                              | String                       |
+| getLocationTo()    | Returns the target location (i.e., city, country) for which conversion would be performed.                                              | String                       |
+| builder()          | Returns an instance of TimezoneConvertParamsBuilder class to create TimezoneConvertParams object with custom parameters.                | static TimezoneConvertParams |
+
+### Class: io.ipgeolocation.api.TimezoneConvertParams.TimezoneConvertParamsBuilder
+| Method                                                                                        | Description                                                                                                                | Return Type                  |
+|:----------------------------------------------------------------------------------------------|:---------------------------------------------------------------------------------------------------------------------------|:-----------------------------|
+| withTimeZone(String timezoneFrom, String timezoneTo)                                          | Sets source and target [timezone IDs](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones) to perform conversion. | TimezoneConvertParamsBuilder |
+| withDateTime(String dateTime)                                                                 | Sets dateTime which would be used for conversion.                                                                          | TimezoneConvertParamsBuilder |
+| withCoordinates(BigDecimal latFrom, BigDecimal longFrom, BigDecimal latTo, BigDecimal longTo) | Sets the source and target geo coordinates.                                                                                | TimezoneConvertParamsBuilder |
+| withLocation(String locationFrom, String locationTo)                                          | Sets the source and target locations (i.e., city, country).                                                                | TimezoneConvertParamsBuilder |
+| build()                                                                                       | Returns an instance of the TimezoneConvertParams with the above specified value(s).                                        | TimezoneConvertParams        |
