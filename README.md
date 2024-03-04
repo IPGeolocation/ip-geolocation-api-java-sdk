@@ -4,8 +4,8 @@
 
 [IPGeolocation API](https://ipgeolocation.io) is the solution to identify country code (ISO2 and ISO3 standard), country
 name, continent code, continent name, country capital, state/province, district, city, zip code, latitude and longitude
-of city, is country belongs to Europian Union, calling code, top level domain (TLD), languages, country flag, internet
-service provider (ISP), connection type, organization, geoname ID, currency code, currency name, time zone ID, time zone
+of city, is country belongs to European Union, calling code, top level domain (TLD), languages, country flag, internet
+service provider (ISP), connection type, organization, geo name ID, currency code, currency name, time zone ID, time zone
 offset, current time in the time zone, is time zone in daylight saving time, total daylight savings and user agent
 details. This document provides important information to help you get up to speed with IPGeolocation API using IP
 Geolocation API Java SDK.
@@ -25,8 +25,8 @@ Developers can use this Java SDK for software and web projects related to, but n
 You need a valid 'IPGeolocation API key' to use this SDK. [Sign up](https://ipgeolocation.io/signup) here and get your
 free API key if you don’t have one.
 
-**Note:** Complete documentation to use this SDK is also available
-at [IP Geolocation API JAVA SDK Documentation](https://ipgeolocation.io/documentation/ip-geolocation-api-java-sdk.html)
+**Note:** Complete documentation [![javadoc](https://javadoc.io/badge2/io.ipgeolocation/ipgeolocation/ipgeolocation.svg)](https://javadoc.io/doc/io.ipgeolocation/ipgeolocation) to use this SDK is also available
+at [IP Geolocation API Website](https://ipgeolocation.io/documentation/ip-geolocation-api-java-sdk.html)
 .
 
 ## System Requirements
@@ -46,7 +46,7 @@ Add the following dependency in 'pom.xml' file to use the IP Geolocation API Jav
 <dependency>
     <groupId>io.ipgeolocation</groupId>
     <artifactId>ipgeolocation</artifactId>
-    <version>1.0.15</version>
+    <version>1.0.16</version>
 </dependency>
 ```
 
@@ -55,10 +55,7 @@ Add the following dependency in 'pom.xml' file to use the IP Geolocation API Jav
 Add the following dependency in 'build.gradle' file to use the IP Geolocation API Java SDK.
 
 ```gradle
-dependencies {
-    compile 'io.ipgeolocation:ipgeolocation:1.0.15'
-    ...
-}
+implementation 'io.ipgeolocation:ipgeolocation:1.0.16'
 ```
 
 ### Ivy
@@ -66,16 +63,14 @@ dependencies {
 Add the following dependency code in 'ivy.xml' file to use the IP Geolocation API Java SDK.
 
 ```ivy
-<dependency org='io.ipgeolocation' name='ipgeolocation' rev='1.0.15'>
-    <artifact name='ipgeolocation' />
-</dependency>
+<dependency org="io.ipgeolocation" name="ipgeolocation" rev="1.0.16"/>
 ```
 
 ### JAR File
 
 Use the following URL to download the latest JAR file for IP Geolocation API Java SDK.
 
-* [https://ipgeolocation.io/downloads/ip-geolocation-api-java-1.0.15.jar](https://ipgeolocation.io/downloads/ip-geolocation-api-java-1.0.15.jar)
+* [https://ipgeolocation.io/downloads/ip-geolocation-api-java-1.0.16.jar](https://ipgeolocation.io/downloads/ip-geolocation-api-java-1.0.16.jar)
 
 Documentation
 -----------
@@ -132,7 +127,7 @@ try {
 GeolocationParams geolocationParams =
         GeolocationParams.builder()
             .withIPAddress("1.1.1.1")
-            .withLand("ru")
+            .withLang("ru")
             .build();
 
 try {
