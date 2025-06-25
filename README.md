@@ -1,14 +1,60 @@
-# ipgeolocation-sdk-java
+# ipgeolocation-java-sdk
 
 IPGeolocation.io - IP intelligence products
 - API version: 2.0
-  - Generator version: 7.13.0
 
 Ipgeolocation provides a set of APIs to make ip based decisions.
 
+## Table of Contents
+
+1. [Installation](#installation)
+   - [Maven](#maven)
+   - [Gradle](#gradle)
+   - [Manual Installation](#manual-installation)
+2. [Authentication Setup](#authentication-setup)
+
+3. [IP Geolocation Examples](#ip-geolocation-examples)
+   - [1. Basic Plan Examples](#1-basic-plan-examples)
+   - [2. Standard Plan Examples](#2-standard-plan-examples)
+   - [3. Advanced Plan Examples](#3-advanced-plan-examples)
+   - [Bulk IP Geolocation Example](#bulk-ip-geolocation-example)
+
+4. [IP Security Examples](#ip-security-examples)
+   - [Basic Request (Minimal Setup)](#basic-request-minimal-setup)
+   - [Include Multiple Optional Fields](#include-multiple-optional-fields)
+   - [Request with Field Filtering](#request-with-field-filtering)
+   - [Bulk IP Security Request](#bulk-ip-security-request)
+
+5. [ASN API Examples](#asn-api-examples)
+   - [Get ASN Information by IP Address](#get-asn-information-by-ip-address)
+   - [Get ASN Information by ASN Number](#get-asn-information-by-asn-number)
+   - [Combine All objects using Include](#combine-all-objects-using-include)
+
+6. [Timezone API Examples](#timezone-api-examples)
+   - [Get Timezone by IP Address](#get-timezone-by-ip-address)
+   - [Get Timezone by Timezone Name](#get-timezone-by-timezone-name)
+   - [Get Timezone from Any Address](#get-timezone-from-any-address)
+   - [Get Timezone from Location Coordinates](#get-timezone-from-location-coordinates)
+   - [Get Timezone and Airport Details from IATA Code](#get-timezone-and-airport-details-from-iata-code)
+   - [Get Timezone and City Details from UN/LOCODE](#get-timezone-and-city-details-from-unlocode)
+
+7. [Timezone Converter Examples](#timezone-converter-examples)
+   - [Convert Current Time from One Timezone to Another](#convert-current-time-from-one-timezone-to-another)
+
+8. [User Agent API Examples](#user-agent-api-examples)
+   - [Parse a Basic User Agent String](#parse-a-basic-user-agent-string)
+   - [Bulk User Agent Parsing Example](#bulk-user-agent-parsing-example)
+9. [Astronomy API Examples](#astronomy-api-examples)
+   - [Astronomy by Coordinates](#astronomy-by-coordinates)
+   - [Astronomy by IP Address](#astronomy-by-ip-address)
+   - [Astronomy by Location String](#astronomy-by-location-string)
+   - [Astronomy for Specific Date](#astronomy-for-specific-date)
+   - [Astronomy in Different Language](#astronomy-in-different-language)
+
+10. [Documentation for Models](#documentation-for-models)
 
 
-# 📦 Installation
+# Installation
 
 ## Requirements
 - **Java**: 1.8 or higher
@@ -55,7 +101,7 @@ Then include the following JARs in your classpath:
 
 ---
 
-# 🔐 Authentication Setup
+# Authentication Setup
 
 To authenticate API requests, you need an API key from [ipgeolocation.io](https://ipgeolocation.io/). Once obtained, configure your API client as follows:
 
@@ -75,13 +121,13 @@ Ensure that your API key is securely stored and not exposed in public repositori
 
 ---
 
-# 📘 Example Usage
+# Example Usage
 
 ## IP Geolocation Examples
 
 This section provides usage examples of the `getIPGeolocation()` method from the SDK across Free, Standard, and Advanced subscription tiers. Each example highlights different combinations of parameters: `fields`, `include`, and `excludes`.
 
-### 📌 Parameters
+### Parameters
 
 #### `fields`
 Use this parameter to include specific fields in the response.
