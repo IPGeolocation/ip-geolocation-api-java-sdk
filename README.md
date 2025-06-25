@@ -1,810 +1,1744 @@
-# IP Geolocation API Java SDK
+# ipgeolocation-sdk-java
 
-## Introduction
+IPGeolocation.io - IP intelligence products
+- API version: 2.0
+  - Generator version: 7.13.0
 
-[IPGeolocation API](https://ipgeolocation.io) is the solution to identify country code (ISO2 and ISO3 standard), country
-name, continent code, continent name, country capital, state/province, district, city, zip code, latitude and longitude
-of city, is country belongs to European Union, calling code, top level domain (TLD), languages, country flag, internet
-service provider (ISP), connection type, organization, geo name ID, currency code, currency name, time zone ID, time zone
-offset, current time in the time zone, is time zone in daylight saving time, total daylight savings and user agent
-details. This document provides important information to help you get up to speed with IPGeolocation API using IP
-Geolocation API Java SDK.
+Ipgeolocation provides a set of APIs to make ip based decisions.
 
-Developers can use this Java SDK for software and web projects related to, but not limited to:
 
-1. Display native language and currency
-2. Redirect based on the country
-3. Digital rights management
-4. Web log stats and analysis
-5. Auto-selection of country, state/province and city on forms
-6. Filter access from countries you do not do business with
-7. Geo-targeting for increased sales and click-through
 
-## Quick Start Guide
+# 📦 Installation
 
-You need a valid 'IPGeolocation API key' to use this SDK. [Sign up](https://ipgeolocation.io/signup) here and get your
-free API key if you don’t have one.
+## Requirements
+- **Java**: 1.8 or higher
+- **Build Tools**: Maven 3.8.3+ or Gradle 7.2+
 
-**Note:** Complete documentation [![javadoc](https://javadoc.io/badge2/io.ipgeolocation/ipgeolocation/ipgeolocation.svg)](https://javadoc.io/doc/io.ipgeolocation/ipgeolocation) to use this SDK is also available
-at [IP Geolocation API Website](https://ipgeolocation.io/documentation/ip-geolocation-api-java-sdk.html)
-.
+## Using Maven
 
-## System Requirements
+Add the following dependency to your `pom.xml` file:
 
-IP Geolocation API Java SDK has been developed and tested on JDK version 8.  
-Note: Internet connection is required to run this component.
-
-## Installation
-
-Our Java SDK can be installed by various methods given below:
-
-### Maven
-
-Add the following dependency in 'pom.xml' file to use the IP Geolocation API Java SDK.
-
-```maven
+```xml
 <dependency>
-    <groupId>io.ipgeolocation</groupId>
-    <artifactId>ipgeolocation</artifactId>
-    <version>1.0.16</version>
+  <groupId>io.ipgeolocation</groupId>
+  <artifactId>ipgeolocation</artifactId>
+  <version>2.0.0</version>
 </dependency>
 ```
 
-### Gradle
+## Using Gradle
 
-Add the following dependency in 'build.gradle' file to use the IP Geolocation API Java SDK.
+Add this to your `build.gradle` file:
 
-```gradle
-implementation 'io.ipgeolocation:ipgeolocation:1.0.16'
-```
-
-### Ivy
-
-Add the following dependency code in 'ivy.xml' file to use the IP Geolocation API Java SDK.
-
-```ivy
-<dependency org="io.ipgeolocation" name="ipgeolocation" rev="1.0.16"/>
-```
-
-### JAR File
-
-Use the following URL to download the latest JAR file for IP Geolocation API Java SDK.
-
-* [https://ipgeolocation.io/downloads/ip-geolocation-api-java-1.0.16.jar](https://ipgeolocation.io/downloads/ip-geolocation-api-java-1.0.16.jar)
-
-Documentation
------------
-Use the following URL to visit documentation
-
-* [https://ipgeolocation.io/documentation.html](https://ipgeolocation.io/documentation.html)
-
-Basic Usage
------------
-
-### Setup API
-
-```java
-// Create IPGeolocationAPI object, passing your valid API key
-IPGeolocationAPI ipGeolocationAPI = new IPGeolocationAPI("YOUR_API_KEY");
-```
-
-### Geolocation Lookup
-
-```java
-// Get geolocation for IP address (1.1.1.1) and fields (geo, time_zone and currency)
-GeolocationParams geolocationParams =
-        GeolocationParams.builder()
-            .withIPAddress("1.1.1.1")
-            .withFields("geo,time_zone,currency")
-            .includeSecurity()
-            .build();
-
-try {
-    Geolocation geolocation = ipGeolocationAPI.getGeolocation(geolocationParams);
-
-    // Geolocation Info
-    System.out.println("Country: " + geolocation.getCountryName());
-    System.out.println("Currency: " + geolocation.getCurrency().getName());
-    System.out.println("Location time: " + geolocation.getTimezone().getCurrentTime());
-
-    // Security Info
-    System.out.println("Is Anonymous: " + geolocation.getGeolocationSecurity().isAnonymous());
-    System.out.println("Is Known Attacker: " + geolocation.getGeolocationSecurity().isKnownAttacker());
-    System.out.println("Is Proxy: " + geolocation.getGeolocationSecurity().isProxy());
-    System.out.println("Proxy Type: " + geolocation.getGeolocationSecurity().getProxyType());
-    System.out.println("IP Threat Score: " + geolocation.getGeolocationSecurity().getThreatScore());
-    System.out.println("Is Bot: " + geolocation.getGeolocationSecurity().isBot());
-    System.out.println("Is Spam: " + geolocation.getGeolocationSecurity().isSpam());
-    System.out.println("Is Tor: " + geolocation.getGeolocationSecurity().isTor());
-    System.out.println("Is Cloud Provider: " + geolocation.getGeolocationSecurity().isCloudProvider());
-} catch (IPGeolocationError e) {
-    // on unsuccessful lookup or invalid input IPGeolocationError is thrown
-    System.err.println("HTTP status: " + e.getStatus() + " Error: " + e.getMessage());
+```groovy
+repositories {
+    mavenCentral()
+    mavenLocal() // Only needed if using locally built version
 }
-```
-```java
-// Get geolocation in Russian** for IP address (1.1.1.1) and all fields
-GeolocationParams geolocationParams =
-        GeolocationParams.builder()
-            .withIPAddress("1.1.1.1")
-            .withLang("ru")
-            .build();
 
-try {
-    Geolocation geolocation = ipGeolocationAPI.getGeolocation(geolocationParams);
-
-    System.out.println("IP Address: " + geolocation.getIP());
-    System.out.println("Country: " + geolocation.getCountryName());
-} catch (IPGeolocationError e) {
-    // on unsuccessful lookup or invalid input IPGeolocationError is thrown
-    System.err.println("HTTP status: " + e.getStatus() + " Error: " + e.getMessage());
-}
-```
-```java
-// Get geolocation for the calling machine's IP address for all fields
-try {
-    Geolocation geolocation = ipGeolocationAPI.getGeolocation();
-
-    System.out.println("IP Address: " + geolocation.getIP());
-    System.out.println("Country Code ISO2: " + geolocation.getCountryCode2());
-    System.out.println("Location time: " + geolocation.getTimezone().getCurrentTime());
-} catch (IPGeolocationError e) {
-    // on unsuccessful lookup or invalid input IPGeolocationError is thrown
-    System.err.println("HTTP status: " + e.getStatus() + " Error: " + e.getMessage());
+dependencies {
+    implementation "io.ipgeolocation:ipgeolocation:2.0.0"
 }
 ```
 
-### Bulk Geolocations Lookup
-```java
-// Query geolocation in German** for multiple IP addresses and all fields
-String[] ips = new String[]{"1.1.1.1", "2.2.2.2", "3.3.3.3"};
-GeolocationParams geolocationParams =
-        GeolocationParams.builder()
-            .withLang("de")
-            .build();
+## Manual Installation
 
-try {
-    List<Geolocation> geolocations = ipGeolocationAPI.getBulkGeolocation(ips, geolocationParams);
+To build the SDK manually:
 
-    System.out.println("No. of Requests: " + geolocations.size());
-    System.out.println("1st IP's Country: " + geolocations.get(0).getCountryName());
-    System.out.println("2nd IP's Language: " + geolocations.get(1).getLanguages());
-    System.out.println("3rd IP's location time: " + geolocations.get(2).getTimezone().getCurrentTime());
-} catch (IPGeolocationError e) {
-    // on unsuccessful lookup or invalid input IPGeolocationError is thrown
-    System.err.println("HTTP status: " + e.getStatus() + " Error: " + e.getMessage());
-}
-```
-```java
-// Query geolocations for multiple IP addresses but only geo field
-String[] ips = new String[]{"1.1.1.1", "2.2.2.2", "3.3.3.3"};
-GeolocationParams geolocationParams =
-        GeolocationParams.builder()
-            .withFields("geo")
-            .build();
-
-try {
-    List<Geolocation> geolocations = ipGeolocationAPI.getBulkGeolocation(ips, geolocationParams);
-
-    System.out.println("No. of Requests: " + geolocations.size());
-    System.out.println("1st IP's Country: " + geolocations.get(0).getCountryName());
-    System.out.println("2nd IP's City: "+geolocations.get(1).getCity());
-    System.out.println("3rd IP's City Zipcode: " + geolocations.get(2).getZipCode());
-} catch (IPGeolocationError e) {
-    // on unsuccessful lookup or invalid input IPGeolocationError is thrown
-    System.err.println("HTTP status: " + e.getStatus() + " Error: " + e.getMessage());
-}
+```bash
+mvn clean package
 ```
 
-### Timezone API
+Then include the following JARs in your classpath:
+- `target/ipgeolocation-sdk-java-2.0.0.jar`
+- All JARs in `target/lib/`
+
+---
+
+# 🔐 Authentication Setup
+
+To authenticate API requests, you need an API key from [ipgeolocation.io](https://ipgeolocation.io/). Once obtained, configure your API client as follows:
+
 ```java
-// Get time zone information by time zone ID
-TimezoneParams timezoneParams =
-        TimezoneParams.builder().withTimeZone("America/New_York").build();
+import invoker.io.ipgeolocation.sdk.ApiClient;
+import invoker.io.ipgeolocation.sdk.Configuration;
+import auth.invoker.io.ipgeolocation.sdk.ApiKeyAuth;
 
-try {
-    Timezone tz = ipGeolocationAPI.getTimezone(timezoneParams);
-    
-    System.out.println("Format 'EEEE, MMMM dd, yyyy HH:mm:ss': " + tz.getDateTimeTxt());
-    System.out.println("Format 'EEE, dd MMM yyyy HH:mm:ss Z': " + tz.getDateTimeWti());
-} catch (IPGeolocationError e) {
-    // on unsuccessful lookup or invalid input IPGeolocationError is thrown
-    System.err.println("HTTP status: " + e.getStatus() + " Error: " + e.getMessage());
-}
-```
-```java
-// Get time zone information by coordinates (latitude and longitude) of the location
-TimezoneParams timezoneParams =
-        TimezoneParams.builder()
-            .withCoordinates(BigDecimal.valueOf(37.1838139), BigDecimal.valueOf(-123.8105225))
-            .build();
+ApiClient client = Configuration.getDefaultApiClient();
+client.setBasePath("https://api.ipgeolocation.io/v2");
 
-try {
-    Timezone tz = ipGeolocationAPI.getTimezone(timezoneParams);
-
-    System.out.println("Timezone: " + tz.getTimezone());
-    System.out.println("Timezone in Unix: " + tz.getDateTimeUnix());
-    System.out.println("Time in 24 format: " + tz.getTime24());
-} catch (IPGeolocationError e) {
-    // on unsuccessful lookup or invalid input IPGeolocationError is thrown
-    System.err.println("HTTP status: " + e.getStatus() + " Error: " + e.getMessage());
-}
-```
-```java
-// Get time zone information for IP address (1.1.1.1) and geolocation information in Japanese**
-TimezoneParams timezoneParams =
-        TimezoneParams.builder()
-            .withIPAddress("1.1.1.1")
-            .withLang("ja")
-            .build();
-
-try {
-    Timezone tz = ipGeolocationAPI.getTimezone(timezoneParams);
-
-    // Timezone Info
-    System.out.println("Timezone: " + tz.getTimezone());
-    System.out.println("Format 'EEEE, MMMM dd, yyyy HH:mm:ss': " + tz.getDateTimeTxt());
-    System.out.println("Format 'yyyy-MM-dd'T'HH:mm:ssZ': " + tz.getDateTimeYmd());
-
-    // Geo Info
-    System.out.println("City: " + tz.getGeo().getCity());
-    System.out.println("State/Province: " + tz.getGeo().getStateProvince());
-    System.out.println("Country: " + tz.getGeo().getCountryName());
-} catch (IPGeolocationError e) {
-    // on unsuccessful lookup or invalid input IPGeolocationError is thrown
-    System.err.println("HTTP status: " + e.getStatus() + " Error: " + e.getMessage());
-}
-```
-```java
-// Query time zone information for calling machine's IP address
-try {
-    Timezone tz = ipGeolocationAPI.getTimezone();
-
-    // Timezone Info
-    System.out.println("Timezone Offset: " + tz.getTimezoneOffset());
-    System.out.println("Date: " + tz.getDate());
-    System.out.println("Month (No.): " + tz.getMonth());
-
-    // Geo Info
-    System.out.println("City: " + tz.getGeo().getCity());
-    System.out.println("Country Code ISO3: " + tz.getGeo().getCountryCode3());
-    System.out.println("Lat/Lon: " + tz.getGeo().getLatitude() + "/" + tz.getGeo().getLongitude());
-} catch (IPGeolocationError e) {
-    // on unsuccessful lookup or invalid input IPGeolocationError is thrown
-    System.err.println("HTTP status: " + e.getStatus() + " Error: " + e.getMessage());
-}
-```
-```java
-// Get time zone information by location (city, country, etc.)
-TimezoneParams timezoneParams = 
-        TimezoneParams.builder().withLocation("Syria, Damascus").build();
-
-try {
-    Timezone tz = ipGeolocationAPI.getTimezone(timezoneParams);
-
-    System.out.println("Format 'EEEE, MMMM dd, yyyy HH:mm:ss': " + tz.getDateTimeTxt());
-    System.out.println("Country: " + tz.getGeo().getCountryName());
-} catch (IPGeolocationError e) {
-    // on unsuccessful lookup or invalid input IPGeolocationError is thrown
-    System.err.println("HTTP status: " + e.getStatus() + " Error: " + e.getMessage());
-}
+ApiKeyAuth apiKeyAuth = (ApiKeyAuth) client.getAuthentication("ApiKeyAuth");
+apiKeyAuth.setApiKey("YOUR_API_KEY_HERE");
 ```
 
-### UserAgent API
-```java
-// Query/Parse user agent information for Provided the provided string
-try {
-    String uaString = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_2) AppleWebKit/601.3.9 (KHTML, like Gecko) Version/9.0.2 Safari/601.3.9";
-    UserAgent ua = ipGeolocationAPI.getUserAgent(uaString);
+Ensure that your API key is securely stored and not exposed in public repositories.
 
-    System.out.println("Device name: " + ua.getDevice().getName());
-    System.out.println("OS name: " + ua.getOperatingSystem().getName());
-    System.out.println("OS version: " + ua.getOperatingSystem().getVersion());
-    System.out.println("CPU: " + ua.getDevice().getCpu());
-} catch (IPGeolocationError e) {
-    // on unsuccessful lookup or invalid input IPGeolocationError is thrown
-    System.err.println("HTTP status: " + e.getStatus() + " Error: " + e.getMessage());
+---
+
+# 📘 Example Usage
+
+## IP Geolocation Examples
+
+This section provides usage examples of the `getIPGeolocation()` method from the SDK across Free, Standard, and Advanced subscription tiers. Each example highlights different combinations of parameters: `fields`, `include`, and `excludes`.
+
+### 📌 Parameters
+
+#### `fields`
+Use this parameter to include specific fields in the response.
+
+#### `excludes`
+Use this parameter to omit specific fields from the response.
+
+#### `include`
+Use this parameter to add optional modules to the response, such as:
+- `security`
+- `user_agent`
+- `hostname`
+- `liveHostname`
+- `hostnameFallbackLive`
+- `abuse`
+- `dma`
+- `timezone`
+
+
+For complete details, refer to the official documentation: [IP Geolocation API Documentation](https://ipgeolocation.io/ip-location-api.html#documentation-overview)
+
+The `ip` parameter in the SDK can accept any valid IPv4 address, IPv6 address, or domain name. If the `ip()` method is not used or the parameter is omitted, the API will return information about the public IP address of the device or server where the SDK is executed.
+
+### 1. Basic Plan Examples
+
+#### Default Fields
+
+```java
+import io.ipgeolocation.sdk.api.IPGeolocationAPI;
+import io.ipgeolocation.sdk.model.GeolocationResponse;
+
+IPGeolocationAPI api = new IPGeolocationAPI(client);
+GeolocationResponse response = api.getIPGeolocation()
+        .ip("8.8.8.8")
+        .execute();
+
+System.out.println(response);
+```
+Sample Response:
+```
+class GeolocationResponse {
+    ip: 8.8.8.8
+    location: class Location {
+        continentCode: NA
+        continentName: North America
+        countryCode2: US
+        countryCode3: USA
+        countryName: United States
+        countryNameOfficial: United States of America
+        countryCapital: Washington, D.C.
+        stateProv: California
+        stateCode: US-CA
+        district: Santa Clara
+        city: Mountain View
+        zipcode: 94043-1351
+        latitude: 37.42240
+        longitude: -122.08421
+        isEu: false
+        countryFlag: https://ipgeolocation.io/static/flags/us_64.png
+        geonameId: 6301403
+        countryEmoji: 🇺🇸
+    }
+    countryMetadata: class CountryMetadata {
+        callingCode: +1
+        tld: .us
+        languages: [en-US, es-US, haw, fr]
+    }
+    currency: class Currency {
+        code: USD
+        name: US Dollar
+        symbol: $
+    }
 }
 ```
+Filtering Specific Fields from the Response (Use of 'exclude' and 'fields')
 ```java
-// Query/Parse user agent information for the provided strings
-String[] uaStrings = new String[]
-        {"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_2) AppleWebKit/601.3.9 (KHTML, like Gecko) Version/9.0.2 Safari/601.3.9",
-                "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/47.0.2526.111 Safari/537.36",
-                "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:40.0) Gecko/20100101 Firefox/40.1"};
+GeolocationResponse response = api.getIPGeolocation()
+    .ip("8.8.4.4")
+    .fields("location")
+    .excludes("location.continent_code,location.continent_name")
+    .execute();
 
-try {
-    List<UserAgent> uas = ipGeolocationAPI.getBulkUserAgent(uaStrings);
-
-    System.out.println("No. of Requests: " + uas.size());
-    System.out.println("1st UA's Device name: " + uas.get(0).getDevice().getName());
-    System.out.println("2nd UA's OS name: " + uas.get(1).getOperatingSystem().getName());
-    System.out.println("3rd UA's Browser: " + uas.get(2).getName());
-} catch (IPGeolocationError e) {
-    System.err.println("HTTP status: " + e.getStatus() + " Error: " + e.getMessage());
-}
+System.out.println(response);
 ```
-```java
-// Query useragent of the machine IP Address along with Geolocation
-GeolocationParams geolocationParams = 
-        GeolocationParams.builder()
-                .includeUserAgentDetail()
-               .build();
-try {
-    Geolocation geolocation = ipGeolocationAPI.getGeolocation(geolocationParams);
-
-    System.out.println("IP: " + geolocation.getIP());
-    System.out.println("City: " + geolocation.getCity());
-    System.out.println("UserAgent OS: " + geolocation.getUserAgent().getOperatingSystem().getName());
-    System.out.println("UserAgent Browser:" + geolocation.getUserAgent().getName());
-    System.out.println("UserAgent Device: " + geolocation.getUserAgent().getDevice().getName());
-
-} catch (IPGeolocationError e) {
-    // on unsuccessful lookup or invalid input IPGeolocationError is thrown
-    System.err.println("HTTP status: " + e.getStatus() + " Error: " + e.getMessage());
-}
+Sample Response
 ```
-### Astronomy API
-```java
-// Query astronomy information for location (city, country, etc.)
-AstronomyParams astronomyParams =
-        AstronomyParams.builder()
-                .withLocation("Amsterdam, Netherlands")
-                .build();
-
-try {
-    Astronomy astronomy = ipGeolocationAPI.getAstronomy(astronomyParams);
-
-    System.out.println("City: " + astronomy.getLocation().getCity());
-    System.out.println("Country: " + astronomy.getLocation().getCountryName());
-    System.out.println("Locality: " + astronomy.getLocation().getLocality());
-
-    System.out.println("Sun Distance: " + astronomy.getSunDistance());
-    System.out.println("Sun Altitude: " + astronomy.getSunAltitude());
-    System.out.println("Day length: " + astronomy.getDayLength());
-} catch (IPGeolocationError e) {
-    // on unsuccessful lookup or invalid input IPGeolocationError is thrown
-    System.err.println("HTTP status: " + e.getStatus() + " Error: " + e.getMessage());
-}
-```
-```java
-// Query astronomy information for given geo coordinates (latitude/longitude)
-AstronomyParams astronomyParams = 
-        AstronomyParams.builder()
-                .withCoordinates(BigDecimal.valueOf(51.507277), BigDecimal.valueOf(-0.1290644))
-                .withDate("2024-02-29")
-                .build();
-
-try {
-    Astronomy astronomy = ipGeolocationAPI.getAstronomy(astronomyParams);
-
-    System.out.println("Lat/Lon: " + astronomy.getLocation().getLatitude() + "/" + astronomy.getLocation().getLongitude());
-
-    System.out.println("Date: " + astronomy.getDate());
-    System.out.println("Moonset: " + astronomy.getMoonset());
-    System.out.println("Sun Azimuth: " + astronomy.getSunAzimuth());
-} catch (IPGeolocationError e) {
-    // on unsuccessful lookup or invalid input IPGeolocationError is thrown
-    System.err.println("HTTP status: " + e.getStatus() + " Error: " + e.getMessage());
-}
-```
-```java
-// Query astronomy information for machine IP
-try {
-    Astronomy astronomy = ipGeolocationAPI.getAstronomy();
-
-    System.out.println("Zipcode: " + astronomy.getLocation().getCity());
-    System.out.println("State code: " + astronomy.getLocation().getStateCode());
-    System.out.println("City: " + astronomy.getLocation().getCity());
-
-    System.out.println("Sunrise: " + astronomy.getSunrise());
-    System.out.println("Sunset: " + astronomy.getSunset());
-    System.out.println("Moonrise: " + astronomy.getMoonrise());
-} catch (IPGeolocationError e) {
-    // on unsuccessful lookup or invalid input IPGeolocationError is thrown
-    System.err.println("HTTP status: " + e.getStatus() + " Error: " + e.getMessage());
-}
-```
-```java
-// Query astronomy information for specific IP in Chinese Language
-AstronomyParams astronomyParams = AstronomyParams.builder()
-        .withIPAddress("1.1.1.1")
-        .withLang("cn")
-        .build();
-
-try {
-    Astronomy astronomy = ipGeolocationAPI.getAstronomy(astronomyParams);
-
-    System.out.println("Zipcode: " + astronomy.getLocation().getCity());
-    System.out.println("Country Name: " + astronomy.getLocation().getCountryName());
-
-    System.out.println("Sun distance: " + astronomy.getSunDistance());
-    System.out.println("Moonrise: " + astronomy.getMoonrise());
-    System.out.println("Moon Parallactic Angle: " + astronomy.getMoonParallacticAngle());
-} catch (IPGeolocationError e) {
-    // on unsuccessful lookup or invalid input IPGeolocationError is thrown
-    System.err.println("HTTP status: " + e.getStatus() + " Error: " + e.getMessage());
-}
-```
-### Time Conversion API
-```java
-// Convert time using timezone ID with the provided time
-TimezoneConvertParams timezoneConvertParams =
-        TimezoneConvertParams.builder()
-                .withTimeZone("America/New_York", "Asia/Karachi")
-                .withDateTime("2024-02-29 16:40")
-                .build();
-
-try {
-    TimezoneConvert tzConverted = ipGeolocationAPI.convertTimeZone(timezoneConvertParams);
-
-    System.out.println("Original time: " + tzConverted.getOriginalTime());
-    System.out.println("Converted time: " + tzConverted.getConvertedTime());
-    System.out.println("Difference in hours: " + tzConverted.getDiffHour());
-}catch (IPGeolocationError e) {
-    // on unsuccessful lookup or invalid input IPGeolocationError is thrown
-    System.err.println("HTTP status: " + e.getStatus() + " Error: " + e.getMessage());
-}
-```
-```java
-// Convert time using locations with current time
-TimezoneConvertParams timezoneConvertParams =
-        TimezoneConvertParams.builder()
-                .withLocation("Lahore, Pakistan", "London, United Kingdom")
-                .build();
-
-try {
-    TimezoneConvert tzConverted = ipGeolocationAPI.convertTimeZone(timezoneConvertParams);
-
-    System.out.println("Original time: " + tzConverted.getOriginalTime());
-    System.out.println("Converted time: " + tzConverted.getConvertedTime());
-    System.out.println("Difference in minutes: " + tzConverted.getDiffMin());
-}catch (IPGeolocationError e) {
-    // on unsuccessful lookup or invalid input IPGeolocationError is thrown
-    System.err.println("HTTP status: " + e.getStatus() + " Error: " + e.getMessage());
-}
-```
-```java
-// Convert time using Geo Coordinates of locations with the provided time
-TimezoneConvertParams timezoneConvertParams =
-        TimezoneConvertParams.builder()
-                .withCoordinates(
-                        BigDecimal.valueOf(31.522165), BigDecimal.valueOf(74.358422),
-                        BigDecimal.valueOf(38.907084), BigDecimal.valueOf(-77.03449))
-                .withDateTime("2024-02-29 16:40:40")
-                .build();
-
-try {
-    TimezoneConvert tzConverted = ipGeolocationAPI.convertTimeZone(timezoneConvertParams);
-
-    System.out.println("Original time: " + tzConverted.getOriginalTime());
-    System.out.println("Converted time: " + tzConverted.getConvertedTime());
-    System.out.println("Difference in hours: " + tzConverted.getDiffHour());
-}catch (IPGeolocationError e) {
-    // on unsuccessful lookup or invalid input IPGeolocationError is thrown
-    System.err.println("HTTP status: " + e.getStatus() + " Error: " + e.getMessage());
+class GeolocationResponse {
+    ip: 8.8.4.4
+    location: class Location {
+        countryCode2: US
+        countryCode3: USA
+        countryName: United States
+        countryNameOfficial: United States of America
+        countryCapital: Washington, D.C.
+        stateProv: California
+        stateCode: US-CA
+        district: Santa Clara
+        city: Mountain View
+        zipcode: 94043-1351
+        latitude: 37.42240
+        longitude: -122.08421
+        isEu: false
+        countryFlag: https://ipgeolocation.io/static/flags/us_64.png
+        geonameId: 6301403
+        countryEmoji: 🇺🇸
+    }
 }
 ```
 
+### 2. Standard Plan Examples
+#### Default Fields
 
-** IPGeolocation provides geolocation information in the following languages:
+```java
+import io.ipgeolocation.sdk.api.IPGeolocationAPI;
+import io.ipgeolocation.sdk.model.GeolocationResponse;
 
-* English (en)
-* German (de)
-* Russian (ru)
-* Japanese (ja)
-* French (fr)
-* Chinese Simplified (cn)
-* Spanish (es)
-* Czech (cs)
-* Italian (it)
+IPGeolocationAPI api = new IPGeolocationAPI(client);
+GeolocationResponse response = api.getIPGeolocation()
+        .ip("8.8.8.8")
+        .execute();
 
-By default, geolocation information is returned into English. Response in a language other than English is available to
-paid users only.
+System.out.println(response);
+```
+Sample Response:
+```
+class GeolocationResponse {
+    ip: 8.8.8.8
+    location: class Location {
+        continentCode: NA
+        continentName: North America
+        countryCode2: US
+        countryCode3: USA
+        countryName: United States
+        countryNameOfficial: United States of America
+        countryCapital: Washington, D.C.
+        stateProv: California
+        stateCode: US-CA
+        district: Santa Clara
+        city: Mountain View
+        zipcode: 94043-1351
+        latitude: 37.42240
+        longitude: -122.08421
+        isEu: false
+        countryFlag: https://ipgeolocation.io/static/flags/us_64.png
+        geonameId: 6301403
+        countryEmoji: 🇺🇸
+    }
+    countryMetadata: class CountryMetadata {
+        callingCode: +1
+        tld: .us
+        languages: [en-US, es-US, haw, fr]
+    }
+    network: class Network {
+        asn: class NetworkAsn {
+            asNumber: AS15169
+            organization: Google LLC
+            country: US
+        }
+        company: class NetworkCompany {
+            name: Google LLC
+        }
+    }
+    currency: class Currency {
+        code: USD
+        name: US Dollar
+        symbol: $
+    }
+}
+```
+### Retrieving Geolocation Data in Multiple Languages
+Here is an example to get the geolocation data for IP address '2001:4230:4890::1' in French language:
+```java
+IPGeolocationAPI api = new IPGeolocationAPI(client);
+GeolocationResponse response = api.getIPGeolocation()
+        .ip("2001:4230:4890::1")
+        .lang("fr")
+        .execute();
 
-## IP Geolocation API Java SDK Objects Reference
+System.out.println(response);
+```
 
-IP Geolocation API Java SDK has the following classes that you can use to fully leverage it.
+Sample Response
+```
+class GeolocationResponse {
+    ip: 2001:4230:4890:0:0:0:0:1
+    location: class Location {
+        continentCode: AF
+        continentName: Afrique
+        countryCode2: MU
+        countryCode3: MUS
+        countryName: Maurice
+        countryNameOfficial: 
+        countryCapital: Port Louis
+        stateProv: Wilhems des plaines
+        stateCode: MU-PW
+        district: Quatre Bornes
+        city: Quatre Bornes
+        zipcode: 72201
+        latitude: -20.24304
+        longitude: 57.49631
+        isEu: false
+        countryFlag: https://ipgeolocation.io/static/flags/mu_64.png
+        geonameId: 1106777
+        countryEmoji: 🇲🇺
+    }
+    countryMetadata: class CountryMetadata {
+        callingCode: +230
+        tld: .mu
+        languages: [en-MU, bho, fr]
+    }
+    network: class Network {
+        asn: class NetworkAsn {
+            asNumber: AS0
+            organization: 
+            country:
+        }
+        company: class NetworkCompany {
+            name: African Network Information Center AfriNIC Ltd
+        }
+    }
+    currency: class Currency {
+        code: MUR
+        name: Mauritius Rupee
+        symbol: ₨
+    }
+}
+```
 
-### Class: io.ipgeolocation.api.IPGeolocationAPI
+#### Include HostName, Timezone and User-Agent
+```java
+IPGeolocationAPI api = new IPGeolocationAPI(client);
+GeolocationResponse response = api.getIPGeolocation()
+        .ip("4.5.6.7")
+        .fields("location.country_name,location.country_capital")
+        .include("user_agent, time_zone, hostnameFallbackLive")
+        .execute();
 
-| Method                                                          | Description                                                                                                                                    | Return Type       |
-|:----------------------------------------------------------------|:-----------------------------------------------------------------------------------------------------------------------------------------------|:------------------|
-| IPGeolocationAPI(String apiKey) throws IllegalArgumentException | Constructs the IPGeolocationAPI object. It takes a valid apiKey as a parameter and throws IllegalArgumentException if apiKey is empty or null. |                   |
-| getApiKey()                                                     | Return the API key that you set to query the IPGeolocation API.                                                                                | String            |
-| getGeolocation()                                                | Query Geolocation API.                                                                                                                         | Geolocation       |
-| getGeolocation(GeolocationParams params)                        | Query Geolocation API based on the parameters passed.                                                                                          | Geolocation       |
-| getBulkGeolocation(String[] ips)                                | Query Geolocation API to lookup multiple IP addresses (max. 50).                                                                               | List<Geolocation> |
-| getBulkGeolocation(String[] ips, GeolocationParams params)      | Query Geolocation API to lookup multiple IP addresses (max. 50) based upon the parameters passed.                                              | List<Geolocation> |
-| getTimezone()                                                   | Query Timezone API based on calling machine's IP address.                                                                                      | Timezone          |
-| getTimezone(TimezoneParams params)                              | Query Timezone API based on the parameters passed.                                                                                             | Timezone          |
-| convertTimeZone(TimezoneConvertParams params)                   | Convert between different timezones.                                                                                                           | TimezoneConvert   |
-| getUserAgent(String uaString)                                   | Query UserAgent API.                                                                                                                           | UserAgent         |
-| getBulkUserAgent(String[] uaStrings)                            | Query UserAgent API to lookup multiple user-agent strings (max. 50).                                                                           | List<UserAgent>   |
-| getAstronomy()                                                  | Query Astronomy API with default the parameters.                                                                                               | Astronomy         |
-| getAstronomy(AstronomyParams params)                            | Query Astronomy API based upon the parameters passed.                                                                                          | Astronomy         |
+System.out.println(response);
+```
+Sample Response
+```
+class GeolocationResponse {
+    ip: 4.5.6.7
+    hostname: 4.5.6.7
+    location: class Location {
+        countryName: United States
+        countryCapital: Washington, D.C.
+    }
+    timeZone: class TimeZone {
+        name: America/Chicago
+        offset: -6
+        offsetWithDst: -5
+        currentTime: 2025-05-28 06:52:16.748-0500
+        currentTimeUnix: 1748433136.748
+        isDst: true
+        dstSavings: 1
+        dstExists: true
+        dstStart: class TimeZoneDstStart {
+            utcTime: 2025-03-09 TIME 08
+            duration: +1H
+            gap: true
+            dateTimeAfter: 2025-03-09 TIME 03
+            dateTimeBefore: 2025-03-09 TIME 02
+            overlap: false
+        }
+        dstEnd: class TimeZoneDstEnd {
+            utcTime: 2025-11-02 TIME 07
+            duration: -1H
+            gap: false
+            dateTimeAfter: 2025-11-02 TIME 01
+            dateTimeBefore: 2025-11-02 TIME 02
+            overlap: true
+        }
+    }
+    userAgent: class UserAgentData {
+        userAgentString: OpenAPI-Generator/1.0.0/java
+        name: OpenAPI-Generator
+        type: Special
+        version: 1.0.0
+        versionMajor: 1
+        device: class UserAgentDataDevice {
+            name: Unknown
+            type: Unknown
+            brand: Unknown
+            cpu: Unknown
+        }
+        engine: class UserAgentDataEngine {
+            name: Unknown
+            type: Unknown
+            version: ??
+            versionMajor: ??
+        }
+        operatingSystem: class UserAgentDataOperatingSystem {
+            name: Unknown
+            type: Unknown
+            version: ??
+            versionMajor: ??
+            build: ??
+        }
+    }
+}
+```
+**Note on Hostname Parameters**
 
-### Class: io.ipgeolocation.api.GeolocationParams
+The IP Geolocation API supports hostname lookup for all paid subscriptions. However, this is not included by default. To enable hostname resolution, use the `include` parameter with one of the following options:
 
-| Method                          | Description                                                                                 | Return Type                     |
-|:--------------------------------|:--------------------------------------------------------------------------------------------|:--------------------------------|
-| getIPAddress()                  | Get IP address set to lookup geolocation.                                                   | String                          |
-| getLang()                       | Get language set to lookup geolocation.                                                     | String                          |
-| getFields()                     | Get fields set to lookup geolocation.                                                       | String                          |
-| isIncludeHostname()             | Returns Boolean object whether hostname is included in response or not.                     | boolean                         |
-| isIncludeHostnameFallbackLive() | Returns Boolean object whether hostname with fall-back-live is included in response or not. | boolean                         |
-| isIncludeLiveHostname()         | Returns Boolean object whether live hostname is included in response or not.                | boolean                         |
-| isIncludeSecurity()             | Returns Boolean object whether Security object is included in response or not.              | boolean                         |
-| isIncludeUserAgentDetail()      | Returns Boolean object whether UserAgent object is included in response or not.             | boolean                         |
-| getExcludes()                   | Get fields (as a comma separated value) that have been excluded from response.              | String                          |
-| builder()                       | Returns an instance of GeolocationParamsBuilder.                                            | static GeolocationParamsBuilder |
+- `hostname`: Performs a quick lookup using the internal hostname database. If no match is found, the IP is returned as-is. This is fast but may produce incomplete results.
+- `liveHostname`: Queries live sources for accurate hostname resolution. This may increase response time.
+- `hostnameFallbackLive`: Attempts the internal database first, and falls back to live sources if no result is found. This option provides a balance of speed and reliability.
 
-### Class: io.ipgeolocation.api.GeolocationParamsBuilder
+### 3. Advanced Plan Examples
+#### Include DMA, Abuse and Security
 
-| Method                        | Description                                                                                                                                                                                                                                                                                                                      | Return Type                  |
-|:------------------------------|:---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:-----------------------------|
-| withIPAddress(String ip)      | Sets IP address to lookup geolocation.                                                                                                                                                                                                                                                                                           | GeolocationParamsBuilder     |
-| withLang(String lang)         | Set language parameter to lookup geolocation.                                                                                                                                                                                                                                                                                    | GeolocationParamsBuilder     |
-| withFields(String fields)     | Set fields to lookup geolocation.                                                                                                                                                                                                                                                                                                | GeolocationParamsBuilder     |
-| includeHostname()             | This URL parameter enables the IPGeolocation API to lookup hostname from our IP-Hostname database and returns the same IP address if there is no hostname found for the queried IP address. Lookup thru IP-Hostname database is faster than other options but is experimental and under process and can produce unwanted output. | GeolocationParamsBuilder     |
-| includeHostnameFallbackLive() | This URL parameter enables the IPGeolocation API to lookup hostname from our IP-Hostname database and if there is no hostname found for the queried IP address, then lookup thru the live sources. This option has been introduced for faster and accurate lookup.                                                               | GeolocationParamsBuilder     |
-| includeLiveHostname()         | Returns Boolean object whether live hostname is included in response or not.                                                                                                                                                                                                                                                     | GeolocationParamsBuilder     |
-| includeSecurity()             | Returns Boolean object whether Security object is included in response or not.                                                                                                                                                                                                                                                   | GeolocationParamsBuilder     |
-| includeUserAgentDetail()      | Returns Boolean object whether UserAgent object is included in response or not.                                                                                                                                                                                                                                                  | GeolocationParamsBuilder     |
-| withExcludes(String excludes) | Set fields (as a comma separated value) to exclude from response.                                                                                                                                                                                                                                                                | GeolocationParamsBuilder     |
-| build()                       | Returns an instance of GeolocationParams with the values set earlier.                                                                                                                                                                                                                                                            | GeolocationParams            |
+```java
+import io.ipgeolocation.sdk.api.IPGeolocationAPI;
+import io.ipgeolocation.sdk.model.GeolocationResponse;
 
-### Class: io.ipgeolocation.api.Geolocation
+IPGeolocationAPI api = new IPGeolocationAPI(client);
+GeolocationResponse response = api.getIPGeolocation()
+        .ip("8.8.8.8")
+        .excludes("location.country_flag,location.country_emoji")
+        .include("dma,abuse,security")
+        .execute();
 
-| Method                   | Description                                                  | Return Type         |
-|:-------------------------|:-------------------------------------------------------------|:--------------------|
-| getDomain()              | Returns domain name if domain name is passed.                | String              |
-| getHostname()            | Returns hostname for the IP address.                         | String              |
-| getIP()                  | Returns IP address of the geolocation.                       | String              |
-| getContinentCode()       | Returns 2-letters continent code.                            | String              |
-| getContinentName()       | Returns continent name.                                      | String              |
-| getCountryCode2()        | Returns 2-letters country code.                              | String              |
-| getCountryCode3()        | Returns 3-letters country code.                              | String              |
-| getCountryName()         | Returns country name.                                        | String              |
-| getCountryCapital()      | Returns country capital.                                     | String              |
-| getStateProvince()       | Returns state/province.                                      | String              |
-| getStateCode()           | Returns the ISO code for state/province.                     | String              |
-| getDistrict()            | Returns district.                                            | String              |
-| getCity()                | Returns city.                                                | String              |
-| getZipCode()             | Returns zip code.                                            | String              |
-| getLatitude()            | Returns latitude of the city.                                | BigDecimal          |
-| getLongitude()           | Returns longitude of the city.                               | BigDecimal          |
-| isEU()                   | Returns is the country in European Union.                    | boolean             |
-| getCallingCode()         | Returns country calling code.                                | String              |
-| getCountryTLD()          | Returns country's top level domain like '.au' for Australia. | String              |
-| getLanguages()           | Returns languages spoken in the country.                     | String              |
-| getCountryFlag()         | Returns a URL to country's flag.                             | String              |
-| getISP()                 | Returns ISP name.                                            | String              |
-| getConnectionType()      | Returns connection type of the IP address.                   | String              |
-| getOrganization()        | Returns organization of the IP address.                      | String              |
-| getAsn()                 | Returns AS number of the IP address.                         | String              |
-| getGeoNameId()           | Returns Geo Name ID from geonames.org database.              | String              |
-| getCurrency()            | Returns currency information of the country.                 | GeolocationCurrency |
-| getTimezone()            | Returns time zone information of the country.                | GeolocationTimezone |
-| getGeolocationSecurity() | Returns security details of the ip address.                  | GeolocationSecurity |
-| getUserAgent()           | Returns user agent information of the country.               | UserAgent           |
+System.out.println(response);
+```
+Sample Response:
+```
+class GeolocationResponse {
+    ip: 8.8.8.8
+    location: class Location {
+        continentCode: NA
+        continentName: North America
+        countryCode2: US
+        countryCode3: USA
+        countryName: United States
+        countryNameOfficial: United States of America
+        countryCapital: Washington, D.C.
+        stateProv: California
+        stateCode: US-CA
+        district: Santa Clara
+        city: Mountain View
+        zipcode: 94043-1351
+        latitude: 37.42240
+        longitude: -122.08421
+        isEu: false
+        countryFlag: null
+        geonameId: 6301403
+        countryEmoji: null
+        accuracyRadius: 
+        locality: Mountain View
+        dmaCode: 807
+    }
+    countryMetadata: class CountryMetadata {
+        callingCode: +1
+        tld: .us
+        languages: [en-US, es-US, haw, fr]
+    }
+    network: class Network {
+        asn: class NetworkAsn {
+            asNumber: AS15169
+            organization: Google LLC
+            country: US
+            asnName: GOOGLE
+            type: BUSINESS
+            domain: about.google
+            dateAllocated: 
+            allocationStatus: assigned
+            numOfIpv4Routes: 965
+            numOfIpv6Routes: 104
+            rir: ARIN
+        }
+        connectionType: 
+        company: class NetworkCompany {
+            name: Google LLC
+            type: Business
+            domain: googlellc.com
+        }
+    }
+    currency: class Currency {
+        code: USD
+        name: US Dollar
+        symbol: $
+    }
+    security: class Security {
+        threatScore: 0
+        isTor: false
+        isProxy: false
+        proxyType: 
+        proxyProvider: 
+        isAnonymous: false
+        isKnownAttacker: false
+        isSpam: false
+        isBot: false
+        isCloudProvider: false
+        cloudProvider: 
+    }
+    abuse: class Abuse {
+        route: 8.8.8.0/24
+        country: 
+        handle: ABUSE5250-ARIN
+        name: Abuse
+        organization: Abuse
+        role: abuse
+        kind: group
+        address: 1600 Amphitheatre Parkway
+        Mountain View
+        CA
+        94043
+        United States
+        emails: [network-abuse@google.com]
+        phoneNumbers: [+1-650-253-0000]
+    }
+}
+```
+These examples demonstrate typical usage of the IP Geolocation API with different subscription tiers. Use `fields` to specify exactly which data to receive, `include` for optional data like security and user agent, and `excludes` to omit specific keys from the response.
 
-### Class: io.ipgeolocation.api.GeolocationCurrency
+**Note:** All features available in the Free plan are also included in the Standard and Advanced plans. Similarly, all features of the Standard plan are available in the Advanced plan.
 
-| Method      | Description                      | Return Type |
-|:------------|:---------------------------------|:------------|
-| getName()   | Returns currency name.           | String      |
-| getCode()   | Returns 3-letters currency code. | String      |
-| getSymbol() | Returns currency symbol.         | String      |
+## Bulk IP Geolocation Example
+The SDK also supports bulk IP geolocation requests using the `getBulkIpGeolocation()` method. All parameters like `fields`, `include`, and `excludes` can also be used in bulk requests.
 
-### Class: io.ipgeolocation.api.GeolocationTimezone
+```java
 
-| Method               | Description                                                               | Return Type |
-|:---------------------|:--------------------------------------------------------------------------|:------------|
-| getName()            | Returns standard time zone ID like "America/New_York".                    | String      |
-| getOffset()          | Returns time zone offset from UTC.                                        | int         |
-| getCurrentTime()     | Returns current date-time string in the format "yyyy-MM-dd HH:mm:ss.SSSZ" | String      |
-| getCurrentTimeUnix() | Returns current date-time as a unix time                                  | BigDecimal  |
-| isDST()              | Returns is the country observing daylight saving time.                    | Boolean     |
-| getDSTSavings()      | Returns daylight savings time (in hours).                                 | int         |
-| getOffsetWithDst()   | Returns daylight savings time offset with UTC (in hours).                 | int         |
+import io.ipgeolocation.sdk.model.BulkIPRequest;
+import io.ipgeolocation.sdk.api.IPGeolocationAPI;
+import io.ipgeolocation.sdk.model.BulkGeolocationResponse;
 
-### Class: io.ipgeolocation.api.GeolocationSecurity
+IPGeolocationAPI api = new IPGeolocationAPI(client);
 
-| Method             | Description                                                     | Return Type |
-|:-------------------|:----------------------------------------------------------------|:------------|
-| getThreatScore()   | Returns threat score for the ip address                         | int         |
-| isTor()            | Returns Boolean object whether the ip is using tor or not.      | boolean     |
-| isProxy()          | Returns Boolean object whether the ip is using proxy or not.    | boolean     |
-| getProxyType()     | Returns the type of proxy used by ip address                    | String      |
-| isAnonymous()      | Returns Boolean object whether the ip is anonymous or not.      | boolean     |
-| isKnownAttacker()  | Returns Boolean object whether the ip is known attacker or not. | boolean     |
-| isBot()            | Returns Boolean object whether the ip is bot or not.            | boolean     |
-| isSpam()           | Returns Boolean object whether the ip is spam or not.           | boolean     |
-| isCloudProvider()  | Returns Boolean object whether the ip is cloud provider or not. | boolean     |
+BulkIPRequest bulkRequest = new BulkIPRequest();
+bulkRequest.addIp("8.8.8.8");
+bulkRequest.addIp("1.1.1.1");
 
-### Class: io.ipgeolocation.api.TimezoneParams
+List<BulkGeolocationResponse> response = api.getBulkIPGeolocation()
+        .bulkIpRequest(bulkRequest)
+        .fields("location.country_name,location.city")
+        .include("security,timezone")
+        .excludes("location.continent_code")
+        .execute();
 
-| Method         | Description                                                               | Return Type                  |
-|:---------------|:--------------------------------------------------------------------------|:-----------------------------|
-| getTimezone()  | Get time zone ID set to query time zone information.                      | String                       |
-| getIPAddress() | Get IP address set to query time zone information.                        | String                       |
-| getLatitude()  | Returns latitude set to query time zone information.                      | BigDecimal                   |
-| getLongitude() | Returns longitude set to query time zone information.                     | BigDecimal                   |
-| getLocation()  | Get location parameter value to get timezone details.                     | String                       |
-| getLang()      | Get language set to lookup geolocation.                                   | String                       |
-| builder()      | Returns an instance of TimezoneParamsBuilder.                             | static TimezoneParamsBuilder |
+System.out.println(response);
+```
 
-### Class: io.ipgeolocation.api.TimezoneParamsBuilder
+## IP Security Examples
 
-| Method                                                     | Description                                                               | Return Type           |
-|:-----------------------------------------------------------|:--------------------------------------------------------------------------|:----------------------|
-| withTimezone(String timeZone)                              | Sets time zone ID to query time zone information.                         | TimezoneParamsBuilder |
-| withIPAddress(String ipAddress)                            | Sets IP address to query time zone information.                           | TimezoneParamsBuilder |
-| withCoordinates(BigDecimal latitude, BigDecimal longitude) | Sets latitude and longitude of a location to query time zone information. | TimezoneParamsBuilder |
-| withLocation(String location)                              | Set location parameter to get timezone details.                           | TimezoneParamsBuilder |
-| withLang(String lang)                                      | Set language parameter to lookup geolocation. Default is 'en'.            | TimezoneParamsBuilder |
-| build()                                                    | Returns an instance of TimezoneParams with the values set earlier.        | TimezoneParams        |
+This section provides usage examples of the `getIPSecurity()` method from the SDK across various subscription tiers. Each example demonstrates different ways to query threat intelligence and risk metadata using parameters like fields, excludes, and optional modules.
 
-### Class: io.ipgeolocation.api.Timezone
+For full API specifications, refer to the [official IP Security API documentation](https://ipgeolocation.io/ip-security-api.html#documentation-overview).
 
-| Method                     | Description                                                                            | Return Type |
-|:---------------------------|:---------------------------------------------------------------------------------------|:------------|
-| getTimezone()              | Returns time zone ID like "America/New_York".                                          | String      |
-| getTimezoneOffset()        | Returns time zone offset from UTC.                                                     | int         |
-| getTimezoneOffsetWithDST() | Returns time zone offset with dst value from UTC.                                      | int         |
-| getDate()                  | Returns current date in the format "yyyy-MM-dd".                                       | String      |
-| getDateTime()              | Returns date-time string in the format "yyyy-MM-dd HH:mm:ss".                          | String      |
-| getDateTimeTxt()           | Returns date-time string in the format "EEEE, MMMM dd, yyyy HH:mm:ss".                 | String      |
-| getDateTimeWti()           | Returns date-time string in the format "EEE, dd MMM yyyy HH:mm:ss Z".                  | String      |
-| getDateTimeYmd()           | Returns date-time string in the format "yyyy-MM-dd'T'HH:mm:ssZ".                       | String      |
-| getDateTimeUnix()          | Returns current date-time as unix time.                                                | BigDecimal  |
-| getTime24()                | Returns current time in the format "HH:mm:ss".                                         | String      |
-| getTime12()                | Returns current time in the format "hh:mm:ss aa".                                      | String      |
-| getWeek()                  | Returns current week of the year.                                                      | int         |
-| getMonth()                 | Returns current month of the year.                                                     | int         |
-| getYear()                  | Returns current year.                                                                  | int         |
-| getYearAbbr()              | Returns 2-letters year abbreviation like "18".                                         | String      |
-| isDST()                    | Returns is the country observing Daylight Saving time.                                 | boolean     |
-| getDSTSavings()            | Returns daylight savings time (in hours).                                              | int         |
-| getGeo()                   | Returns geolocation of timezone if you lookup timezone information from an IP address. | TimezoneGeo |
+---
 
-### Class: io.ipgeolocation.api.TimezoneGeo
+### Basic Request (Minimal Setup)
 
-| Method             | Description                      | Return Type |
-|:-------------------|:---------------------------------|:------------|
-| getCountryCode2()  | Returns 2-letters country code.  | String      |
-| getCountryCode3()  | Returns 3-letters country code.  | String      |
-| getCountryName()   | Returns country name.            | String      |
-| getStateProvince() | Returns state/province.          | String      |
-| getDistrict()      | Returns district.                | String      |
-| getCity()          | Returns city.                    | String      |
-| getZipCode()       | Returns zip code.                | String      |
-| getLatitude()      | Returns latitude of the city.    | BigDecimal  |
-| getLongitude()     | Returns longitude of the city.   | BigDecimal  |
+```java
+import io.ipgeolocation.sdk.api.IPSecurityAPI;
+import io.ipgeolocation.sdk.model.SecurityAPIResponse;
 
-### Class: io.ipgeolocation.api.UserAgent
+IPSecurityAPI api = new IPSecurityAPI(client);
+SecurityAPIResponse response = api.getIPSecurity()
+        .ip("2.56.188.34")
+        .execute();
 
-| Method                 | Description                                       | Return Type              |
-|:-----------------------|:--------------------------------------------------|:-------------------------|
-| getUserAgentString()   | Returns user-agent string.                        | String                   |
-| getName()              | Returns name of the user agent.                   | String                   |
-| getType()              | Returns type of the user agent.                   | String                   |
-| getVersion()           | Returns version of the user agent.                | String                   |
-| getVersionMajor()      | Returns version major of the user agent.          | String                   |
-| getDevice()            | Returns user-agent's device details.              | UserAgentDevice          |
-| getEngine()            | Returns user-agent's engine details.              | UserAgentEngine          |
-| getOperatingSystem()   | Returns user-agent's operating system details.    | UserAgentOperatingSystem |
+System.out.println(response);
+```
 
-### Class: io.ipgeolocation.api.UserAgentDevice
+Sample Response
+```
+class SecurityAPIResponse {
+    ip: 2.56.188.34
+    security: class Security {
+        threatScore: 80
+        isTor: false
+        isProxy: true
+        proxyType: VPN
+        proxyProvider: Nord VPN
+        isAnonymous: true
+        isKnownAttacker: true
+        isSpam: false
+        isBot: false
+        isCloudProvider: true
+        cloudProvider: Packethub S.A.
+    }
+}
+```
+### Include Multiple Optional Fields
+```java
+SecurityAPIResponse response = api.getIPSecurity()
+    .ip("2.56.188.34")
+    .include("location,network,currency,time_zone,user_agent,country_metadata,hostname")
+    .execute();
+```
 
-| Method     | Description                       | Return Type |
-|:-----------|:----------------------------------|:------------|
-| getName()  | Returns user-agent's device name. | String      |
-| getType()  | Returns user-agent's type name.   | String      |
-| getBrand() | Returns user-agent's brand name.  | String      |
-| getCpu()   | Returns user-agent's CPU name.    | String      |
+Sample Response
+```
+class SecurityAPIResponse {
+    ip: 2.56.188.34
+    hostname: 2.56.188.34
+    security: class Security {
+        threatScore: 80
+        isTor: false
+        isProxy: true
+        proxyType: VPN
+        proxyProvider: Nord VPN
+        isAnonymous: true
+        isKnownAttacker: true
+        isSpam: false
+        isBot: false
+        isCloudProvider: true
+        cloudProvider: Packethub S.A.
+    }
+    location: class LocationMinimal {
+        continentCode: NA
+        continentName: North America
+        countryCode2: US
+        countryCode3: USA
+        countryName: United States
+        countryNameOfficial: United States of America
+        countryCapital: Washington, D.C.
+        stateProv: Texas
+        stateCode: US-TX
+        district: Dallas County
+        city: Dallas
+        zipcode: 75207
+        latitude: 32.78916
+        longitude: -96.82170
+        isEu: false
+        countryFlag: https://ipgeolocation.io/static/flags/us_64.png
+        geonameId: 7181768
+        countryEmoji: 🇺🇸
+    }
+    network: class NetworkMinimal {
+        asn: class NetworkMinimalAsn {
+            asNumber: AS62240
+            organization: Clouvider Limited
+            country: GB
+        }
+        company: class NetworkMinimalCompany {
+            name: Packethub S.A.
+        }
+    }
+    timeZone: class TimeZone {
+        name: America/Chicago
+        offset: -6
+        offsetWithDst: -5
+        currentTime: 2025-05-29 08:27:44.939-0500
+        currentTimeUnix: 1748525264.939
+        isDst: true
+        dstSavings: 1
+        dstExists: true
+        dstStart: class TimeZoneDstStart {
+            utcTime: 2025-03-09 TIME 08
+            duration: +1H
+            gap: true
+            dateTimeAfter: 2025-03-09 TIME 03
+            dateTimeBefore: 2025-03-09 TIME 02
+            overlap: false
+        }
+        dstEnd: class TimeZoneDstEnd {
+            utcTime: 2025-11-02 TIME 07
+            duration: -1H
+            gap: false
+            dateTimeAfter: 2025-11-02 TIME 01
+            dateTimeBefore: 2025-11-02 TIME 02
+            overlap: true
+        }
+    }
+    userAgent: class UserAgentData {
+        userAgentString: OpenAPI-Generator/1.0.0/java
+        name: OpenAPI-Generator
+        type: Special
+        version: 1.0.0
+        versionMajor: 1
+        device: class UserAgentDataDevice {
+            name: Unknown
+            type: Unknown
+            brand: Unknown
+            cpu: Unknown
+        }
+        engine: class UserAgentDataEngine {
+            name: Unknown
+            type: Unknown
+            version: ??
+            versionMajor: ??
+        }
+        operatingSystem: class UserAgentDataOperatingSystem {
+            name: Unknown
+            type: Unknown
+            version: ??
+            versionMajor: ??
+            build: ??
+        }
+    }
+    countryMetadata: class CountryMetadata {
+        callingCode: +1
+        tld: .us
+        languages: [en-US, es-US, haw, fr]
+    }
+    currency: class Currency {
+        code: USD
+        name: US Dollar
+        symbol: $
+    }
+}
+```
+### Request with Field Filtering
 
-### Class: io.ipgeolocation.api.UserAgentEngine
+```java
+SecurityAPIResponse response = api.getIPSecurity()
+        .ip("195.154.221.54")
+        .fields("is_tor,is_proxy,is_bot,is_spam")
+        .execute();
 
-| Method            | Description                                | Return Type |
-|:------------------|:-------------------------------------------|:------------|
-| getName()         | Returns user-agent's engine name.          | String      |
-| getType()         | Returns user-agent's engine type.          | String      |
-| getVersion()      | Returns user-agent's engine version.       | String      |
-| getVersionMajor() | Returns user-agent's engine version major. | String      |
+System.out.println(response);
+```
+Sample Response
+```
+class SecurityAPIResponse {
+    ip: 195.154.221.54
+    security: class Security {
+        isTor: false
+        isProxy: true
+        isSpam: false
+        isBot: false
+    }
+}
 
-### Class: io.ipgeolocation.api.UserAgentOperatingSystem
+```
+## Bulk IP Security Request
+The SDK also supports bulk IP Security requests using the `getBulkIPSecurity()` method. All parameters like `fields`, `include`, and `excludes` can also be used in bulk requests.
 
-| Method            | Description                                          | Return Type |
-|:------------------|:-----------------------------------------------------|:------------|
-| getName()         | Returns user-agent's operating system name.          | String      |
-| getType()         | Returns user-agent's operating system type.          | String      |
-| getVersion()      | Returns user-agent's operating system version.       | String      |
-| getVersionMajor() | Returns user-agent's operating system version major. | String      |
+```java
+import io.ipgeolocation.sdk.model.BulkSecurityResponse;
+import io.ipgeolocation.sdk.model.BulkIPRequest;
 
-### Class: io.ipgeolocation.api.AstronomyParams
+BulkIPRequest bulkRequest = new BulkIPRequest();
+bulkRequest.addIp("2.56.188.34");
+bulkRequest.addIp("2.56.188.35");
 
-| Method            | Description                                                        | Return Type                   |
-|:------------------|:-------------------------------------------------------------------|:------------------------------|
-| getLocation()     | Returns location parameter value to get astronomy information.     | String                        |
-| getLatitude()     | Returns latitude parameter value to get astronomy information.     | BigDecimal                    |
-| getLongitude()    | Returns longitude parameter value to get astronomy information.    | BigDecimal                    |
-| getIpAddress()    | Returns IP address parameter value to get astronomy information.   | String                        |
-| getDate()         | Returns date parameter value to get astronomy information.         | String                        |
-| getLang()         | Returns language set to get the astronomy information.             | String                        |
-| builder()         | Returns an instance of AstronomyParamsBuilder class.               | static AstronomyParamsBuilder |
+List<BulkSecurityResponse> response = api.getBulkIPSecurity(bulkIPRequest)
+        .include("location,network")
+        .fields("security.threat_score,location.country_name")
+        .execute();
 
-### Class: io.ipgeolocation.api.AstronomyParams.AstronomyParamsBuilder
-| Method                                                     | Description                                                               | Return Type            |
-|:-----------------------------------------------------------|:--------------------------------------------------------------------------|:-----------------------|
-| withLocation(String location)                              | Sets location to query astronomy information.                             | AstronomyParamsBuilder |
-| withCoordinates(BigDecimal latitude, BigDecimal longitude) | Sets latitude and longitude of a location to query astronomy information. | AstronomyParamsBuilder |
-| withIPAddress(String ipAddress)                            | Sets IP address of which to query astronomy information.                  | AstronomyParamsBuilder | 
-| withDate(String date)                                      | Sets date of which to query astronomy information.                        | AstronomyParamsBuilder |
-| withLang(String lang)                                      | Sets language in which to query information.                              | AstronomyParamsBuilder |
-| build()                                                    | Returns an instance of AstronomyParams with the above specified value(s). | AstronomyParams        |
+System.out.println(response);
+```
+## ASN API Examples
 
-### Class: io.ipgeolocation.api.Astronomy
-| Method                    | Description                                                                              | Return Type       |
-|:--------------------------|:-----------------------------------------------------------------------------------------|:------------------|
-| getDate()                 | Returns the date of which the information is queried in "yyyy-MM-dd" format.             | String            |
-| getCurrentTime()          | Returns the current time in the format "HH:mm:ss".                                       | String            |
-| getSunrise()              | Returns the time at which sun rises in format "HH:mm".                                   | String            |
-| getSunset()               | Returns the time at which sun sets in format "HH:mm".                                    | String            |
-| getSunStatus()            | Returns the status of sunrise and sunset as "-", if these values are not available.      | String            |
-| getSolarNoon()            | Returns the solar noon time in the format "HH:mm".                                       | String            |
-| getDayLength()            | Returns the day length in the format "HH:mm".                                            | String            |
-| getSunAltitude()          | Returns the altitude of the sun in degrees.                                              | BigDecimal        |
-| getSunDistance()          | Returns the distance from the sun in km.                                                 | BidDecimal        |
-| getSunAzimuth()           | Returns the azimuth of the sun in degrees.                                               | BigDecimal        |
-| getMoonrise()             | Returns the moon rise time in the format "HH:mm".                                        | BigDecimal        |
-| getMoonset()              | Returns the moon set time in the format "HH:mm".                                         | BigDecimal        |
-| getMoonStatus()           | Returns the status of moon rise and moon set as "-", if these values are not available.  | BigDecimal        |
-| getMoonAltitude()         | Returns the altitude of the moon in degrees.                                             | BigDecimal        |
-| getMoonDistance()         | Returns the distance from the moon in km.                                                | BigDecimal        |
-| getMoonAzimuth()          | Returns the azimuth of the moon in degrees.                                              | BigDecimal        |
-| getMoonParallacticAngle() | Returns the Moon Parallactic angle of the moon in degrees.                               | BigDecimal        |
-| getLocation()             | Returns the instance of the AstronomyLocation related to astronomy information.          | AstronomyLocation |
-| toString()                | Returns the fetched JSON from the API in formatted way.                                  | String            |
+This section provides usage examples of the `getAsnDetails()` method from the SDK. These methods allow developers to retrieve detailed ASN-level network data either by ASN number or by IP address. Note that ASN API is only available in the Advanced subscription plans.
 
-### Class: io.ipgeolocation.api.AstronomyLocation
-| Method                    | Description                                                                               | Return Type |
-|:--------------------------|:------------------------------------------------------------------------------------------|:------------|
-| getLocation()             | Returns the input location i.e., street address.                                          | String      |
-| getLatitude()             | Returns the latitude value for which the astronomy information was queried.               | BigDecimal  |
-| getLongitude()            | Returns the longitude value for which the astronomy information was queried.              | BigDecimal  |
-| getZipcode()              | Returns the zip code related to the queried astronomy information.                        | String      |
-| getCountryCode2()         | Returns the two letter country code for queried astronomy information. e.g. 'PK'.         | String      |
-| getCountryCode3()         | Returns the three letter country code for the queried astronomy information. e.g., 'PAK'. | String      |
-| getCountryName()          | Returns the general country name of the queried astronomy information.                    | String      |
-| getCountryNameOfficial()  | Returns the official country name of the queried astronomy information.                   | String      |
-| getStateProv()            | Returns the State/Province of the queried astronomy information.                          | String      |
-| getStateCode()            | Returns the state code of the queried astronomy information. e.g., 'PK-PB'                | String      |
-| getDistrict()             | Returns the district of the queried astronomy information.                                | String      |
-| getLocality()             | Returns the locality of the queried astronomy information.                                | String      |
-| getCity()                 | Returns the city of the queried astronomy information.                                    | String      |
-| toString()                | Returns the fetched JSON from the API in the formatted way.                               | String      |
+Refer to the [ASN API documentation](https://ipgeolocation.io/asn-api.html#documentation-overview) for a detailed list of supported fields and behaviors.
 
-### Class: io.ipgeolocation.api.TimezoneConvertParams
-| Method             | Description                                                                                                                             | Return Type                  |
-|:-------------------|:----------------------------------------------------------------------------------------------------------------------------------------|:-----------------------------|
-| getTimezoneFrom()  | Returns the source [timezone ID](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones) for which conversion would be performed. | String                       |
-| getTimezoneTo()    | Returns the target timezone ID for which conversion would be performed.                                                                 | String                       |
-| getTime()          | Returns the dateTime which would be used for conversion.                                                                                | String                       |
-| getLatitudeFrom()  | Returns the source latitude for which conversion would be performed.                                                                    | BigDecimal                   |
-| getLongitudeFrom() | Returns the source longitude for which conversion would be performed.                                                                   | BigDecimal                   |
-| getLatitudeTo()    | Returns the target latitude for which conversion would be performed.                                                                    | BigDecimal                   |
-| getLongitudeTo()   | Returns the target longitude for which conversion would be performed.                                                                   | BigDecimal                   |
-| getLocationFrom()  | Returns the source location (i.e., city, country) for which conversion would be performed.                                              | String                       |
-| getLocationTo()    | Returns the target location (i.e., city, country) for which conversion would be performed.                                              | String                       |
-| builder()          | Returns an instance of TimezoneConvertParamsBuilder class to create TimezoneConvertParams object with custom parameters.                | static TimezoneConvertParams |
+### Get ASN Information by IP Address
 
-### Class: io.ipgeolocation.api.TimezoneConvertParams.TimezoneConvertParamsBuilder
-| Method                                                                                        | Description                                                                                                                | Return Type                  |
-|:----------------------------------------------------------------------------------------------|:---------------------------------------------------------------------------------------------------------------------------|:-----------------------------|
-| withTimeZone(String timezoneFrom, String timezoneTo)                                          | Sets source and target [timezone IDs](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones) to perform conversion. | TimezoneConvertParamsBuilder |
-| withDateTime(String dateTime)                                                                 | Sets dateTime which would be used for conversion.                                                                          | TimezoneConvertParamsBuilder |
-| withCoordinates(BigDecimal latFrom, BigDecimal longFrom, BigDecimal latTo, BigDecimal longTo) | Sets the source and target geo coordinates.                                                                                | TimezoneConvertParamsBuilder |
-| withLocation(String locationFrom, String locationTo)                                          | Sets the source and target locations (i.e., city, country).                                                                | TimezoneConvertParamsBuilder |
-| build()                                                                                       | Returns an instance of the TimezoneConvertParams with the above specified value(s).                                        | TimezoneConvertParams        |
+```java
+import io.ipgeolocation.sdk.api.AsnLookupAPI;
+import io.ipgeolocation.sdk.api.AsnLookupApi;
+import io.ipgeolocation.sdk.model.ASNResponse;
+
+AsnLookupAPI api = new AsnLookupAPI(client);
+
+ASNResponse response = api.getAsnDetails()
+        .ip("8.8.8.8")
+        .execute();
+
+System.out.println(response);
+```
+Sample Response
+```
+class ASNResponse {
+    ip: 8.8.8.8
+    asn: class ASNDetails {
+        asNumber: AS15169
+        organization: Google LLC
+        country: US
+        asnName: GOOGLE
+        type: BUSINESS
+        domain: about.google
+        dateAllocated: 
+        allocationStatus: assigned
+        numOfIpv4Routes: 983
+        numOfIpv6Routes: 104
+        rir: ARIN
+    }
+}
+```
+### Get ASN Information by ASN Number
+
+```java
+import io.ipgeolocation.sdk.model.ASNResponse;
+
+ASNResponse response = api.getAsnDetails()
+        .asn("AS15169")
+        .execute();
+
+System.out.println(response);
+```
+Sample Response
+```
+class ASNResponse {
+    asn: class ASNDetails {
+        asNumber: AS15169
+        organization: Google LLC
+        country: US
+        asnName: GOOGLE
+        type: BUSINESS
+        domain: about.google
+        dateAllocated: 
+        allocationStatus: assigned
+        numOfIpv4Routes: 983
+        numOfIpv6Routes: 104
+        rir: ARIN
+    }
+}
+```
+
+### Combine All objects using Include
+```java
+import io.ipgeolocation.sdk.model.ASNResponse;
+
+ASNResponse response = api.getAsnDetails()
+        .asn("AS12")
+        .include("peers,downstreams,upstreams,routes,whois_response")
+        .execute();
+
+System.out.println(response);
+```
+Sample Response
+```
+class ASNResponse {
+    ip: null
+    asn: class ASNDetails {
+        asNumber: AS12
+        organization: New York University
+        country: US
+        asnName: NYU-DOMAIN
+        type: EDUCATION
+        domain: nyu.edu
+        dateAllocated: 
+        allocationStatus: assigned
+        numOfIpv4Routes: 11
+        numOfIpv6Routes: 1
+        rir: ARIN
+        routes: [192.76.177.0/24, 216.165.96.0/20, 216.165.89.0/24, 216.165.0.0/18, 216.165.112.0/21, 128.122.0.0/16, 2607:f600::/32, 216.165.102.0/24, 216.165.64.0/19, 216.165.120.0/22, 192.86.139.0/24, 216.165.103.0/24]
+        upstreams: [class ASNConnection {
+            asNumber: AS3269
+            description: Telecom Italia S.p.A.
+            country: IT
+        }, class ASNConnection {
+            asNumber: AS8220
+            description: COLT Technology Services Group Limited
+            country: GB
+        }, class ASNConnection {
+            asNumber: AS286
+            description: GTT Communications Inc.
+            country: US
+        }, class ASNConnection {
+            asNumber: AS3257
+            description: GTT Communications Inc.
+            country: US
+        }, class ASNConnection {
+            asNumber: AS3754
+            description: NYSERNet
+            country: US
+        }, class ASNConnection {
+            asNumber: AS3356
+            description: Level 3 Parent, LLC
+            country: US
+        }, class ASNConnection {
+            asNumber: AS6461
+            description: Zayo Bandwidth
+            country: US
+        }, class ASNConnection {
+            asNumber: AS137
+            description: Consortium GARR
+            country: IT
+        }]
+        downstreams: [class ASNConnection {
+            asNumber: AS394666
+            description: NYU Langone Health
+            country: US
+        }, class ASNConnection {
+            asNumber: AS54965
+            description: Polytechnic Institute of NYU
+            country: US
+        }]
+        peers: [class ASNConnection {
+            asNumber: AS3269
+            description: Telecom Italia S.p.A.
+            country: IT
+        }, class ASNConnection {
+            asNumber: AS8220
+            description: COLT Technology Services Group Limited
+            country: GB
+        }, class ASNConnection {
+            asNumber: AS394666
+            description: NYU Langone Health
+            country: US
+        }, class ASNConnection {
+            asNumber: AS286
+            description: GTT Communications Inc.
+            country: NL
+        }, class ASNConnection {
+            asNumber: AS286
+            description: GTT Communications Inc.
+            country: US
+        }, class ASNConnection {
+            asNumber: AS3257
+            description: GTT Communications Inc.
+            country: US
+        }, class ASNConnection {
+            asNumber: AS3754
+            description: NYSERNet
+            country: US
+        }, class ASNConnection {
+            asNumber: AS3356
+            description: Level 3 Parent, LLC
+            country: US
+        }, class ASNConnection {
+            asNumber: AS6461
+            description: Zayo Bandwidth
+            country: US
+        }, class ASNConnection {
+            asNumber: AS137
+            description: Consortium GARR
+            country: IT
+        }, class ASNConnection {
+            asNumber: AS54965
+            description: Polytechnic Institute of NYU
+            country: US
+        }]
+        whoisResponse: 
+        
+        
+        ASNumber:       12
+        ASName:         NYU-DOMAIN
+        ASHandle:       AS12
+        RegDate:        1984-07-05
+        Updated:        2023-05-25    
+        Ref:            https://rdap.arin.net/registry/autnum/12
+        
+        
+        OrgName:        New York University
+        OrgId:          NYU-Z
+        Address:        726 Broadway, 8th Floor - ITS
+        City:           New York
+        StateProv:      NY
+        PostalCode:     10003
+        Country:        US
+        RegDate:        2023-05-15
+        Updated:        2023-05-15
+        Ref:            https://rdap.arin.net/registry/entity/NYU-Z
+        
+        
+        OrgAbuseHandle: OIS9-ARIN
+        OrgAbuseName:   Office of Information Security
+        OrgAbusePhone:  +1-212-998-3333 
+        OrgAbuseEmail:  abuse@nyu.edu
+        OrgAbuseRef:    https://rdap.arin.net/registry/entity/OIS9-ARIN
+        
+        OrgNOCHandle: COSI-ARIN
+        OrgNOCName:   Communications Operations Services - ITS
+        OrgNOCPhone:  +1-212-998-3444 
+        OrgNOCEmail:  noc-cosi-arin@nyu.edu
+        OrgNOCRef:    https://rdap.arin.net/registry/entity/COSI-ARIN
+        
+        OrgTechHandle: COSI-ARIN
+        OrgTechName:   Communications Operations Services - ITS
+        OrgTechPhone:  +1-212-998-3444 
+        OrgTechEmail:  noc-cosi-arin@nyu.edu
+        OrgTechRef:    https://rdap.arin.net/registry/entity/COSI-ARIN
+        
+        RTechHandle: COSI-ARIN
+        RTechName:   Communications Operations Services - ITS
+        RTechPhone:  +1-212-998-3444 
+        RTechEmail:  noc-cosi-arin@nyu.edu
+        RTechRef:    https://rdap.arin.net/registry/entity/COSI-ARIN
+        
+        RNOCHandle: COSI-ARIN
+        RNOCName:   Communications Operations Services - ITS
+        RNOCPhone:  +1-212-998-3444 
+        RNOCEmail:  noc-cosi-arin@nyu.edu
+        RNOCRef:    https://rdap.arin.net/registry/entity/COSI-ARIN
+               
+    }
+}
+```
+## Timezone API Examples
+
+This section provides usage examples of the `getTimezone()` method from the SDK, showcasing how to fetch timezone and time-related data using different query types — IP address, latitude/longitude, and timezone ID.
+
+For full API specifications, refer to the [Timezone API documentation](https://ipgeolocation.io/timezone-api.html#documentation-overview).
+
+### Get Timezone by IP Address
+
+```java
+import io.ipgeolocation.sdk.api.TimezoneAPI;
+import io.ipgeolocation.sdk.model.TimezoneResponse;
+
+TimezoneAPI api = new TimezoneAPI(client);
+
+TimezoneResponse response = api.getTimezone()
+        .ip("8.8.8.8")
+        .execute();
+
+System.out.println(response);
+```
+Sample Response
+```
+class TimeZoneResponse {
+    ip: 8.8.8.8
+   
+    location: class TimezoneLocation {
+        continentCode: NA
+        continentName: North America
+        countryCode2: US
+        countryCode3: USA
+        countryName: United States
+        countryNameOfficial: United States of America
+        isEu: false
+        stateProv: California
+        stateCode: US-CA
+        district: Santa Clara
+        city: Mountain View
+        locality: null
+        zipcode: 94043-1351
+        latitude: 37.42240
+        longitude: -122.08421
+    }
+    timeZone: class TimezoneDetails {
+        name: America/Los_Angeles
+        offset: -8
+        offsetWithDst: -7
+        date: 2025-06-23
+        dateTime: 2025-06-23 02:15:25
+        dateTimeTxt: Monday, June 23, 2025 02:15:25
+        dateTimeWti: Mon, 23 Jun 2025 02:15:25 -0700
+        dateTimeYmd: 2025-06-23T02:15:25-0700
+        dateTimeUnix: 1.750670125437E9
+        time24: 02:15:25
+        time12: 02:15:25 AM
+        week: 26
+        month: 6
+        year: 2025
+        yearAbbr: 25
+        isDst: true
+        dstSavings: 1
+        dstExists: true
+        dstStart: class TimezoneDetailDstStart {
+            utcTime: 2025-03-09 TIME 10
+            duration: +1H
+            gap: true
+            dateTimeAfter: 2025-03-09 TIME 03
+            dateTimeBefore: 2025-03-09 TIME 02
+            overlap: false
+        }
+        dstEnd: class TimezoneDetailDstEnd {
+            utcTime: 2025-11-02 TIME 09
+            duration: -1H
+            gap: false
+            dateTimeAfter: 2025-11-02 TIME 01
+            dateTimeBefore: 2025-11-02 TIME 02
+            overlap: true
+        }
+    }
+}
+```
+### Get Timezone by Timezone Name
+
+```java
+import io.ipgeolocation.sdk.model.TimezoneResponse;
+
+TimezoneResponse response = api.getTimezone()
+        .tz("Europe/ London")
+        .execute();
+
+System.out.println(response);
+```
+Sample Response
+``` 
+class TimeZoneResponse {
+    timeZone: class TimezoneDetails {
+        name: Europe/London
+        offset: 0
+        offsetWithDst: 1
+        date: 2025-06-23
+        dateTime: 2025-06-23 10:25:01
+        dateTimeTxt: Monday, June 23, 2025 10:25:01
+        dateTimeWti: Mon, 23 Jun 2025 10:25:01 +0100
+        dateTimeYmd: 2025-06-23T10:25:01+0100
+        dateTimeUnix: 1.750670701706E9
+        time24: 10:25:01
+        time12: 10:25:01 AM
+        week: 26
+        month: 6
+        year: 2025
+        yearAbbr: 25
+        isDst: true
+        dstSavings: 1
+        dstExists: true
+        dstStart: class TimezoneDetailDstStart {
+            utcTime: 2025-03-30 TIME 01
+            duration: +1H
+            gap: true
+            dateTimeAfter: 2025-03-30 TIME 02
+            dateTimeBefore: 2025-03-30 TIME 01
+            overlap: false
+        }
+        dstEnd: class TimezoneDetailDstEnd {
+            utcTime: 2025-10-26 TIME 01
+            duration: -1H
+            gap: false
+            dateTimeAfter: 2025-10-26 TIME 01
+            dateTimeBefore: 2025-10-26 TIME 02
+            overlap: true
+        }
+    }
+}
+```
+### Get Timezone from Any Address
+
+```java
+import io.ipgeolocation.sdk.model.TimezoneResponse;
+
+TimezoneResponse response = api.getTimezone()
+        .location("Munich, Germany")
+        .execute();
+
+System.out.println(response);
+```
+Sample Response
+```
+class TimeZoneResponse {
+    location: class TimezoneLocation {
+        locationString: Munich, Germany
+        countryName: Germany
+        stateProv: Bavaria
+        city: Munich
+        locality: 
+        latitude: 48.13711
+        longitude: 11.57538
+    }
+    timeZone: class TimezoneDetails {
+        name: Europe/Berlin
+        offset: 1
+        offsetWithDst: 2
+        date: 2025-06-23
+        dateTime: 2025-06-23 11:35:23
+        dateTimeTxt: Monday, June 23, 2025 11:35:23
+        dateTimeWti: Mon, 23 Jun 2025 11:35:23 +0200
+        dateTimeYmd: 2025-06-23T11:35:23+0200
+        dateTimeUnix: 1.750671323755E9
+        time24: 11:35:23
+        time12: 11:35:23 AM
+        week: 26
+        month: 6
+        year: 2025
+        yearAbbr: 25
+        isDst: true
+        dstSavings: 1
+        dstExists: true
+        dstStart: class TimezoneDetailDstStart {
+            utcTime: 2025-03-30 TIME 01
+            duration: +1H
+            gap: true
+            dateTimeAfter: 2025-03-30 TIME 03
+            dateTimeBefore: 2025-03-30 TIME 02
+            overlap: false
+        }
+        dstEnd: class TimezoneDetailDstEnd {
+            utcTime: 2025-10-26 TIME 01
+            duration: -1H
+            gap: false
+            dateTimeAfter: 2025-10-26 TIME 02
+            dateTimeBefore: 2025-10-26 TIME 03
+            overlap: true
+        }
+    }
+}
+```
+### Get Timezone from Location Coordinates
+
+```java
+import io.ipgeolocation.sdk.model.TimezoneResponse;
+
+TimezoneResponse response = api.getTimezone()
+        .lat(48.8566F)
+        ._long(2.3522F)
+        .execute();
+
+System.out.println(response);
+```
+Sample Response
+```
+class TimeZoneResponse {
+    timeZone: class TimezoneDetails {
+        name: Europe/Paris
+        offset: 1
+        offsetWithDst: 2
+        date: 2025-06-23
+        dateTime: 2025-06-23 11:53:31
+        dateTimeTxt: Monday, June 23, 2025 11:53:31
+        dateTimeWti: Mon, 23 Jun 2025 11:53:31 +0200
+        dateTimeYmd: 2025-06-23T11:53:31+0200
+        dateTimeUnix: 1.750672411295E9
+        time24: 11:53:31
+        time12: 11:53:31 AM
+        week: 26
+        month: 6
+        year: 2025
+        yearAbbr: 25
+        isDst: true
+        dstSavings: 1
+        dstExists: true
+        dstStart: class TimezoneDetailDstStart {
+            utcTime: 2025-03-30 TIME 01
+            duration: +1H
+            gap: true
+            dateTimeAfter: 2025-03-30 TIME 03
+            dateTimeBefore: 2025-03-30 TIME 02
+            overlap: false
+        }
+        dstEnd: class TimezoneDetailDstEnd {
+            utcTime: 2025-10-26 TIME 01
+            duration: -1H
+            gap: false
+            dateTimeAfter: 2025-10-26 TIME 02
+            dateTimeBefore: 2025-10-26 TIME 03
+            overlap: true
+        }
+    }
+}
+```
+### Get Timezone and Airport Details from IATA Code
+
+```java
+import io.ipgeolocation.sdk.model.TimezoneResponse;
+
+TimezoneResponse response = api.getTimezone()
+        .iataCode("ZRH")
+        .execute();
+
+System.out.println(response);
+```
+Sample Response
+```
+class TimeZoneResponse {
+    airportDetails: class TimezoneAirport {
+        type: large_airport
+        name: Zurich Airport
+        latitude: 47.45806
+        longitude: 8.54806
+        elevationFt: 1417
+        continentCode: EU
+        countryCode: CH
+        stateCode: CH-ZH
+        city: Zurich
+        iataCode: ZRH
+        icaoCode: LSZH
+        faaCode: 
+    }
+    timeZone: class TimezoneDetails {
+        name: Europe/Zurich
+        offset: 1
+        offsetWithDst: 2
+        date: 2025-06-23
+        dateTime: 2025-06-23 12:24:08
+        dateTimeTxt: Monday, June 23, 2025 12:24:08
+        dateTimeWti: Mon, 23 Jun 2025 12:24:08 +0200
+        dateTimeYmd: 2025-06-23T12:24:08+0200
+        dateTimeUnix: 1.750674248242E9
+        time24: 12:24:08
+        time12: 12:24:08 PM
+        week: 26
+        month: 6
+        year: 2025
+        yearAbbr: 25
+        isDst: true
+        dstSavings: 1
+        dstExists: true
+        dstStart: class TimezoneDetailDstStart {
+            utcTime: 2025-03-30 TIME 01
+            duration: +1H
+            gap: true
+            dateTimeAfter: 2025-03-30 TIME 03
+            dateTimeBefore: 2025-03-30 TIME 02
+            overlap: false
+        }
+        dstEnd: class TimezoneDetailDstEnd {
+            utcTime: 2025-10-26 TIME 01
+            duration: -1H
+            gap: false
+            dateTimeAfter: 2025-10-26 TIME 02
+            dateTimeBefore: 2025-10-26 TIME 03
+            overlap: true
+        }
+    }
+}
+```
+Similarly, you can fetch Airport Details and Timezone from using any ICAO code as well
+
+### Get Timezone and City Details from UN/LOCODE
+
+```java
+import io.ipgeolocation.sdk.model.TimezoneResponse;
+
+TimezoneResponse response = api.getTimezone()
+        .loCode("ESBCN")
+        .execute();
+
+System.out.println(response);
+```
+Sample Response
+```
+class TimeZoneResponse {
+    loCodeDetails: class TimezoneLocode {
+        loCode: ESBCN
+        city: Barcelona
+        stateCode: 
+        countryCode: ES
+        countryName: 
+        locationType: Port, Rail Terminal, Road Terminal, Airport, Postal Exchange
+        latitude: 41.38289
+        longitude: 2.17743
+    }
+    timeZone: class TimezoneDetails {
+        name: Europe/Madrid
+        offset: 1
+        offsetWithDst: 2
+        date: 2025-06-23
+        dateTime: 2025-06-23 12:32:55
+        dateTimeTxt: Monday, June 23, 2025 12:32:55
+        dateTimeWti: Mon, 23 Jun 2025 12:32:55 +0200
+        dateTimeYmd: 2025-06-23T12:32:55+0200
+        dateTimeUnix: 1.750674775033E9
+        time24: 12:32:55
+        time12: 12:32:55 PM
+        week: 26
+        month: 6
+        year: 2025
+        yearAbbr: 25
+        isDst: true
+        dstSavings: 1
+        dstExists: true
+        dstStart: class TimezoneDetailDstStart {
+            utcTime: 2025-03-30 TIME 01
+            duration: +1H
+            gap: true
+            dateTimeAfter: 2025-03-30 TIME 03
+            dateTimeBefore: 2025-03-30 TIME 02
+            overlap: false
+        }
+        dstEnd: class TimezoneDetailDstEnd {
+            utcTime: 2025-10-26 TIME 01
+            duration: -1H
+            gap: false
+            dateTimeAfter: 2025-10-26 TIME 02
+            dateTimeBefore: 2025-10-26 TIME 03
+            overlap: true
+        }
+    }
+}
+```
+## Timezone Converter Examples
+
+This section provides usage examples of the `convertTimezone()` method from the SDK. The Timezone Converter API allows you to convert a specific time from one timezone to another using timezone identifiers and optional date/time inputs.
+
+For more details, refer to official documentation: [Timezone Converter API](https://ipgeolocation.io/timezone-api.html#convert-time-bw-time-zones).
+
+### Convert Current Time from One Timezone to Another
+
+```java
+import io.ipgeolocation.sdk.api.TimezoneAPI;
+import io.ipgeolocation.sdk.model.TimezoneConversionResponse;
+
+TimezoneAPI api = new TimezoneAPI(client);
+
+TimezoneConversionResponse response = api.convertTimezone()
+        .from("America/New_York")
+        .to("Asia/Tokyo")
+        .execute();
+
+System.out.println(response);
+```
+Sample Response
+```
+class TimeConversionResponse {
+    originalTime: 2024-12-08 11:00
+    convertedTime: 2024-12-09 01:00:00
+    diffHour: 14.0
+    diffMin: 840
+}
+```
+Similarly, you can convert time from any timezone to another timezone using location coordinates (Latitude and Longitude), location addresses, IATA codes, ICAO codes and UN/LUCODE .
+
+## User Agent API Examples
+
+This section provides usage examples of the `getUserAgent()` method from the SDK. The User Agent API extracts and classifies information from user agent strings, including browser, engine, device, OS, and type metadata.
+
+For full explanation, visit the [User Agent API documentation](https://ipgeolocation.io/user-agent-api.html#documentation-overview).
+
+### Parse a Basic User Agent String
+
+```java
+import io.ipgeolocation.sdk.api.UserAgentAPI;
+import io.ipgeolocation.sdk.model.UserAgentResponse;
+
+UserAgentAPI api = new UserAgentAPI(client);
+
+UserAgentResponse response = api.getUserAgent()
+        .userAgentString("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36")
+        .execute();
+
+System.out.println(response);
+```
+Sample Response
+```
+class UserAgentData {
+    userAgentString: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36
+    name: Chrome
+    type: Browser
+    version: 125
+    versionMajor: 125
+    device: class UserAgentDataDevice {
+        name: Desktop
+        type: Desktop
+        brand: Unknown
+        cpu: Intel x86_64
+    }
+    engine: class UserAgentDataEngine {
+        name: Blink
+        type: Browser
+        version: 125
+        versionMajor: 125
+    }
+    operatingSystem: class UserAgentDataOperatingSystem {
+        name: Windows NT
+        type: Desktop
+        version: ??
+        versionMajor: ??
+        build: ??
+    }
+}
+```
+If you don't pass any userAgentString, the API will return the data of device's user agent.
+
+## Bulk User Agent Parsing Example
+
+The SDK also supports bulk User Agent parsing using the `getBulkUserAgent()` method. This allows parsing multiple user agent strings in a single request. All fields available in single-user-agent parsing are returned per entry.
+
+```java
+import io.ipgeolocation.sdk.api.UserAgentAPI;
+import io.ipgeolocation.sdk.model.UserAgentBulkRequest;
+import io.ipgeolocation.sdk.model.UserAgentData;
+
+UserAgentAPI api = new UserAgentAPI(client);
+
+UserAgentBulkRequest bulkRequest = new UserAgentBulkRequest();
+bulkRequest.addUaString("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36");
+bulkRequest.addUaString("Mozilla/5.0 (iPhone; CPU iPhone OS 16_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.0 Mobile/15E148 Safari/604.1");
+
+List<UserAgentData> response = api.getBulkUserAgent()
+        .userAgentBulkRequest(bulkRequest)
+        .execute();
+
+System.out.println(response);
+```
+
+## Astronomy API Examples
+
+This section provides usage examples of the `getAstronomy()` method from the SDK, allowing developers to fetch sun and moon timings and position data based on coordinates, IP, or location string.
+
+Refer to the [official Astronomy API documentation](https://ipgeolocation.io/astronomy-api.html#documentation-overview) for more details.
+
+### Astronomy by Coordinates
+
+```java
+import io.ipgeolocation.sdk.api.AstronomyAPI;
+import io.ipgeolocation.sdk.model.AstronomyResponse;
+
+AstronomyAPI api = new AstronomyAPI(client);
+
+AstronomyResponse response = api.getAstronomy()
+        .lat(40.7128F)
+        ._long(-74.0060F)
+        .execute();
+
+System.out.println(response);
+```
+Sample Response
+```
+class AstronomyResponse {
+    location: class TimezoneLocation {
+        latitude: 40.71280
+        longitude: -74.00600
+    }
+    astronomy: class Astronomy {
+        date: 2025-06-24
+        currentTime: 07:30:21.579
+        sunrise: 05:26
+        sunset: 20:31
+        sunStatus: -
+        solarNoon: 12:58
+        dayLength: 15:05
+        sunAltitude: 20.804246588855296
+        sunDistance: 152040201.01537988
+        sunAzimuth: 76.49892606690912
+        moonrise: 04:03
+        moonset: 20:23
+        moonStatus: -
+        moonAltitude: 34.414214378812524
+        moonDistance: 364347.463373039
+        moonAzimuth: 80.61208284060893
+        moonParallacticAngle: -57.93796259578105
+        moonPhase: NEW_MOON
+        moonIlluminationPercentage: -1.31
+        moonAngle: 346.8453135834885
+    }
+}
+```
+### Astronomy by IP Address
+```java
+AstronomyResponse response = api.getAstronomy()
+        .ip("8.8.8.8")
+        .execute();
+
+System.out.println(response);
+```
+Sample Response
+```
+class AstronomyResponse {
+    ip: 8.8.8.8
+    location: class TimezoneLocation {
+        continentCode: NA
+        continentName: North America
+        countryCode2: US
+        countryCode3: USA
+        countryName: United States
+        countryNameOfficial: United States of America
+        isEu: false
+        stateProv: California
+        stateCode: US-CA
+        district: Santa Clara
+        city: Mountain View
+        zipcode: 94043-1351
+        latitude: 37.42240
+        longitude: -122.08421
+    }
+    astronomy: class Astronomy {
+        date: 2025-06-24
+        currentTime: 04:34:28.021
+        sunrise: 05:48
+        sunset: 20:33
+        sunStatus: -
+        solarNoon: 13:10
+        dayLength: 14:45
+        sunAltitude: -12.617167576625503
+        sunDistance: 152040201.01537988
+        sunAzimuth: 46.86985777464207
+        moonrise: 04:37
+        moonset: 20:30
+        moonStatus: -
+        moonAltitude: -0.21211874350402243
+        moonDistance: 364352.7073377457
+        moonAzimuth: 53.468292502889824
+        moonParallacticAngle: -46.31833060135301
+        moonPhase: NEW_MOON
+        moonIlluminationPercentage: -1.30
+        moonAngle: 346.8846229043112
+    }
+}
+```
+
+### Astronomy by Location String
+```java
+AstronomyResponse response = api.getAstronomy()
+    .location("Milan, Italy")
+    .execute();
+
+System.out.println(response);
+```
+Sample Response
+```
+class AstronomyResponse {
+    location: class TimezoneLocation {
+        locationString: Milan, Italy
+        countryName: Italy
+        stateProv: Lombardy
+        city: Milan
+        locality: 
+        latitude: 45.46419
+        longitude: 9.18963
+    }
+    astronomy: class Astronomy {
+        date: 2025-06-24
+        currentTime: 13:42:31.494
+        sunrise: 05:35
+        sunset: 21:16
+        sunStatus: -
+        solarNoon: 13:25
+        dayLength: 15:41
+        sunAltitude: 67.67235422430544
+        sunDistance: 152040201.01537988
+        sunAzimuth: 190.14730820895687
+        moonrise: 03:55
+        moonset: 20:58
+        moonStatus: -
+        moonAltitude: 67.12458191571332
+        moonDistance: 364363.02827482205
+        moonAzimuth: 226.96305382114292
+        moonParallacticAngle: 35.51972222628293
+        moonPhase: NEW_MOON
+        moonIlluminationPercentage: -1.29
+        moonAngle: 346.9617371469379
+    }
+}
+```
+### Astronomy for Specific Date
+```java
+AstronomyResponse response = api.getAstronomy()
+        .lat("-27.47")
+        ._long("153.02")
+        .date("2025-01-01")
+        .execute();
+
+System.out.println(response);
+```
+Sample Response
+```
+class AstronomyResponse {
+    location: class TimezoneLocation {
+        latitude: -27.47000
+        longitude: 153.02000
+    }
+    astronomy: class Astronomy {
+        date: 2025-01-01
+        currentTime: 21:52:17.735
+        sunrise: 04:56
+        sunset: 18:46
+        sunStatus: -
+        solarNoon: 11:51
+        dayLength: 13:50
+        sunAltitude: -31.926446962587317
+        sunDistance: 147102938.8803657
+        sunAzimuth: 212.6674132050822
+        moonrise: 05:42
+        moonset: 20:08
+        moonStatus: -
+        moonAltitude: -18.400463391101542
+        moonDistance: 380312.3006037494
+        moonAzimuth: 228.6071219705199
+        moonParallacticAngle: 133.10083951250047
+        moonPhase: NEW_MOON
+        moonIlluminationPercentage: 2.80
+        moonAngle: 19.261001616778085
+    }
+}
+```
+
+### Astronomy in Different Language
+You can also get Astronomy Data in other languages as well. Only paid subscriptions can access this feature.
+```java
+AstronomyResponse response = api.getAstronomy()
+        .ip("1.1.1.1")
+        .lang("fr")
+        .execute();
+
+System.out.println(response);
+```
+Sample Response
+```
+class AstronomyResponse {
+    ip: 1.1.1.1
+    location: class TimezoneLocation {
+        continentCode: OC
+        continentName: Océanie
+        countryCode2: AU
+        countryCode3: AUS
+        countryName: Australie
+        countryNameOfficial: 
+        isEu: false
+        stateProv: Queensland
+        stateCode: AU-QLD
+        district: Brisbane
+        city: Brisbane Sud
+        locality: null
+        zipcode: 4101
+        latitude: -27.47306
+        longitude: 153.01421
+    }
+    astronomy: class Astronomy {
+        date: 2025-06-24
+        currentTime: 21:58:05.865
+        sunrise: 06:38
+        sunset: 17:02
+        sunStatus: -
+        solarNoon: 11:50
+        dayLength: 10:24
+        sunAltitude: -64.35374526473097
+        sunDistance: 152040201.0153799
+        sunAzimuth: 267.19451980250926
+        moonrise: 05:11
+        moonset: 15:31
+        moonStatus: -
+        moonAltitude: -77.90471534790521
+        moonDistance: 364383.09958533326
+        moonAzimuth: 276.0819890304232
+        moonParallacticAngle: 90.30849575969972
+        moonPhase: NEW_MOON
+        moonIlluminationPercentage: -1.26
+        moonAngle: 347.1107575290927
+    }
+}
+```
+
+
+## Documentation for Models
+
+ - [ASNConnection](docs/ASNConnection.md)
+ - [ASNResponse](docs/ASNResponse.md)
+ - [ASNDetails](docs/ASNDetails.md)
+ - [Abuse](docs/Abuse.md)
+ - [Astronomy](docs/Astronomy.md)
+ - [AstronomyResponse](docs/AstronomyResponse.md)
+ - [CountryMetadata](docs/CountryMetadata.md)
+ - [Currency](docs/Currency.md)
+ - [ErrorResponse](docs/ErrorResponse.md)
+ - [GeolocationResponse](docs/GeolocationResponse.md)
+ - [BulkGeolocationResponse](docs/BulkGeolocationResponse.md)
+ - [BulkIPRequest](docs/BulkIPRequest.md)
+ - [Location](docs/Location.md)
+ - [LocationMinimal](docs/LocationMinimal.md)
+ - [Network](docs/Network.md)
+ - [NetworkAsn](docs/NetworkAsn.md)
+ - [NetworkCompany](docs/NetworkCompany.md)
+ - [NetworkMinimal](docs/NetworkMinimal.md)
+ - [NetworkMinimalAsn](docs/NetworkMinimalAsn.md)
+ - [NetworkMinimalCompany](docs/NetworkMinimalCompany.md)
+ - [Security](docs/Security.md)
+ - [SecurityAPIResponse](docs/SecurityAPIResponse.md)
+ - [BulkSecurityResponse](docs/BulkSecurityResponse.md)
+ - [TimeConversionResponse](docs/TimeConversionResponse.md)
+ - [TimeZone](docs/TimeZone.md)
+ - [TimezoneResponse](docs/TimezoneResponse.md)
+ - [TimezoneDstEnd](docs/TimezoneDstEnd.md)
+ - [TimezoneDstStart](docs/TimeZoneDstStart.md)
+ - [TimezoneAirport](docs/TimezoneAirport.md)
+ - [TimezoneDetails](docs/TimezoneDetails.md)
+ - [TimezoneDetailDstEnd](docs/TimezoneDetailDstEnd.md)
+ - [TimezoneDetailDstStart](docs/TimezoneDetailDstStart.md)
+ - [TimezoneLocation](docs/TimezoneLocation.md)
+ - [TimezoneLocode](docs/TimezoneLocode.md)
+ - [UserAgentBulkRequest](docs/UserAgentBulkRequest.md)
+ - [UserAgentData](docs/UserAgentData.md)
+ - [UserAgentDataDevice](docs/UserAgentDataDevice.md)
+ - [UserAgentDataEngine](docs/UserAgentDataEngine.md)
+ - [UserAgentDataOperatingSystem](docs/UserAgentDataOperatingSystem.md)
+ - [UserAgentPostRequest](docs/UserAgentRequest.md)
+
+
