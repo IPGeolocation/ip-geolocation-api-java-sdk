@@ -8,11 +8,11 @@ Ipgeolocation provides a set of APIs to make ip based decisions.
 ## Table of Contents
 
 1. [Installation](#installation)
-   - [Maven](#maven)
-   - [Gradle](#gradle)
+   - [Maven](#using-maven)
+   - [Gradle](#using-gradle)
    - [Manual Installation](#manual-installation)
 2. [Authentication Setup](#authentication-setup)
-
+3. [API Endpoints](#api-endpoints)
 3. [IP Geolocation Examples](#ip-geolocation-examples)
    - [1. Basic Plan Examples](#1-basic-plan-examples)
    - [2. Standard Plan Examples](#2-standard-plan-examples)
@@ -121,6 +121,26 @@ Ensure that your API key is securely stored and not exposed in public repositori
 
 ---
 
+# API Endpoints
+
+All URIs are relative to *https://api.ipgeolocation.io/v2*
+
+Class | Method                                                                            | HTTP request | Description
+------------ |-----------------------------------------------------------------------------------| ------------- | -------------
+*ASNLookupAPI* | [**getAsnDetails**](docs/ASNLookupAPI.md#getasndetails)                           | **GET** /asn | Get details of any ASN number or associated IP address
+*AbuseContactAPI* | [**getAbuseContactInfo**](docs/AbuseContactAPI.md#getabusecontactinfo)            | **GET** /abuse | Retrieve abuse reporting contact information for a given IP address
+*AstronomyAPI* | [**getAstronomy**](docs/AstronomyAPI.md#getastronomydetails)                      | **GET** /astronomy | Get sunrise, sunset, moonrise, moonset, and related data for a location
+*IPGeolocationAPI* | [**getBulkIPGeolocation**](docs/IPGeolocationAPI.md#getbulkipgeolocation)         | **POST** /ipgeo-bulk | Get geolocation data for multiple IP addresses in a single API request
+*IPGeolocationAPI* | [**getIPGeolocation**](docs/IPGeolocationAPI.md#getipgeolocation)                 | **GET** /ipgeo | 	Get geolocation data for a single IP address
+*IPSecurityAPI* | [**getBulkIPSecurity**](docs/IPSecurityAPI.md#getbulkipsecurity)                  | **POST** /security-bulk | Retrieve security threat intelligence for multiple IPs
+*IPSecurityAPI* | [**getIPSecurity**](docs/IPSecurityAPI.md#getipsecurity)                          | **GET** /security | Retrieve security information (VPN, TOR, proxy, etc.) for a single IP
+*TimeConversionAPI* | [**convertTimezone**](docs/TimezoneConversionAPI.md#converttimezone)              | **GET** /timezone/convert | Convert time between two specified timezones
+*TimezoneAPI* | [**getTimezone**](docs/TimezoneAPI.md#gettimezone)                                | **GET** /timezone | Timezone information details
+*UserAgentAPI* | [**getUserAgent**](docs/Api/UserAgentAPI.md#getuseragentdetails)                  | **GET** /user-agent | Get details of user-agent
+*UserAgentAPI* | [**getBulkUserAgent**](docs/UserAgentAPI.md#getbulkuseragent)                     | **POST** /user-agent-bulk | Handle multiple user-agent string lookups
+*UserAgentAPI* | [**getUserAgentOfCustomString**](docs/UserAgentAPI.md#getuseragentofcustomstring) | **POST** /user-agent | Handle single User-Agent string
+---
+
 # Example Usage
 
 ## IP Geolocation Examples
@@ -151,7 +171,7 @@ For complete details, refer to the official documentation: [IP Geolocation API D
 
 The `ip` parameter in the SDK can accept any valid IPv4 address, IPv6 address, or domain name. If the `ip()` method is not used or the parameter is omitted, the API will return information about the public IP address of the device or server where the SDK is executed.
 
-### 1. Basic Plan Examples
+### 1. Developer (Free) Plan Examples
 
 #### Default Fields
 
@@ -403,10 +423,10 @@ class GeolocationResponse {
         }
     }
     userAgent: class UserAgentData {
-        userAgentString: OpenAPI-Generator/1.0.0/java
-        name: OpenAPI-Generator
+        userAgentString: IPGeolocation/2.0.0/java
+        name: IPGeolocation Java SDK
         type: Special
-        version: 1.0.0
+        version: 2.0.0
         versionMajor: 1
         device: class UserAgentDataDevice {
             name: Unknown
@@ -696,10 +716,10 @@ class SecurityAPIResponse {
         }
     }
     userAgent: class UserAgentData {
-        userAgentString: OpenAPI-Generator/1.0.0/java
-        name: OpenAPI-Generator
+        userAgentString: IPGeolocation/2.0.0/java
+        name: IPGeolocation Java SDK
         type: Special
-        version: 1.0.0
+        version: 2.0.0
         versionMajor: 1
         device: class UserAgentDataDevice {
             name: Unknown
@@ -1400,10 +1420,10 @@ For more details, refer to official documentation: [Timezone Converter API](http
 ### Convert Current Time from One Timezone to Another
 
 ```java
-import io.ipgeolocation.sdk.api.TimezoneAPI;
+import io.ipgeolocation.sdk.api.TimezoneConversionAPI;
 import io.ipgeolocation.sdk.model.TimezoneConversionResponse;
 
-TimezoneAPI api = new TimezoneAPI(client);
+TimezoneConversionAPI api = new TimezoneConversionAPI(client);
 
 TimezoneConversionResponse response = api.convertTimezone()
         .from("America/New_York")
@@ -1414,7 +1434,7 @@ System.out.println(response);
 ```
 Sample Response
 ```
-class TimeConversionResponse {
+class TimezoneConversionResponse {
     originalTime: 2024-12-08 11:00
     convertedTime: 2024-12-09 01:00:00
     diffHour: 14.0
@@ -1742,6 +1762,93 @@ class AstronomyResponse {
     }
 }
 ```
+## Abuse Contact API Examples
+This section demonstrates how to use the `getAbuseContactInfo()` method of the AbuseContact API. This API helps security teams, hosting providers, and compliance professionals quickly identify the correct abuse reporting contacts for any IPv4 or IPv6 address. You can retrieve data like the responsible organization, role, contact emails, phone numbers, and address to take appropriate mitigation action against abusive or malicious activity.
+> **Note**: Abuse Contact API is only available in Advanced Plan
+
+Refer to the official [Abuse Contact API documentation](https://ipgeolocation.io/ip-abuse-contact-api.html#documentation-overview) for details on all available fields.
+### Lookup Abuse Contact by IP
+```java
+import io.ipgeolocation.sdk.api.AbuseContactAPI;
+import io.ipgeolocation.sdk.model.AbuseResponse;
+
+AbuseContactAPI api = new AbuseContactAPI(client);
+
+AbuseResponse response = api.getAbuseContactInfo()
+        .ip("1.0.0.0")
+        .execute();
+
+System.out.println(response);
+```
+Sample Response:
+```
+class AbuseResponse {
+    ip: 1.0.0.0
+    abuse: class Abuse {
+        route: 1.0.0.0/24
+        country: AU
+        handle: IRT-APNICRANDNET-AU
+        name: IRT-APNICRANDNET-AU
+        organization: 
+        role: abuse
+        kind: group
+        address: PO Box 3646
+        South Brisbane, QLD 4101
+        Australia
+        emails: [helpdesk@apnic.net]
+        phoneNumbers: [+61 7 3858 3100]
+    }
+}
+```
+
+### Lookup Abuse Contact with Specific Fields
+```java
+AbuseResponse response = api.getAbuseContactInfo()
+        .ip("1.2.3.4")
+        .fields("abuse.role,abuse.emails")
+        .execute();
+
+System.out.println(response);
+```
+Sample Response:
+```
+class AbuseResponse {
+    ip: 1.2.3.4
+    abuse: class Abuse {
+        role: abuse
+        emails: [helpdesk@apnic.net]
+    }
+}
+```
+### Lookup Abuse Contact while Excluding Fields
+```java
+AbuseResponse response = api.getAbuseContactInfo()
+        .ip("9.9.9.9")
+        .excludes("abuse.handle,abuse.emails")
+        .execute();
+
+System.out.println(response);
+```
+Sample Response:
+```
+class AbuseResponse {
+    ip: 9.9.9.9
+    abuse: class Abuse {
+        route: 9.9.9.0/24
+        country:
+        name: Quad9 Abuse
+        organization: Quad9 Abuse
+        role: abuse
+        kind: group
+        address: 1442 A Walnut Street Ste 501
+        Berkeley
+        CA
+        94709
+        United States
+        phoneNumbers: [+1-415-831-3129]
+    }
+}
+```
 
 
 ## Documentation for Models
@@ -1750,7 +1857,11 @@ class AstronomyResponse {
  - [ASNResponse](docs/ASNResponse.md)
  - [ASNDetails](docs/ASNDetails.md)
  - [Abuse](docs/Abuse.md)
+ - [AbuseResponse](docs/AbuseResponse.md)
  - [Astronomy](docs/Astronomy.md)
+ - [AstronomyEvening](docs/AstronomyEvening.md)
+ - [AstronomyLocation](docs/AstronomyLocation.md)
+ - [AstronomyMorning](docs/AstronomyMorning.md)
  - [AstronomyResponse](docs/AstronomyResponse.md)
  - [CountryMetadata](docs/CountryMetadata.md)
  - [Currency](docs/Currency.md)
@@ -1769,7 +1880,7 @@ class AstronomyResponse {
  - [Security](docs/Security.md)
  - [SecurityAPIResponse](docs/SecurityAPIResponse.md)
  - [BulkSecurityResponse](docs/BulkSecurityResponse.md)
- - [TimeConversionResponse](docs/TimeConversionResponse.md)
+ - [TimeConversionResponse](docs/TimezoneConversionResponse.md)
  - [TimeZone](docs/TimeZone.md)
  - [TimezoneResponse](docs/TimezoneResponse.md)
  - [TimezoneDstEnd](docs/TimezoneDstEnd.md)

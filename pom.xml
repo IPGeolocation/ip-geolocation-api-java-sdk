@@ -8,7 +8,7 @@
     <artifactId>ipgeolocation</artifactId>
     <packaging>jar</packaging>
     <name>ipgeolocation-java-sdk</name>
-    <version>2.0.0</version>
+    <version>2.0.1</version>
     <description>Java SDK to lookup IP location, time zone detail, currency, security, astronomy information
         and timezone conversion using IPGeolocation.io API
     </description>
@@ -311,11 +311,6 @@
             <artifactId>jakarta.annotation-api</artifactId>
             <version>${jakarta-annotation-version}</version>
             <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.openapitools</groupId>
-            <artifactId>jackson-databind-nullable</artifactId>
-            <version>${jackson-databind-nullable-version}</version>
         </dependency>
         <dependency>
             <groupId>jakarta.ws.rs</groupId>

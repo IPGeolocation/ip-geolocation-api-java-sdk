@@ -1,6 +1,6 @@
 
 
-# ASNResponseXML
+# AbuseResponse
 
 
 ## Properties
@@ -8,7 +8,7 @@
 | Name | Type | Description | Notes |
 |------------ | ------------- | ------------- | -------------|
 |**ip** | **String** |  |  [optional] |
-|**asn** | [**ASNResponseXMLAsn**](ASNResponseXMLAsn.md) |  |  [optional] |
+|**abuse** | [**Abuse**](Abuse.md) |  |  [optional] |
 
 
 

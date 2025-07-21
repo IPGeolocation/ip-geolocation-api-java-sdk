@@ -1,77 +1,19 @@
-# TimezoneApi
+# TimezoneAPI
 
 All URIs are relative to *https://api.ipgeolocation.io/v2*
 
-| Method | HTTP request | Description |
-|------------- | ------------- | -------------|
-| [**timezoneGet**](TimezoneApi.md#timezoneGet) | **GET** /timezone | Timezone information details |
+| Method                                            | HTTP request | Description |
+|---------------------------------------------------| ------------- | -------------|
+| [**getTimezone**](TimezoneAPI.md#gettimezone) | **GET** /timezone | Timezone information details |
 
 
-<a id="timezoneGet"></a>
-# **timezoneGet**
-> TimeZoneDetailedResponse timezoneGet().tz(tz).location(location).lat(lat)._long(_long).ip(ip).iataCode(iataCode).icaoCode(icaoCode).loCode(loCode).output(output).lang(lang).execute();
+
+# **getTimezone**
+> TimezoneResponse getTimezone().tz(tz).location(location).lat(lat)._long(_long).ip(ip).iataCode(iataCode).icaoCode(icaoCode).loCode(loCode).output(output).lang(lang).execute();
 
 Timezone information details
 
-The Time Zone API provides current time, date, and time zone-related information. It supports various input types including time zone name, geographic coordinates, addresses, IPs, and location codes.  The API determines the time zone based on the following priority order if multiple parameters are provided:   1. Time Zone Name   2. Geographic Coordinates (latitude &amp; longitude)   3. Location Address   4. IP Address   5. IATA Code   6. ICAO Code   7. UN/LOCODE  Enriched response data is returned based on the type of input: - IP: includes geolocation info - Address: includes location metadata - IATA/ICAO: includes airport info - UN/LOCODE: includes city details  You can call the time zone API without passing any time zone, coordinates, IATA, ICAO, LO code or IP address as well. It will use the calling machine&#39;s IP address to return the regional time zone information. 
-
-### Example
-
-```java
-// Import classes:
-
-import invoker.io.ipgeolocation.sdk.ApiClient;
-import invoker.io.ipgeolocation.sdk.ApiException;
-import invoker.io.ipgeolocation.sdk.Configuration;
-import io.ipgeolocation.sdk.api.TimezoneAPI;
-import io.ipgeolocation.sdk.invoker.auth.ApiKeyAuth;
-
-public class Example {
-    public static void main(String[] args) {
-        ApiClient defaultClient = Configuration.getDefaultApiClient();
-        defaultClient.setBasePath("https://api.ipgeolocation.io/v2");
-
-        // Configure API key authorization: ApiKeyAuth
-        ApiKeyAuth ApiKeyAuth = (ApiKeyAuth) defaultClient.getAuthentication("ApiKeyAuth");
-        ApiKeyAuth.setApiKey("YOUR API KEY");
-        // Uncomment the following line to set a prefix for the API key, e.g. "Token" (defaults to null)
-        //ApiKeyAuth.setApiKeyPrefix("Token");
-
-        TimezoneAPI apiInstance = new TimezoneAPI(defaultClient);
-        String tz = "America/Los_Angeles"; // String | pass a valid time zone name as a query parameter tz to get the time zone information.
-        String location = "London, UK"; // String | pass any address of a location as the query parameter location to get the time zone information.
-        Float lat = -27.4748F; // Float | pass the latitude of a location as query parameters to get the time zone information.
-        Float _long = 153.017F; // Float | pass the longitude of a location as query parameters to get the time zone information.
-        String ip = "1.1.1.1"; // String | You can pass any IPv4 or IPv6 address as a query parameter ip to get the regional timezone information.
-        String iataCode = "DXB"; // String | pass any 3 letter IATA code as a query paramter iata_code to get the comprehensive airport details along with the time zone information, in which that airport exists.
-        String icaoCode = "KATL"; // String | pass any 4 letter ICAO code as a query paramter icao_code to get the comprehensive airport details along with the time zone information, in which that airport exists.
-        String loCode = "DEBER"; // String | pass any 5 letter UNLOCODE as a query paramter lo_code to get the comprehensive lo code/city details along with the time zone information of the concerned city.
-        String output = "json"; // String | Desired output format (json or xml).
-        String lang = "en"; // String | By default, the API responds in English. You can change the response language by passing the language code as a query parameter `lang`. Multi language feature is available only for `paid users`.
-        try {
-            TimeZoneDetailedResponse result = apiInstance.getTimezone()
-                    .tz(tz)
-                    .location(location)
-                    .lat(lat)
-                    ._long(_long)
-                    .ip(ip)
-                    .iataCode(iataCode)
-                    .icaoCode(icaoCode)
-                    .loCode(loCode)
-                    .output(output)
-                    .lang(lang)
-                    .execute();
-            System.out.println(result);
-        } catch (ApiException e) {
-            System.err.println("Exception when calling TimezoneApi#timezoneGet");
-            System.err.println("Status code: " + e.getCode());
-            System.err.println("Reason: " + e.getResponseBody());
-            System.err.println("Response headers: " + e.getResponseHeaders());
-            e.printStackTrace();
-        }
-    }
-}
-```
+The Time Zone API provides current time, date, and time zone-related information. It supports various input types including time zone name, geographic coordinates, addresses, IPs, and location codes.  The API determines the time zone based on the following priority order if multiple parameters are provided:   1. Time Zone Name   2. Geographic Coordinates (latitude &amp; longitude)   3. Location Address   4. IP Address   5. IATA Code   6. ICAO Code   7. UN/LOCODE  Enriched response data is returned based on the type of input: - IP: includes geolocation info - Address: includes location metadata - IATA/ICAO: includes airport info - UN/LOCODE: includes city details  You can call the time zone API without passing any time zone, coordinates, IATA, ICAO, LO code or IP address as well. It will use the calling machine&#39;s IP address to return the regional time zone information.
 
 ### Parameters
 
@@ -90,16 +32,16 @@ public class Example {
 
 ### Return type
 
-[**TimeZoneDetailedResponse**](TimezoneResponse.md)
+[**TimezoneResponse**](TimezoneResponse.md)
 
 ### Authorization
 
-[ApiKeyAuth](../README.md#ApiKeyAuth)
+[ApiKeyAuth](../README.md#authentication-setup)
 
 ### HTTP request headers
 
- - **Content-Type**: Not defined
- - **Accept**: application/json, application/xml
+- **Content-Type**: Not defined
+- **Accept**: application/json, application/xml
 
 ### HTTP response details
 | Status code | Description | Response headers |
