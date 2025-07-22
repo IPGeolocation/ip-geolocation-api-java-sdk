@@ -68,7 +68,7 @@ Add the following dependency to your `pom.xml` file:
 <dependency>
   <groupId>io.ipgeolocation</groupId>
   <artifactId>ipgeolocation</artifactId>
-  <version>2.0.0</version>
+  <version>2.0.1</version>
 </dependency>
 ```
 
@@ -83,7 +83,7 @@ repositories {
 }
 
 dependencies {
-    implementation "io.ipgeolocation:ipgeolocation:2.0.0"
+    implementation "io.ipgeolocation:ipgeolocation:2.0.1"
 }
 ```
 
@@ -96,7 +96,7 @@ mvn clean package
 ```
 
 Then include the following JARs in your classpath:
-- `target/ipgeolocation-sdk-java-2.0.0.jar`
+- `target/ipgeolocation-sdk-java-2.0.1.jar`
 - All JARs in `target/lib/`
 
 ---
