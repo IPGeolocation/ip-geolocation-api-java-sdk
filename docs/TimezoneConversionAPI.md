@@ -1,87 +1,18 @@
-# TimeConversionApi
+# TimezoneConversionAPI
 
 All URIs are relative to *https://api.ipgeolocation.io/v2*
 
-| Method | HTTP request | Description |
-|------------- | ------------- | -------------|
-| [**timezoneConvertGet**](TimeConversionApi.md#timezoneConvertGet) | **GET** /timezone/convert |  |
+| Method                                                          | HTTP request | Description |
+|-----------------------------------------------------------------| ------------- | -------------|
+| [**convertTimezone**](TimezoneConversionAPI.md#converttimezone) | **GET** /timezone/convert |  |
 
 
-<a id="timezoneConvertGet"></a>
-# **timezoneConvertGet**
-> TimeConversionResponse timezoneConvertGet().time(time).tzFrom(tzFrom).tzTo(tzTo).latFrom(latFrom).longFrom(longFrom).latTo(latTo).longTo(longTo).locationFrom(locationFrom).locationTo(locationTo).icaoFrom(icaoFrom).icaoTo(icaoTo).iataFrom(iataFrom).iataTo(iataTo).locodeFrom(locodeFrom).locodeTo(locodeTo).execute();
+# **convertTimezone**
+> TimezoneConversionResponse convertTimezone().time(time).tzFrom(tzFrom).tzTo(tzTo).latFrom(latFrom).longFrom(longFrom).latTo(latTo).longTo(longTo).locationFrom(locationFrom).locationTo(locationTo).icaoFrom(icaoFrom).icaoTo(icaoTo).iataFrom(iataFrom).iataTo(iataTo).locodeFrom(locodeFrom).locodeTo(locodeTo).execute();
 
 
 
-You can convert a timestamp provided as a query paramter time from one time zone to another time zone.
-
-### Example
-
-```java
-// Import classes:
-
-import invoker.io.ipgeolocation.sdk.ApiClient;
-import invoker.io.ipgeolocation.sdk.ApiException;
-import invoker.io.ipgeolocation.sdk.Configuration;
-import io.ipgeolocation.sdk.api.TimezoneConversionApi;
-import io.ipgeolocation.sdk.invoker.auth.ApiKeyAuth;
-
-public class Example {
-    public static void main(String[] args) {
-        ApiClient defaultClient = Configuration.getDefaultApiClient();
-        defaultClient.setBasePath("https://api.ipgeolocation.io/v2");
-
-        // Configure API key authorization: ApiKeyAuth
-        ApiKeyAuth ApiKeyAuth = (ApiKeyAuth) defaultClient.getAuthentication("ApiKeyAuth");
-        ApiKeyAuth.setApiKey("YOUR API KEY");
-        // Uncomment the following line to set a prefix for the API key, e.g. "Token" (defaults to null)
-        //ApiKeyAuth.setApiKeyPrefix("Token");
-
-        TimezoneConversionApi apiInstance = new TimezoneConversionApi(defaultClient);
-        String time = "2025-02-28 9:00:00"; // String | time parameter takes the input in the following two formats: i) 'yyyy-MM-dd HH:mm', and ii) 'yyyy-MM-dd HH:mm:ss'. This parameter is optional and you can omit it to convert the current time between two coordinates, time zones or locations.
-        String tzFrom = "America/Argentina/Catamarca"; // String | timezone to convert from
-        String tzTo = "Asia/Kabul"; // String | timezone to convert to
-        Float latFrom = 34.0207305F; // Float | latitude to convert from
-        Float longFrom = -118.691916F; // Float | longitude to convert from
-        Float latTo = 53.473682F; // Float | latitude to convert to
-        Float longTo = -77.397706F; // Float | longitude to convert to
-        String locationFrom = "New York, USA"; // String | location to convert from
-        String locationTo = "Lahore, Pakistan"; // String | location to convert to
-        String icaoFrom = "YSSY"; // String | location to convert from
-        String icaoTo = "ZBAA"; // String | location to convert to
-        String iataFrom = "DXB"; // String | location to convert from
-        String iataTo = "LHR"; // String | location to convert to
-        String locodeFrom = "PKISB"; // String | location to convert from
-        String locodeTo = "USNYC"; // String | location to convert to
-        try {
-            TimeConversionResponse result = apiInstance.convertTimezone()
-                    .time(time)
-                    .tzFrom(tzFrom)
-                    .tzTo(tzTo)
-                    .latFrom(latFrom)
-                    .longFrom(longFrom)
-                    .latTo(latTo)
-                    .longTo(longTo)
-                    .locationFrom(locationFrom)
-                    .locationTo(locationTo)
-                    .icaoFrom(icaoFrom)
-                    .icaoTo(icaoTo)
-                    .iataFrom(iataFrom)
-                    .iataTo(iataTo)
-                    .locodeFrom(locodeFrom)
-                    .locodeTo(locodeTo)
-                    .execute();
-            System.out.println(result);
-        } catch (ApiException e) {
-            System.err.println("Exception when calling TimeConversionApi#timezoneConvertGet");
-            System.err.println("Status code: " + e.getCode());
-            System.err.println("Reason: " + e.getResponseBody());
-            System.err.println("Response headers: " + e.getResponseHeaders());
-            e.printStackTrace();
-        }
-    }
-}
-```
+You can convert a timestamp provided as a query parameter time from one time zone to another time zone.
 
 ### Parameters
 
@@ -105,16 +36,16 @@ public class Example {
 
 ### Return type
 
-[**TimeConversionResponse**](TimeConversionResponse.md)
+[**TimezoneConversionResponse**](TimezoneConversionResponse.md)
 
 ### Authorization
 
-[ApiKeyAuth](../README.md#ApiKeyAuth)
+[ApiKeyAuth](../README.md#authentication-setup)
 
 ### HTTP request headers
 
- - **Content-Type**: Not defined
- - **Accept**: application/json, application/xml
+- **Content-Type**: Not defined
+- **Accept**: application/json, application/xml
 
 ### HTTP response details
 | Status code | Description | Response headers |

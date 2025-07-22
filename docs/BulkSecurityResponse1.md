@@ -1,6 +1,6 @@
 
 
-# SecurityBulkPost200ResponseInner1
+# BulkSecurityResponse1
 
 
 ## Properties

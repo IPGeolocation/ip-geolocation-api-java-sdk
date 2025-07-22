@@ -1,6 +1,6 @@
 
 
-# TimeConversionResponse
+# TimezoneConversionResponse
 
 
 ## Properties

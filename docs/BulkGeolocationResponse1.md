@@ -1,6 +1,6 @@
 
 
-# IpgeoBulkPost200ResponseInner1
+# BulkGeolocationResponse1
 
 
 ## Properties
