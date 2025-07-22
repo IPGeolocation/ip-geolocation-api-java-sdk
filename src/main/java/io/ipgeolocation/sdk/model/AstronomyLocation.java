@@ -107,7 +107,7 @@ public class AstronomyLocation {
   public static final String SERIALIZED_NAME_ELEVATION = "elevation";
   @SerializedName(SERIALIZED_NAME_ELEVATION)
   @javax.annotation.Nullable
-  private Double elevation;
+  private String elevation;
 
   public AstronomyLocation() {
   }
@@ -416,7 +416,7 @@ public class AstronomyLocation {
   }
 
 
-  public AstronomyLocation elevation(@javax.annotation.Nullable Double elevation) {
+  public AstronomyLocation elevation(@javax.annotation.Nullable String elevation) {
     this.elevation = elevation;
     return this;
   }
@@ -426,11 +426,11 @@ public class AstronomyLocation {
    * @return elevation
    */
   @javax.annotation.Nullable
-  public Double getElevation() {
+  public String getElevation() {
     return elevation;
   }
 
-  public void setElevation(@javax.annotation.Nullable Double elevation) {
+  public void setElevation(@javax.annotation.Nullable String elevation) {
     this.elevation = elevation;
   }
 

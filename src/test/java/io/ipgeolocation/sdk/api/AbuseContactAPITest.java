@@ -34,10 +34,10 @@ public class AbuseContactAPITest {
 
         // Configure API key authorization: ApiKeyAuth
         ApiKeyAuth ApiKeyAuth = (ApiKeyAuth) defaultClient.getAuthentication("ApiKeyAuth");
-        ApiKeyAuth.setApiKey("481060d9cb8a4813a40f2720caa8de74");
+        ApiKeyAuth.setApiKey("API_KEY");
 
-        String ip = "9.9.9.9";
-        String excludes = "abuse.handle,abuse.emails";
+        String ip = null;
+        String excludes = null;
         String fields = null;
         AbuseResponse response = api.getAbuseContactInfo()
                 .ip(ip)

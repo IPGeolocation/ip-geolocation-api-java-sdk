@@ -1531,8 +1531,8 @@ import io.ipgeolocation.sdk.model.AstronomyResponse;
 AstronomyAPI api = new AstronomyAPI(client);
 
 AstronomyResponse response = api.getAstronomy()
-        .lat(40.7128F)
-        ._long(-74.0060F)
+        .lat("40.7128")
+        ._long("-74.0060")
         .execute();
 
 System.out.println(response);
@@ -1540,31 +1540,63 @@ System.out.println(response);
 Sample Response
 ```
 class AstronomyResponse {
-    location: class TimezoneLocation {
+    location: class AstronomyLocation {
+        countryName:
+        stateProv: New York
+        city: New York
+        locality: 
         latitude: 40.71280
         longitude: -74.00600
+        elevation: 6.0
     }
     astronomy: class Astronomy {
-        date: 2025-06-24
-        currentTime: 07:30:21.579
-        sunrise: 05:26
-        sunset: 20:31
+        date: 2025-07-22
+        currentTime: 05:34:17.046
+        midNight: 01:02
+        nightEnd: 03:48
+        morning: class AstronomyMorning {
+            astronomicalTwilightBegin: 03:48
+            astronomicalTwilightEnd: 04:32
+            nauticalTwilightBegin: 04:32
+            nauticalTwilightEnd: 05:12
+            civilTwilightBegin: 05:12
+            civilTwilightEnd: 05:43
+            blueHourBegin: 04:59
+            blueHourEnd: 05:24
+            goldenHourBegin: 05:24
+            goldenHourEnd: 06:23
+        }
+        sunrise: 05:43
+        sunset: 20:21
+        evening: class AstronomyEvening {
+            goldenHourBegin: 19:41
+            goldenHourEnd: 20:40
+            blueHourBegin: 20:40
+            blueHourEnd: 21:05
+            civilTwilightBegin: 20:21
+            civilTwilightEnd: 20:52
+            nauticalTwilightBegin: 20:52
+            nauticalTwilightEnd: 21:31
+            astronomicalTwilightBegin: 21:31
+            astronomicalTwilightEnd: 22:16
+        }
+        nightBegin: 22:16
         sunStatus: -
-        solarNoon: 12:58
-        dayLength: 15:05
-        sunAltitude: 20.804246588855296
-        sunDistance: 152040201.01537988
-        sunAzimuth: 76.49892606690912
-        moonrise: 04:03
-        moonset: 20:23
+        solarNoon: 13:02
+        dayLength: 14:37
+        sunAltitude: -2.4240905951150817
+        sunDistance: 152012050.75662628
+        sunAzimuth: 60.53270916713848
+        moonPhase: WANING_CRESCENT
+        moonrise: 02:48
+        moonset: 19:10
         moonStatus: -
-        moonAltitude: 34.414214378812524
-        moonDistance: 364347.463373039
-        moonAzimuth: 80.61208284060893
-        moonParallacticAngle: -57.93796259578105
-        moonPhase: NEW_MOON
-        moonIlluminationPercentage: -1.31
-        moonAngle: 346.8453135834885
+        moonAltitude: 26.687264834949556
+        moonDistance: 369857.6483476412
+        moonAzimuth: 74.22460131532307
+        moonParallacticAngle: -56.08124322972331
+        moonIlluminationPercentage: -7.41
+        moonAngle: 328.4181377849406
     }
 }
 ```
@@ -1580,7 +1612,7 @@ Sample Response
 ```
 class AstronomyResponse {
     ip: 8.8.8.8
-    location: class TimezoneLocation {
+    location: class AstronomyLocation {
         continentCode: NA
         continentName: North America
         countryCode2: US
@@ -1592,31 +1624,60 @@ class AstronomyResponse {
         stateCode: US-CA
         district: Santa Clara
         city: Mountain View
+        locality: Charleston Terrace
         zipcode: 94043-1351
         latitude: 37.42240
         longitude: -122.08421
+        elevation: 3.0
     }
     astronomy: class Astronomy {
-        date: 2025-06-24
-        currentTime: 04:34:28.021
-        sunrise: 05:48
-        sunset: 20:33
+        date: 2025-07-22
+        currentTime: 02:36:01.027
+        midNight: 01:15
+        nightEnd: 04:18
+        morning: class AstronomyMorning {
+            astronomicalTwilightBegin: 04:18
+            astronomicalTwilightEnd: 04:58
+            nauticalTwilightBegin: 04:58
+            nauticalTwilightEnd: 05:35
+            civilTwilightBegin: 05:35
+            civilTwilightEnd: 06:04
+            blueHourBegin: 05:23
+            blueHourEnd: 05:47
+            goldenHourBegin: 05:47
+            goldenHourEnd: 06:42
+        }
+        sunrise: 06:04
+        sunset: 20:24
+        evening: class AstronomyEvening {
+            goldenHourBegin: 19:46
+            goldenHourEnd: 20:42
+            blueHourBegin: 20:42
+            blueHourEnd: 21:05
+            civilTwilightBegin: 20:24
+            civilTwilightEnd: 20:54
+            nauticalTwilightBegin: 20:54
+            nauticalTwilightEnd: 21:30
+            astronomicalTwilightBegin: 21:30
+            astronomicalTwilightEnd: 22:10
+        }
+        nightBegin: 22:10
         sunStatus: -
-        solarNoon: 13:10
-        dayLength: 14:45
-        sunAltitude: -12.617167576625503
-        sunDistance: 152040201.01537988
-        sunAzimuth: 46.86985777464207
-        moonrise: 04:37
-        moonset: 20:30
+        solarNoon: 13:14
+        dayLength: 14:20
+        sunAltitude: -29.312204242565592
+        sunDistance: 152012050.7566263
+        sunAzimuth: 21.915241201213632
+        moonPhase: WANING_CRESCENT
+        moonrise: 03:23
+        moonset: 19:16
         moonStatus: -
-        moonAltitude: -0.21211874350402243
-        moonDistance: 364352.7073377457
-        moonAzimuth: 53.468292502889824
-        moonParallacticAngle: -46.31833060135301
-        moonPhase: NEW_MOON
-        moonIlluminationPercentage: -1.30
-        moonAngle: 346.8846229043112
+        moonAltitude: -6.780866431657464
+        moonDistance: 369859.5847016905
+        moonAzimuth: 45.928379972251605
+        moonParallacticAngle: -40.47546867785306
+        moonIlluminationPercentage: -7.40
+        moonAngle: 328.43423626935555
     }
 }
 ```
@@ -1632,7 +1693,7 @@ System.out.println(response);
 Sample Response
 ```
 class AstronomyResponse {
-    location: class TimezoneLocation {
+    location: class AstronomyLocation {
         locationString: Milan, Italy
         countryName: Italy
         stateProv: Lombardy
@@ -1640,28 +1701,56 @@ class AstronomyResponse {
         locality: 
         latitude: 45.46419
         longitude: 9.18963
+        elevation: 122.0
     }
     astronomy: class Astronomy {
-        date: 2025-06-24
-        currentTime: 13:42:31.494
-        sunrise: 05:35
-        sunset: 21:16
+        date: 2025-07-22
+        currentTime: 11:37:28.787
+        midNight: 01:29
+        nightEnd: 03:39
+        morning: class AstronomyMorning {
+            astronomicalTwilightBegin: 03:39
+            astronomicalTwilightEnd: 04:35
+            nauticalTwilightBegin: 04:35
+            nauticalTwilightEnd: 05:21
+            civilTwilightBegin: 05:21
+            civilTwilightEnd: 05:54
+            blueHourBegin: 05:06
+            blueHourEnd: 05:35
+            goldenHourBegin: 05:35
+            goldenHourEnd: 06:40
+        }
+        sunrise: 05:54
+        sunset: 21:04
+        evening: class AstronomyEvening {
+            goldenHourBegin: 20:19
+            goldenHourEnd: 21:24
+            blueHourBegin: 21:24
+            blueHourEnd: 21:52
+            civilTwilightBegin: 21:04
+            civilTwilightEnd: 21:38
+            nauticalTwilightBegin: 21:38
+            nauticalTwilightEnd: 22:23
+            astronomicalTwilightBegin: 22:23
+            astronomicalTwilightEnd: 23:18
+        }
+        nightBegin: 23:18
         sunStatus: -
-        solarNoon: 13:25
-        dayLength: 15:41
-        sunAltitude: 67.67235422430544
-        sunDistance: 152040201.01537988
-        sunAzimuth: 190.14730820895687
-        moonrise: 03:55
-        moonset: 20:58
+        solarNoon: 13:29
+        dayLength: 15:10
+        sunAltitude: 55.76507063803926
+        sunDistance: 152012050.7566263
+        sunAzimuth: 128.26574664275847
+        moonPhase: WANING_CRESCENT
+        moonrise: 02:36
+        moonset: 19:49
         moonStatus: -
-        moonAltitude: 67.12458191571332
-        moonDistance: 364363.02827482205
-        moonAzimuth: 226.96305382114292
-        moonParallacticAngle: 35.51972222628293
-        moonPhase: NEW_MOON
-        moonIlluminationPercentage: -1.29
-        moonAngle: 346.9617371469379
+        moonAltitude: 72.39158071193661
+        moonDistance: 369861.22005060845
+        moonAzimuth: 197.31311454833428
+        moonParallacticAngle: 13.735730743087668
+        moonIlluminationPercentage: -7.39
+        moonAngle: 328.44782327106236
     }
 }
 ```
@@ -1678,31 +1767,63 @@ System.out.println(response);
 Sample Response
 ```
 class AstronomyResponse {
-    location: class TimezoneLocation {
+    location: class AstronomyLocation {
+        countryName: Australia
+        stateProv: Queensland
+        city: Brisbane
+        locality: Brisbane
         latitude: -27.47000
         longitude: 153.02000
+        elevation: 
     }
     astronomy: class Astronomy {
         date: 2025-01-01
-        currentTime: 21:52:17.735
+        currentTime: 19:45:17.561
+        midNight: 23:51
+        nightEnd: 03:24
+        morning: class AstronomyMorning {
+            astronomicalTwilightBegin: 03:24
+            astronomicalTwilightEnd: 03:57
+            nauticalTwilightBegin: 03:57
+            nauticalTwilightEnd: 04:29
+            civilTwilightBegin: 04:29
+            civilTwilightEnd: 04:56
+            blueHourBegin: 04:19
+            blueHourEnd: 04:40
+            goldenHourBegin: 04:40
+            goldenHourEnd: 05:30
+        }
         sunrise: 04:56
         sunset: 18:46
+        evening: class AstronomyEvening {
+            goldenHourBegin: 18:12
+            goldenHourEnd: 19:02
+            blueHourBegin: 19:02
+            blueHourEnd: 19:23
+            civilTwilightBegin: 18:46
+            civilTwilightEnd: 19:13
+            nauticalTwilightBegin: 19:13
+            nauticalTwilightEnd: 19:45
+            astronomicalTwilightBegin: 19:45
+            astronomicalTwilightEnd: 20:18
+        }
+        nightBegin: 20:18
         sunStatus: -
         solarNoon: 11:51
         dayLength: 13:50
-        sunAltitude: -31.926446962587317
-        sunDistance: 147102938.8803657
-        sunAzimuth: 212.6674132050822
+        sunAltitude: -12.059617608402677
+        sunDistance: 147102938.88036567
+        sunAzimuth: 235.897971324645
+        moonPhase: NEW_MOON
         moonrise: 05:42
         moonset: 20:08
         moonStatus: -
-        moonAltitude: -18.400463391101542
-        moonDistance: 380312.3006037494
-        moonAzimuth: 228.6071219705199
-        moonParallacticAngle: 133.10083951250047
-        moonPhase: NEW_MOON
-        moonIlluminationPercentage: 2.80
-        moonAngle: 19.261001616778085
+        moonAltitude: 4.6701693782344345
+        moonDistance: 380596.5823950267
+        moonAzimuth: 244.56945849604378
+        moonParallacticAngle: 118.21976701203934
+        moonIlluminationPercentage: 2.49
+        moonAngle: 18.156495178599695
     }
 }
 ```
@@ -1721,7 +1842,7 @@ Sample Response
 ```
 class AstronomyResponse {
     ip: 1.1.1.1
-    location: class TimezoneLocation {
+    location: class AstronomyLocation {
         continentCode: OC
         continentName: Océanie
         countryCode2: AU
@@ -1733,32 +1854,60 @@ class AstronomyResponse {
         stateCode: AU-QLD
         district: Brisbane
         city: Brisbane Sud
-        locality: null
+        locality: 
         zipcode: 4101
         latitude: -27.47306
         longitude: 153.01421
+        elevation: 
     }
     astronomy: class Astronomy {
-        date: 2025-06-24
-        currentTime: 21:58:05.865
-        sunrise: 06:38
-        sunset: 17:02
+        date: 2025-07-22
+        currentTime: 19:54:32.920
+        midNight: 23:54
+        nightEnd: 05:13
+        morning: class AstronomyMorning {
+            astronomicalTwilightBegin: 05:13
+            astronomicalTwilightEnd: 05:41
+            nauticalTwilightBegin: 05:41
+            nauticalTwilightEnd: 06:09
+            civilTwilightBegin: 06:09
+            civilTwilightEnd: 06:34
+            blueHourBegin: 06:00
+            blueHourEnd: 06:19
+            goldenHourBegin: 06:19
+            goldenHourEnd: 07:08
+        }
+        sunrise: 06:34
+        sunset: 17:14
+        evening: class AstronomyEvening {
+            goldenHourBegin: 16:40
+            goldenHourEnd: 17:29
+            blueHourBegin: 17:29
+            blueHourEnd: 17:49
+            civilTwilightBegin: 17:14
+            civilTwilightEnd: 17:39
+            nauticalTwilightBegin: 17:39
+            nauticalTwilightEnd: 18:07
+            astronomicalTwilightBegin: 18:07
+            astronomicalTwilightEnd: 18:35
+        }
+        nightBegin: 18:35
         sunStatus: -
-        solarNoon: 11:50
-        dayLength: 10:24
-        sunAltitude: -64.35374526473097
-        sunDistance: 152040201.0153799
-        sunAzimuth: 267.19451980250926
-        moonrise: 05:11
-        moonset: 15:31
+        solarNoon: 11:54
+        dayLength: 10:39
+        sunAltitude: -35.15165719378359
+        sunDistance: 152012050.75662628
+        sunAzimuth: 276.2757088601843
+        moonPhase: WANING_CRESCENT
+        moonrise: 04:04
+        moonset: 14:19
         moonStatus: -
-        moonAltitude: -77.90471534790521
-        moonDistance: 364383.09958533326
-        moonAzimuth: 276.0819890304232
-        moonParallacticAngle: 90.30849575969972
-        moonPhase: NEW_MOON
-        moonIlluminationPercentage: -1.26
-        moonAngle: 347.1107575290927
+        moonAltitude: -66.8771626746063
+        moonDistance: 369880.37618917384
+        moonAzimuth: 278.66762618741274
+        moonParallacticAngle: 93.79636599869248
+        moonIlluminationPercentage: -7.32
+        moonAngle: 328.6063710418327
     }
 }
 ```
