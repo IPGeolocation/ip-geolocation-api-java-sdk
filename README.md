@@ -1,9 +1,15 @@
-# ipgeolocation-java-sdk
+# IPGeolocation.io Java SDK
 
-IPGeolocation.io - IP intelligence products
+IPGeolocation.io – Real-time IP Intelligence, Threat Detection APIs & Database Solutions
 - API version: 2.0
 
-Ipgeolocation provides a set of APIs to make ip based decisions.
+## IPGeolocation.io SDK for Java
+
+The official **Java SDK** provides streamlined access to **IPGeolocation.io**, a comprehensive platform offering RESTful IP-based APIs and downloadable databases delivering precise geolocation, network, timezone, currency, abuse, ASN, and company/ISP details for IPv4 and IPv6 addresses and User-Agent strings.
+
+With built-in support for **VPN**, **proxy**, **TOR detection**, and **threat detection** (via the IPGeolocation's Security API), this SDK also empowers developers to integrate threat intelligence, personalization, fraud prevention, compliance, and analytics features into Java applications.
+
+Whether you're enriching signup forms with ip geolocation data, localizing content, embedding threat intelligence in back-end systems, or converting time zones and currencies, the SDK ensures seamless, scalable integration with IPGeolocation.io’s global API infrastructure.
 
 ## Table of Contents
 
@@ -14,7 +20,7 @@ Ipgeolocation provides a set of APIs to make ip based decisions.
 2. [Authentication Setup](#authentication-setup)
 3. [API Endpoints](#api-endpoints)
 3. [IP Geolocation Examples](#ip-geolocation-examples)
-   - [1. Basic Plan Examples](#1-basic-plan-examples)
+   - [1. Developer(Free) Plan Examples](#1-developer-plan-examples)
    - [2. Standard Plan Examples](#2-standard-plan-examples)
    - [3. Advanced Plan Examples](#3-advanced-plan-examples)
    - [Bulk IP Geolocation Example](#bulk-ip-geolocation-example)
@@ -171,7 +177,7 @@ For complete details, refer to the official documentation: [IP Geolocation API D
 
 The `ip` parameter in the SDK can accept any valid IPv4 address, IPv6 address, or domain name. If the `ip()` method is not used or the parameter is omitted, the API will return information about the public IP address of the device or server where the SDK is executed.
 
-### 1. Developer (Free) Plan Examples
+### 1. Developer Plan Examples
 
 #### Default Fields
 
