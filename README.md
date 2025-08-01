@@ -18,7 +18,9 @@ Whether you're enriching signup forms with ip geolocation data, localizing conte
    - [Gradle](#using-gradle)
    - [Manual Installation](#manual-installation)
 2. [Authentication Setup](#authentication-setup)
-3. [API Endpoints](#api-endpoints)
+   - [1. How to Get Your API Key](#how-to-get-your-api-key)
+   - [2. Setup API Key](#setup-api-key)
+4. [API Endpoints](#api-endpoints)
 3. [IP Geolocation Examples](#ip-geolocation-examples)
    - [1. Developer (Free) Plan Examples](#1-developer-plan-examples)
    - [2. Standard Plan Examples](#2-standard-plan-examples)
@@ -114,7 +116,27 @@ Then include the following JARs in your classpath:
 
 # Authentication Setup
 
-To authenticate API requests, you need an API key from [ipgeolocation.io](https://ipgeolocation.io/). Once obtained, configure your API client as follows:
+To authenticate API requests, you need an API key from [ipgeolocation.io](https://ipgeolocation.io/).
+
+## How to Get Your API Key
+
+1. **Sign up** here: [https://app.ipgeolocation.io/signup](https://app.ipgeolocation.io/signup)  
+2. **Log in** to your account: [https://app.ipgeolocation.io/login](https://app.ipgeolocation.io/login)  
+3. After logging in, navigate to your **Dashboard** to find your API key: [https://app.ipgeolocation.io/dashboard](https://app.ipgeolocation.io/dashboard)
+
+## API Plan Tiers and Documentation
+
+The documentation below corresponds to the four available API tier plans:
+
+- **Developer Plan** (Free): [Full Documentation](https://ipgeolocation.io/ip-location-api.html#Free)
+- **Standard Plan**: [Full Documentation](https://ipgeolocation.io/ip-location-api.html#Standard)
+- **Advance Plan**: [Full Documentation](https://ipgeolocation.io/ip-location-api.html#Advance)
+- **Security Plan**: [Full Documentation](https://ipgeolocation.io/ip-security-api.html#documentation-overview)
+
+For a detailed comparison of what each plan offers, visit the [Pricing Page](https://ipgeolocation.io/pricing.html).
+
+## Setup API Key
+Once you've obtained the api key, configure your API client as follows:
 
 ```java
 import invoker.io.ipgeolocation.sdk.ApiClient;
