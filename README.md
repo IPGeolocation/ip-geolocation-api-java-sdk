@@ -7,7 +7,7 @@ IPGeolocation.io – Real-time IP Intelligence, Threat Detection APIs & Database
 
 The official **Java SDK** provides streamlined access to **IPGeolocation.io**, a comprehensive platform offering RESTful IP-based APIs and downloadable databases delivering precise geolocation, network, timezone, currency, abuse, ASN, and company/ISP details for IPv4 and IPv6 addresses and User-Agent strings.
 
-With built-in support for **VPN**, **proxy**, **TOR detection**, and **threat detection** (via the IPGeolocation's Security API), this SDK also empowers developers to integrate threat intelligence, personalization, fraud prevention, compliance, and analytics features into Java applications.
+With built-in support for **VPN**, **proxy**, **TOR detection**, and **threat detection** (via the IPGeolocation's Security API for threat intelligence), this SDK also empowers developers to integrate threat intelligence, personalization, fraud prevention, compliance, and analytics features into Java applications.
 
 Whether you're enriching signup forms with ip geolocation data, localizing content, embedding threat intelligence in back-end systems, or converting time zones and currencies, the SDK ensures seamless, scalable integration with IPGeolocation.io’s global API infrastructure.
 
@@ -20,7 +20,7 @@ Whether you're enriching signup forms with ip geolocation data, localizing conte
 2. [Authentication Setup](#authentication-setup)
 3. [API Endpoints](#api-endpoints)
 3. [IP Geolocation Examples](#ip-geolocation-examples)
-   - [1. Developer(Free) Plan Examples](#1-developer-plan-examples)
+   - [1. Developer (Free) Plan Examples](#1-developer-plan-examples)
    - [2. Standard Plan Examples](#2-standard-plan-examples)
    - [3. Advanced Plan Examples](#3-advanced-plan-examples)
    - [Bulk IP Geolocation Example](#bulk-ip-geolocation-example)
@@ -35,8 +35,13 @@ Whether you're enriching signup forms with ip geolocation data, localizing conte
    - [Get ASN Information by IP Address](#get-asn-information-by-ip-address)
    - [Get ASN Information by ASN Number](#get-asn-information-by-asn-number)
    - [Combine All objects using Include](#combine-all-objects-using-include)
+  
+6. [Abuse Contact API Examples](#abuse-contact-api-examples)
+   - [Lookup Abuse Contact by IP](#lookup-abuse-contact-by-ip)
+   - [Lookup Abuse Contact with Specific Fields](#lookup-abuse-contact-with-specific-fields)
+   - [Lookup Abuse Contact while Excluding Fields](#lookup-abuse-contact-while-excluding-fields)
 
-6. [Timezone API Examples](#timezone-api-examples)
+7. [Timezone API Examples](#timezone-api-examples)
    - [Get Timezone by IP Address](#get-timezone-by-ip-address)
    - [Get Timezone by Timezone Name](#get-timezone-by-timezone-name)
    - [Get Timezone from Any Address](#get-timezone-from-any-address)
@@ -44,20 +49,20 @@ Whether you're enriching signup forms with ip geolocation data, localizing conte
    - [Get Timezone and Airport Details from IATA Code](#get-timezone-and-airport-details-from-iata-code)
    - [Get Timezone and City Details from UN/LOCODE](#get-timezone-and-city-details-from-unlocode)
 
-7. [Timezone Converter Examples](#timezone-converter-examples)
+8. [Timezone Converter Examples](#timezone-converter-examples)
    - [Convert Current Time from One Timezone to Another](#convert-current-time-from-one-timezone-to-another)
 
-8. [User Agent API Examples](#user-agent-api-examples)
+9. [User Agent API Examples](#user-agent-api-examples)
    - [Parse a Basic User Agent String](#parse-a-basic-user-agent-string)
    - [Bulk User Agent Parsing Example](#bulk-user-agent-parsing-example)
-9. [Astronomy API Examples](#astronomy-api-examples)
+10. [Astronomy API Examples](#astronomy-api-examples)
    - [Astronomy by Coordinates](#astronomy-by-coordinates)
    - [Astronomy by IP Address](#astronomy-by-ip-address)
    - [Astronomy by Location String](#astronomy-by-location-string)
    - [Astronomy for Specific Date](#astronomy-for-specific-date)
    - [Astronomy in Different Language](#astronomy-in-different-language)
 
-10. [Documentation for Models](#documentation-for-models)
+11. [Documentation for Models](#documentation-for-models)
 
 
 # Installation
@@ -802,7 +807,9 @@ System.out.println(response);
 ```
 ## ASN API Examples
 
-This section provides usage examples of the `getAsnDetails()` method from the SDK. These methods allow developers to retrieve detailed ASN-level network data either by ASN number or by IP address. Note that ASN API is only available in the Advanced subscription plans.
+This section provides usage examples of the `getAsnDetails()` method from the SDK. These methods allow developers to retrieve detailed ASN-level network data either by ASN number or by IP address.
+
+> **Note**: ASN API is only available in the Advanced Plan
 
 Refer to the [ASN API documentation](https://ipgeolocation.io/asn-api.html#documentation-overview) for a detailed list of supported fields and behaviors.
 
@@ -1041,6 +1048,95 @@ class ASNResponse {
     }
 }
 ```
+
+## Abuse Contact API Examples
+This section demonstrates how to use the `getAbuseContactInfo()` method of the AbuseContact API. This API helps security teams, hosting providers, and compliance professionals quickly identify the correct abuse reporting contacts for any IPv4 or IPv6 address. You can retrieve data like the responsible organization, role, contact emails, phone numbers, and address to take appropriate mitigation action against abusive or malicious activity.
+> **Note**: Abuse Contact API is only available in the Advanced Plan
+
+Refer to the official [Abuse Contact API documentation](https://ipgeolocation.io/ip-abuse-contact-api.html#documentation-overview) for details on all available fields.
+### Lookup Abuse Contact by IP
+```java
+import io.ipgeolocation.sdk.api.AbuseContactAPI;
+import io.ipgeolocation.sdk.model.AbuseResponse;
+
+AbuseContactAPI api = new AbuseContactAPI(client);
+
+AbuseResponse response = api.getAbuseContactInfo()
+        .ip("1.0.0.0")
+        .execute();
+
+System.out.println(response);
+```
+Sample Response:
+```
+class AbuseResponse {
+    ip: 1.0.0.0
+    abuse: class Abuse {
+        route: 1.0.0.0/24
+        country: AU
+        handle: IRT-APNICRANDNET-AU
+        name: IRT-APNICRANDNET-AU
+        organization: 
+        role: abuse
+        kind: group
+        address: PO Box 3646
+        South Brisbane, QLD 4101
+        Australia
+        emails: [helpdesk@apnic.net]
+        phoneNumbers: [+61 7 3858 3100]
+    }
+}
+```
+
+### Lookup Abuse Contact with Specific Fields
+```java
+AbuseResponse response = api.getAbuseContactInfo()
+        .ip("1.2.3.4")
+        .fields("abuse.role,abuse.emails")
+        .execute();
+
+System.out.println(response);
+```
+Sample Response:
+```
+class AbuseResponse {
+    ip: 1.2.3.4
+    abuse: class Abuse {
+        role: abuse
+        emails: [helpdesk@apnic.net]
+    }
+}
+```
+### Lookup Abuse Contact while Excluding Fields
+```java
+AbuseResponse response = api.getAbuseContactInfo()
+        .ip("9.9.9.9")
+        .excludes("abuse.handle,abuse.emails")
+        .execute();
+
+System.out.println(response);
+```
+Sample Response:
+```
+class AbuseResponse {
+    ip: 9.9.9.9
+    abuse: class Abuse {
+        route: 9.9.9.0/24
+        country:
+        name: Quad9 Abuse
+        organization: Quad9 Abuse
+        role: abuse
+        kind: group
+        address: 1442 A Walnut Street Ste 501
+        Berkeley
+        CA
+        94709
+        United States
+        phoneNumbers: [+1-415-831-3129]
+    }
+}
+```
+
 ## Timezone API Examples
 
 This section provides usage examples of the `getTimezone()` method from the SDK, showcasing how to fetch timezone and time-related data using different query types — IP address, latitude/longitude, and timezone ID.
@@ -1914,93 +2010,6 @@ class AstronomyResponse {
         moonParallacticAngle: 93.79636599869248
         moonIlluminationPercentage: -7.32
         moonAngle: 328.6063710418327
-    }
-}
-```
-## Abuse Contact API Examples
-This section demonstrates how to use the `getAbuseContactInfo()` method of the AbuseContact API. This API helps security teams, hosting providers, and compliance professionals quickly identify the correct abuse reporting contacts for any IPv4 or IPv6 address. You can retrieve data like the responsible organization, role, contact emails, phone numbers, and address to take appropriate mitigation action against abusive or malicious activity.
-> **Note**: Abuse Contact API is only available in Advanced Plan
-
-Refer to the official [Abuse Contact API documentation](https://ipgeolocation.io/ip-abuse-contact-api.html#documentation-overview) for details on all available fields.
-### Lookup Abuse Contact by IP
-```java
-import io.ipgeolocation.sdk.api.AbuseContactAPI;
-import io.ipgeolocation.sdk.model.AbuseResponse;
-
-AbuseContactAPI api = new AbuseContactAPI(client);
-
-AbuseResponse response = api.getAbuseContactInfo()
-        .ip("1.0.0.0")
-        .execute();
-
-System.out.println(response);
-```
-Sample Response:
-```
-class AbuseResponse {
-    ip: 1.0.0.0
-    abuse: class Abuse {
-        route: 1.0.0.0/24
-        country: AU
-        handle: IRT-APNICRANDNET-AU
-        name: IRT-APNICRANDNET-AU
-        organization: 
-        role: abuse
-        kind: group
-        address: PO Box 3646
-        South Brisbane, QLD 4101
-        Australia
-        emails: [helpdesk@apnic.net]
-        phoneNumbers: [+61 7 3858 3100]
-    }
-}
-```
-
-### Lookup Abuse Contact with Specific Fields
-```java
-AbuseResponse response = api.getAbuseContactInfo()
-        .ip("1.2.3.4")
-        .fields("abuse.role,abuse.emails")
-        .execute();
-
-System.out.println(response);
-```
-Sample Response:
-```
-class AbuseResponse {
-    ip: 1.2.3.4
-    abuse: class Abuse {
-        role: abuse
-        emails: [helpdesk@apnic.net]
-    }
-}
-```
-### Lookup Abuse Contact while Excluding Fields
-```java
-AbuseResponse response = api.getAbuseContactInfo()
-        .ip("9.9.9.9")
-        .excludes("abuse.handle,abuse.emails")
-        .execute();
-
-System.out.println(response);
-```
-Sample Response:
-```
-class AbuseResponse {
-    ip: 9.9.9.9
-    abuse: class Abuse {
-        route: 9.9.9.0/24
-        country:
-        name: Quad9 Abuse
-        organization: Quad9 Abuse
-        role: abuse
-        kind: group
-        address: 1442 A Walnut Street Ste 501
-        Berkeley
-        CA
-        94709
-        United States
-        phoneNumbers: [+1-415-831-3129]
     }
 }
 ```
