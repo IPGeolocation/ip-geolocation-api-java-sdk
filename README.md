@@ -123,7 +123,7 @@ The documentation below corresponds to the four available API tier plans:
 
 For a detailed comparison of what each plan offers, visit the [Pricing Page](https://ipgeolocation.io/pricing.html).
 
-# API Endpoints
+## API Endpoints
 All URIs are relative to *https://api.ipgeolocation.io/v2*
 
 | Class                | Method                                                                                                                                                     | HTTP request              | Description                                                             |
@@ -141,7 +141,7 @@ All URIs are relative to *https://api.ipgeolocation.io/v2*
 | *UserAgentAPI*       | [**getBulkUserAgent**](https://github.com/IPGeolocation/ip-geolocation-api-java-sdk/blob/master/docs/UserAgentAPI.md#getbulkuseragent)                     | **POST** /user-agent-bulk | Handle multiple user-agent string lookups                               |
 | *UserAgentAPI*       | [**getUserAgentOfCustomString**](https://github.com/IPGeolocation/ip-geolocation-api-java-sdk/blob/master/docs/UserAgentAPI.md#getuseragentofcustomstring) | **POST** /user-agent      | Handle single User-Agent string                                         |
 
-# Fields and Methods Availability
+## Fields and Methods Availability
 IP Geolocation offers four plans from billing point of view: **Free, Standard, Security, Advance**. The availability of each method calling from the respective class, over all plans are presented below.
 
 | Class                | Method                                                                                                                                                     | Free | Standard | Security | Advance |
@@ -704,10 +704,10 @@ class SecurityAPIResponse {
 }
 
 ```
-## Bulk IP Security Request
+### Bulk IP Security Request
 The SDK also supports bulk IP Security requests using the `getBulkIPSecurity()` method. All parameters like `fields`, `include`, and `excludes` can also be used in bulk requests.
 
-```text
+```java
 import io.ipgeolocation.sdk.model.BulkSecurityResponse;
 import io.ipgeolocation.sdk.model.BulkIPRequest;
 
