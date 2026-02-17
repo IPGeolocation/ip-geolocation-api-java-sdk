@@ -21,7 +21,7 @@ Based on:
    - [Using Maven](#using-maven)
    - [Using Gradle](#using-gradle)
    - [Manual Installation](#manual-installation)
-3. [API Plan Tiers and Documentation](#api-plan-tiers-and-documentation)
+3. [API Documentation Links](#api-documentations)
 4. [API Endpoints](#api-endpoints)
 5. [Fields and Methods Availability](#fields-and-methods-availability)
 6. [Authentication Setup](#authentication-setup)
@@ -112,14 +112,17 @@ Then include the following JARs in your classpath:
 - `target/ipgeolocation-sdk-java-2.0.1.jar`
 - All JARs in `target/lib/`
 
-## API Plan Tiers and Documentation
+## API Documentations
 
-The documentation below corresponds to the four available API tier plans:
-
-- **Developer Plan** (Free): [Full Documentation](https://ipgeolocation.io/ip-location-api.html#Free)
-- **Standard Plan**: [Full Documentation](https://ipgeolocation.io/ip-location-api.html#Standard)
-- **Advance Plan**: [Full Documentation](https://ipgeolocation.io/ip-location-api.html#Advance)
-- **Security Plan**: [Full Documentation](https://ipgeolocation.io/ip-security-api.html#documentation-overview)
+The documentation below corresponds to the available APIs:
+- [**Overview**](https://ipgeolocation.io/documentation.html)
+- [**IP GeoLocation API**](https://ipgeolocation.io/documentation/ip-location-api.html)
+- [**IP Security API**](https://ipgeolocation.io/documentation/ip-security-api.html)
+- [**ASN API**](https://ipgeolocation.io/documentation/asn-api.html)
+- [**IP Abuse Contact API**](https://ipgeolocation.io/documentation/ip-abuse-contact-api.html)
+- [**Timezone API**](https://ipgeolocation.io/documentation/timezone-api.html)
+- [**User-Agent API**](https://ipgeolocation.io/documentation/user-agent-api.html)
+- [**Astronomy API**](https://ipgeolocation.io/documentation/astronomy-api.html)
 
 For a detailed comparison of what each plan offers, visit the [Pricing Page](https://ipgeolocation.io/pricing.html).
 
@@ -160,7 +163,7 @@ IP Geolocation offers four plans from billing point of view: **Free, Standard, S
 | *UserAgentAPI*       | [**getUserAgentOfCustomString**](https://github.com/IPGeolocation/ip-geolocation-api-java-sdk/blob/master/docs/UserAgentAPI.md#getuseragentofcustomstring) |  ✖   |    ✔     |    ✔     |    ✔    |
 
 > [!TIP]
-> The availability of fields in every API endpoint across all API plans is provided in the **_Reference Table_** within each respective API Documentation. e.g., for IPGeolocationApi, please visit [https://ipgeolocation.io/ip-location-api.html#reference-to-ipgeolocation-api-response](https://ipgeolocation.io/ip-location-api.html#reference-to-ipgeolocation-api-response).
+> The availability of fields in every API endpoint across Free and Paid plans is provided in the **_Reference Table_** within each respective API Documentation. e.g., for IPGeolocationApi, please visit [https://ipgeolocation.io/documentation/ip-location-api.html#reference-to-ipgeolocation-api-response](https://ipgeolocation.io/documentation/ip-location-api.html#reference-to-ipgeolocation-api-response).
 
 ## Authentication Setup
 To authenticate API requests, you need an API key from [ipgeolocation.io](https://ipgeolocation.io/).
@@ -207,7 +210,7 @@ This section provides usage examples of the `getIPGeolocation()` method from the
   - `dma`
   - `time_zone`
 
-For complete details, refer to the official documentation: [IP Geolocation API Documentation](https://ipgeolocation.io/ip-location-api.html#documentation-overview)
+For complete details, refer to the official documentation: [IP Geolocation API Documentation](https://ipgeolocation.io/documentation/ip-location-api.html)
 
 The `ip` parameter in the SDK can accept any valid IPv4 address, IPv6 address, or domain name. If the `ip()` method is not used or the parameter is omitted, the API will return information about the public IP address of the device or server where the SDK is executed.
 
@@ -636,7 +639,7 @@ System.out.println(response);
 
 This section provides usage examples of the `getIPSecurity()` method from the SDK across various subscription tiers. Each example demonstrates different ways to query threat intelligence and risk metadata using parameters like fields, excludes, and optional modules.
 
-For full API specifications, refer to the [official IP Security API documentation](https://ipgeolocation.io/ip-security-api.html#documentation-overview).
+For full API specifications, refer to the [official IP Security API documentation](https://ipgeolocation.io/documentation/ip-security-api.html).
 
 ### Get Security only fields
 
@@ -679,7 +682,7 @@ SecurityAPIResponse response = api.getIPSecurity()
     .execute();
 ```
 > [!NOTE]
-> You can get all the available fields in standard plan in combination with security data, when subscribed to security plan.
+> You can get all the available fields in a paid plan in combination with security data, when subscribed to paid plan.
 
 ### Request with Field Filtering
 
@@ -729,7 +732,7 @@ This section provides usage examples of the `getAsnDetails()` method from the SD
 > [!NOTE] 
 > ASN API is only available in the Advanced Plan.
 
-Refer to the [ASN API documentation](https://ipgeolocation.io/asn-api.html#documentation-overview) for a detailed list of supported fields and behaviors.
+Refer to the [ASN API documentation](https://ipgeolocation.io/documentation/asn-api.html) for a detailed list of supported fields and behaviors.
 
 ### Get ASN Information by IP Address
 
@@ -873,7 +876,7 @@ This section demonstrates how to use the `getAbuseContactInfo()` method of the A
 > [!NOTE]
 > Abuse Contact API is only available in the Advanced Plan.
 
-Refer to the official [Abuse Contact API documentation](https://ipgeolocation.io/ip-abuse-contact-api.html#documentation-overview) for details on all available fields.
+Refer to the official [Abuse Contact API documentation](https://ipgeolocation.io/documentation/ip-abuse-contact-api.html) for details on all available fields.
 ### Lookup Abuse Contact by IP
 ```java
 import io.ipgeolocation.sdk.api.AbuseContactAPI;
@@ -961,7 +964,7 @@ class AbuseResponse {
 
 This section provides usage examples of the `getTimezone()` method from the SDK, showcasing how to fetch timezone and time-related data using different query types — IP address, latitude/longitude, and timezone ID.
 
-For full API specifications, refer to the [Timezone API documentation](https://ipgeolocation.io/timezone-api.html#documentation-overview).
+For full API specifications, refer to the [Timezone API documentation](https://ipgeolocation.io/documentation/timezone-api.html).
 
 ### Get Timezone by IP Address
 
@@ -1337,7 +1340,7 @@ class TimeZoneResponse {
 
 This section provides usage examples of the `convertTimezone()` method from the SDK. The Timezone Converter API allows you to convert a specific time from one timezone to another using timezone identifiers; coordinates; city; IATA/ICAO code or UN/LOCODE and optional date/time inputs.
 
-For more details, refer to official documentation: [Timezone Converter API](https://ipgeolocation.io/timezone-api.html#convert-time-bw-time-zones).
+For more details, refer to official documentation: [Timezone Converter API](https://ipgeolocation.io/documentation/timezone-api.html#convert-time-between-time-zones).
 
 ### Convert Current Time from One Timezone to Another
 
@@ -1369,7 +1372,7 @@ Similarly, you can convert time from any timezone to another timezone using loca
 
 This section provides usage examples of the `getUserAgent()` method from the SDK. The User Agent API extracts and classifies information from user agent strings, including browser, engine, device, OS, and type metadata.
 
-For full explanation, visit the [User Agent API documentation](https://ipgeolocation.io/user-agent-api.html#documentation-overview).
+For full explanation, visit the [User Agent API documentation](https://ipgeolocation.io/documentation/user-agent-api.html).
 
 ### Parse a Basic User Agent String
 
@@ -1442,7 +1445,7 @@ System.out.println(response);
 
 This section provides usage examples of the `getAstronomy()` method from the SDK, allowing developers to fetch sun and moon timings and position data based on coordinates, IP, or location string.
 
-Refer to the [official Astronomy API documentation](https://ipgeolocation.io/astronomy-api.html#documentation-overview) for more details.
+Refer to the [official Astronomy API documentation](https://ipgeolocation.io/documentation/astronomy-api.html) for more details.
 
 ### Lookup Astronomy by Coordinates
 
