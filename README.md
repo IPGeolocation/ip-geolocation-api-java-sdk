@@ -1,1885 +1,734 @@
-# IPGeolocation.io API Java SDK
+# IPGeolocation Java SDK for the IP Geolocation API
+
+[![Maven Central](https://img.shields.io/maven-central/v/io.ipgeolocation/ipgeolocation?label=Maven%20Central)](https://mvnrepository.com/artifact/io.ipgeolocation/ipgeolocation/latest)
+[![Java 21+](https://img.shields.io/badge/Java-21%2B-orange)](https://openjdk.org/)
+[![Build Tool](https://img.shields.io/badge/build-Maven-C71A36)](https://maven.apache.org/)
+[![API Scope](https://img.shields.io/badge/API-IP%20Geolocation%20API-0A7B83)](https://ipgeolocation.io/documentation/ip-location-api.html)
+[![Endpoints](https://img.shields.io/badge/endpoints-%2Fv3%2Fipgeo%20%2B%20%2Fv3%2Fipgeo--bulk-1F6FEB)](https://ipgeolocation.io/documentation/ip-location-api.html)
+[![License](https://img.shields.io/badge/license-Proprietary-111111)](https://ipgeolocation.io/tos.html)
+[![Documentation](https://img.shields.io/badge/docs-IP%20Geolocation%20API-0052CC)](https://ipgeolocation.io/documentation/ip-location-api.html)
+[![Website](https://img.shields.io/badge/website-ipgeolocation.io-117A37)](https://ipgeolocation.io/)
 
 ## Overview
-The official **Java SDK** provides streamlined access to **[IPGeolocation.io](https://ipgeolocation.io)**, a comprehensive platform offering RESTful IP-based APIs and downloadable databases delivering precise **Geolocation, Network, Timezone, Currency, Abuse Contacts, ASN,** and **Company/ISP** details for IPv4 and IPv6 addresses and **User-Agent string parsing**.
+The official **Java SDK** for **[IPGeolocation.io](https://ipgeolocation.io)** provides typed access to the **IP Geolocation API**. It supports **single IP lookup** through `/v3/ipgeo` and **bulk IP lookup** through `/v3/ipgeo-bulk` for **IPv4**, **IPv6**, and **domain** inputs.
 
-With built-in support for **VPN**, **proxy**, **TOR detection**, and **threat detection** (via the IPGeolocation's [Security API](https://ipgeolocation.io/ip-security-api.html) for threat intelligence), this SDK also enables developers to integrate threat intelligence, personalization, fraud prevention, compliance, and analytics features into Java applications.
+Use this SDK when you need **IP geolocation data** in Java applications, including **location**, **network**, **timezone**, **currency**, **ASN**, **company**, **security**, **abuse**, **hostname**, and **user-agent** data returned by `/v3/ipgeo` and `/v3/ipgeo-bulk`.
 
-Whether you're enriching signup forms with ip geolocation data, localizing content, embedding threat intelligence in back-end systems, or converting time zones and currencies, the SDK ensures seamless, scalable integration with IPGeolocation.io’s global API infrastructure.
+It fits backend services, fraud prevention, analytics, compliance, personalization, and enrichment pipelines that need typed responses, raw JSON or XML access, and clear exception handling.
 
-Based on:
-- API version: 2.0
+This version supports only the **Unified IPGeolocation API** endpoints `/v3/ipgeo` and `/v3/ipgeo-bulk`. Dedicated endpoint families are not included in this release.
+
+## At a Glance
+
+| Item | Value |
+|------|-------|
+| SDK Name | IPGeolocation Java SDK |
+| API Scope | IP Geolocation API |
+| Supported Endpoints | `/v3/ipgeo`, `/v3/ipgeo-bulk` |
+| Supported Inputs | IPv4, IPv6, domain |
+| Authentication | API key, request origin allowlisting for `/v3/ipgeo` only |
+| Response Formats | Typed JSON, raw JSON, raw XML |
+| Bulk Limit | Up to 50,000 IPs or domains per request |
+| Java Requirement | 21+ |
+| API Version | 3.0 |
 
 **Official Release:**
 - Available on [**Maven Central**](https://mvnrepository.com/artifact/io.ipgeolocation/ipgeolocation/latest)
 - Source Code: [**GitHub Repository**](https://github.com/IPGeolocation/ip-geolocation-api-java-sdk)
 
 ## Table of Contents
+- [Requirements](#requirements)
+- [Installation](#installation)
+- [Supported Endpoints](#supported-endpoints)
+- [Quick Start](#quick-start)
+- [Authentication Modes](#authentication-modes)
+- [Free and Paid Plan Paths](#free-and-paid-plan-paths)
+- [Client Configuration (Core)](#client-configuration-core)
+- [Available Methods](#available-methods)
+  - [Single Lookup](#single-lookup)
+  - [Bulk Lookup](#bulk-lookup)
+- [Request Parameters](#request-parameters)
+- [Single Lookup Parameter Examples](#single-lookup-parameter-examples)
+- [Raw Response Methods](#raw-response-methods)
+  - [Single Raw JSON Example](#single-raw-json-example)
+  - [Single Raw XML Example](#single-raw-xml-example)
+  - [Bulk Raw JSON Example](#bulk-raw-json-example)
+  - [Bulk Raw XML Example](#bulk-raw-xml-example)
+- [Bulk Examples](#bulk-examples)
+  - [Bulk With All Valid Inputs](#bulk-with-all-valid-inputs)
+  - [Bulk With Mixed Valid and Invalid Inputs](#bulk-with-mixed-valid-and-invalid-inputs)
+- [Advanced Configuration](#advanced-configuration)
+  - [Response Metadata](#response-metadata)
+  - [JSON Output Modes](#json-output-modes)
+- [Error Handling](#error-handling)
+- [Plan Behavior (Free vs Paid)](#plan-behavior-free-vs-paid)
+- [Troubleshooting](#troubleshooting)
+- [Links](#links)
 
-1. [Requirements](#requirements)
-2. [Installation](#installation)
-   - [Using Maven](#using-maven)
-   - [Using Gradle](#using-gradle)
-   - [Manual Installation](#manual-installation)
-3. [API Documentation Links](#api-documentations)
-4. [API Endpoints](#api-endpoints)
-5. [Fields and Methods Availability](#fields-and-methods-availability)
-6. [Authentication Setup](#authentication-setup)
-   - [How to Get Your API Key](#how-to-get-your-api-key)
-   - [Setup API Key](#setup-api-key)
-7. [IP Geolocation Examples](#ip-geolocation-examples)
-   - [Developer (Free) Plan Examples](#developer-plan-examples)
-   - [Standard Plan Examples](#standard-plan-examples)
-   - [Advanced Plan Examples](#advanced-plan-examples)
-   - [Bulk IP Geolocation Example](#bulk-ip-geolocation-example)
-8. [IP Security Examples](#ip-security-examples)
-   - [Get Security only fields](#get-security-only-fields)
-   - [Include Multiple Optional Fields](#include-multiple-optional-fields)
-   - [Request with Field Filtering](#request-with-field-filtering)
-   - [Bulk IP Security Request](#bulk-ip-security-request)
-9. [ASN API Examples](#asn-api-examples)
-   - [Get ASN Information by IP Address](#get-asn-information-by-ip-address)
-   - [Get ASN Information by ASN Number](#get-asn-information-by-asn-number)
-   - [Combine All objects using Include](#combine-all-objects-using-include)
-10. [Abuse Contact API Examples](#abuse-contact-api-examples)
-    - [Lookup Abuse Contact by IP](#lookup-abuse-contact-by-ip)
-    - [Lookup Abuse Contact with Specific Fields](#lookup-abuse-contact-with-specific-fields)
-    - [Lookup Abuse Contact while Excluding Fields](#lookup-abuse-contact-while-excluding-fields)
-11. [Timezone API Examples](#timezone-api-examples)
-    - [Get Timezone by IP Address](#get-timezone-by-ip-address)
-    - [Get Timezone by Timezone Name](#get-timezone-by-timezone-name)
-    - [Get Timezone from Any Address](#get-timezone-from-any-address)
-    - [Get Timezone from Location Coordinates](#get-timezone-from-location-coordinates)
-    - [Get Timezone and Airport Details from IATA Code](#get-timezone-and-airport-details-from-iata-code)
-    - [Get Timezone and City Details from UN/LOCODE](#get-timezone-and-city-details-from-unlocode)
-12. [Timezone Converter Examples](#timezone-converter-examples)
-    - [Convert Current Time from One Timezone to Another](#convert-current-time-from-one-timezone-to-another)
-13. [User Agent API Examples](#user-agent-api-examples)
-    - [Parse a Basic User Agent String](#parse-a-basic-user-agent-string)
-    - [Bulk User Agent Parsing Example](#bulk-user-agent-parsing-example)
-14. [Astronomy API Examples](#astronomy-api-examples)
-    - [Lookup Astronomy by Coordinates](#lookup-astronomy-by-coordinates)
-    - [Lookup Astronomy by IP Address](#lookup-astronomy-by-ip-address)
-    - [Lookup Astronomy by Location String](#lookup-astronomy-by-location-string)
-    - [Lookup Astronomy for Specific Date](#lookup-astronomy-for-specific-date)
-    - [Lookup Astronomy in Different Language](#lookup-astronomy-in-different-language)
-15. [Documentation for Models](#documentation-for-models)
-
+## Why This SDK
+- Java 21+ SDK for the IP Geolocation API
+- Single lookup and bulk lookup support for IPv4, IPv6, and domain names
+- Typed request builders and response models for this SDK
+- Access to location, network, currency, timezone, ASN, company, security, abuse, hostname, and user-agent data through the unified endpoint
+- Raw JSON and XML response methods when typed parsing is not required
+- Clear validation rules for authentication, bulk request limits, and output formats
+- Typed API exceptions mapped by HTTP status
+- Response metadata for status, duration, usage counters, and raw headers
 
 ## Requirements
-- **Java**: 1.8 or higher
-- **Build Tools**: Maven 3.8.3+ or Gradle 7.2+ 
-- **API Key**: Sign up [IPGeolocation.io](https://ipgeolocation.io)
+
+| Item        | Value                  |
+|-------------|------------------------|
+| Java        | 21+                    |
+| Maven       | 3.8+                   |
 
 ## Installation
 
-### Using Maven
-
-Add the following dependency to your `pom.xml` file located at [![Maven Central](https://img.shields.io/maven-central/v/io.ipgeolocation/ipgeolocation.svg?color=brightgreen)](https://mvnrepository.com/artifact/io.ipgeolocation/ipgeolocation):
+### Maven
 
 ```xml
 <dependency>
   <groupId>io.ipgeolocation</groupId>
   <artifactId>ipgeolocation</artifactId>
-  <version>2.0.1</version>
+  <version>3.0.0</version>
 </dependency>
 ```
 
-### Using Gradle
+### Gradle (Groovy)
 
-Add this to your `build.gradle` file:
-
-```groovy
-repositories {
-    mavenCentral()
-    mavenLocal() // Only needed if using locally built version
-}
-
+```gradle
 dependencies {
-    implementation "io.ipgeolocation:ipgeolocation:2.0.1"
+  implementation 'io.ipgeolocation:ipgeolocation:3.0.0'
 }
 ```
 
-### Manual Installation
+### Gradle (Kotlin)
 
-To build the SDK manually:
+```kotlin
+dependencies {
+  implementation("io.ipgeolocation:ipgeolocation:3.0.0")
+}
+```
+
+### Build From Source
 
 ```bash
-mvn clean package
+git clone https://github.com/IPGeolocation/ip-geolocation-api-java-sdk
+cd ip-geolocation-api-java-sdk
+mvn -q clean install
 ```
 
-Then include the following JARs in your classpath:
-- `target/ipgeolocation-sdk-java-2.0.1.jar`
-- All JARs in `target/lib/`
+After `mvn install`, your local Maven repository contains version `3.0.0` and you can use the same dependency coordinates shown above.
 
-## API Documentations
+## Supported Endpoints
 
-The documentation below corresponds to the available APIs:
-- [**Overview**](https://ipgeolocation.io/documentation.html)
-- [**IP GeoLocation API**](https://ipgeolocation.io/documentation/ip-location-api.html)
-- [**IP Security API**](https://ipgeolocation.io/documentation/ip-security-api.html)
-- [**ASN API**](https://ipgeolocation.io/documentation/asn-api.html)
-- [**IP Abuse Contact API**](https://ipgeolocation.io/documentation/ip-abuse-contact-api.html)
-- [**Timezone API**](https://ipgeolocation.io/documentation/timezone-api.html)
-- [**User-Agent API**](https://ipgeolocation.io/documentation/user-agent-api.html)
-- [**Astronomy API**](https://ipgeolocation.io/documentation/astronomy-api.html)
+This SDK currently supports the Unified IPGeolocation API endpoints below.
 
-For a detailed comparison of what each plan offers, visit the [Pricing Page](https://ipgeolocation.io/pricing.html).
+| Endpoint         | HTTP Method | SDK Methods                                                                 | Primary Use Case                              |
+|------------------|-------------|------------------------------------------------------------------------------|-----------------------------------------------|
+| `/v3/ipgeo`      | `GET`       | `lookupIpGeolocation(...)`, `lookupIpGeolocationRaw(...)`                   | Single IPv4, IPv6, or domain lookup           |
+| `/v3/ipgeo-bulk` | `POST`      | `bulkLookupIpGeolocation(...)`, `bulkLookupIpGeolocationRaw(...)`           | Bulk lookup for up to 50,000 IPs or domains   |
 
-## API Endpoints
-All URIs are relative to *https://api.ipgeolocation.io/v2*
+> [!NOTE]
+> Scope of this version:
+> - Supported: the Unified IPGeolocation API endpoints listed above
+> - Not included: dedicated endpoint families outside `/v3/ipgeo` and `/v3/ipgeo-bulk`
 
-| Class                | Method                                                                                                                                                     | HTTP request              | Description                                                             |
-|----------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------|-------------------------------------------------------------------------|
-| *IPGeolocationAPI*   | [**getIPGeolocation**](https://github.com/IPGeolocation/ip-geolocation-api-java-sdk/blob/master/docs/IPGeolocationAPI.md#getipgeolocation)                 | **GET** /ipgeo            | Get geolocation data for a single IP address                            |
-| *IPGeolocationAPI*   | [**getBulkIPGeolocation**](https://github.com/IPGeolocation/ip-geolocation-api-java-sdk/blob/master/docs/IPGeolocationAPI.md#getbulkipgeolocation)         | **POST** /ipgeo-bulk      | Get geolocation data for multiple IP addresses in a single API request  |
-| *IPSecurityAPI*      | [**getIPSecurity**](https://github.com/IPGeolocation/ip-geolocation-api-java-sdk/blob/master/docs/IPSecurityAPI.md#getipsecurity)                          | **GET** /security         | Retrieve security information (VPN, TOR, proxy, etc.) for a single IP   |
-| *IPSecurityAPI*      | [**getBulkIPSecurity**](https://github.com/IPGeolocation/ip-geolocation-api-java-sdk/blob/master/docs/IPSecurityAPI.md#getbulkipsecurity)                  | **POST** /security-bulk   | Retrieve security threat intelligence for multiple IPs                  |
-| *ASNLookupAPI*       | [**getAsnDetails**](https://github.com/IPGeolocation/ip-geolocation-api-java-sdk/blob/master/docs/ASNLookupAPI.md#getasndetails)                           | **GET** /asn              | Get details of any AS number or associated IP address                   |
-| *AbuseContactAPI*    | [**getAbuseContactInfo**](https://github.com/IPGeolocation/ip-geolocation-api-java-sdk/blob/master/docs/AbuseContactAPI.md#getabusecontactinfo)            | **GET** /abuse            | Retrieve abuse reporting contact information for a given IP address     |
-| *AstronomyAPI*       | [**getAstronomy**](https://github.com/IPGeolocation/ip-geolocation-api-java-sdk/blob/master/docs/AstronomyAPI.md#getastronomy)                             | **GET** /astronomy        | Get sunrise, sunset, moonrise, moonset, and related data for a location |
-| *TimezoneAPI*        | [**getTimezone**](https://github.com/IPGeolocation/ip-geolocation-api-java-sdk/blob/master/docs/TimezoneAPI.md#gettimezone)                                | **GET** /timezone         | Get timezone information details                                        |
-| *TimeConversionAPI*  | [**convertTimezone**](https://github.com/IPGeolocation/ip-geolocation-api-java-sdk/blob/master/docs/TimezoneConversionAPI.md#converttimezone)              | **GET** /timezone/convert | Convert time between two specified timezones                            |
-| *UserAgentAPI*       | [**getUserAgent**](https://github.com/IPGeolocation/ip-geolocation-api-java-sdk/blob/master/docs/UserAgentAPI.md#getuseragent)                             | **GET** /user-agent       | Get details of user-agent                                               |
-| *UserAgentAPI*       | [**getBulkUserAgent**](https://github.com/IPGeolocation/ip-geolocation-api-java-sdk/blob/master/docs/UserAgentAPI.md#getbulkuseragent)                     | **POST** /user-agent-bulk | Handle multiple user-agent string lookups                               |
-| *UserAgentAPI*       | [**getUserAgentOfCustomString**](https://github.com/IPGeolocation/ip-geolocation-api-java-sdk/blob/master/docs/UserAgentAPI.md#getuseragentofcustomstring) | **POST** /user-agent      | Handle single User-Agent string                                         |
-
-## Fields and Methods Availability
-IP Geolocation offers four plans from billing point of view: **Free, Standard, Security, Advance**. The availability of each method calling from the respective class, over all plans are presented below.
-
-| Class                | Method                                                                                                                                                     | Free | Standard | Security | Advance |
-|----------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------|:----:|:--------:|:--------:|:-------:|
-| *IPGeolocationAPI*   | [**getIPGeolocation**](https://github.com/IPGeolocation/ip-geolocation-api-java-sdk/blob/master/docs/IPGeolocationAPI.md#getipgeolocation)                 |  ✔   |    ✔     |    ✖     |    ✔    |
-| *IPGeolocationAPI*   | [**getBulkIPGeolocation**](https://github.com/IPGeolocation/ip-geolocation-api-java-sdk/blob/master/docs/IPGeolocationAPI.md#getbulkipgeolocation)         |  ✖   |    ✔     |    ✖     |    ✔    |
-| *IPSecurityAPI*      | [**getIPSecurity**](https://github.com/IPGeolocation/ip-geolocation-api-java-sdk/blob/master/docs/IPSecurityAPI.md#getipsecurity)                          |  ✖   |    ✖     |    ✔     |    ✖    |
-| *IPSecurityAPI*      | [**getBulkIPSecurity**](https://github.com/IPGeolocation/ip-geolocation-api-java-sdk/blob/master/docs/IPSecurityAPI.md#getbulkipsecurity)                  |  ✖   |    ✖     |    ✔     |    ✖    |
-| *ASNLookupAPI*       | [**getAsnDetails**](https://github.com/IPGeolocation/ip-geolocation-api-java-sdk/blob/master/docs/ASNLookupAPI.md#getasndetails)                           |  ✖   |    ✖     |    ✖     |    ✔    |
-| *AbuseContactAPI*    | [**getAbuseContactInfo**](https://github.com/IPGeolocation/ip-geolocation-api-java-sdk/blob/master/docs/AbuseContactAPI.md#getabusecontactinfo)            |  ✖   |    ✖     |    ✖     |    ✔    |
-| *AstronomyAPI*       | [**getAstronomy**](https://github.com/IPGeolocation/ip-geolocation-api-java-sdk/blob/master/docs/AstronomyAPI.md#getastronomy)                             |  ✔   |    ✔     |    ✔     |    ✔    |
-| *TimezoneAPI*        | [**getTimezone**](https://github.com/IPGeolocation/ip-geolocation-api-java-sdk/blob/master/docs/TimezoneAPI.md#gettimezone)                                |  ✔   |    ✔     |    ✔     |    ✔    |
-| *TimeConversionAPI*  | [**convertTimezone**](https://github.com/IPGeolocation/ip-geolocation-api-java-sdk/blob/master/docs/TimezoneConversionAPI.md#converttimezone)              |  ✔   |    ✔     |    ✔     |    ✔    |
-| *UserAgentAPI*       | [**getUserAgent**](https://github.com/IPGeolocation/ip-geolocation-api-java-sdk/blob/master/docs/UserAgentAPI.md#getuseragent)                             |  ✔   |    ✔     |    ✔     |    ✔    |
-| *UserAgentAPI*       | [**getBulkUserAgent**](https://github.com/IPGeolocation/ip-geolocation-api-java-sdk/blob/master/docs/UserAgentAPI.md#getbulkuseragent)                     |  ✖   |    ✔     |    ✔     |    ✔    |
-| *UserAgentAPI*       | [**getUserAgentOfCustomString**](https://github.com/IPGeolocation/ip-geolocation-api-java-sdk/blob/master/docs/UserAgentAPI.md#getuseragentofcustomstring) |  ✖   |    ✔     |    ✔     |    ✔    |
-
-> [!TIP]
-> The availability of fields in every API endpoint across Free and Paid plans is provided in the **_Reference Table_** within each respective API Documentation. e.g., for IPGeolocationApi, please visit [https://ipgeolocation.io/documentation/ip-location-api.html#reference-to-ipgeolocation-api-response](https://ipgeolocation.io/documentation/ip-location-api.html#reference-to-ipgeolocation-api-response).
-
-## Authentication Setup
-To authenticate API requests, you need an API key from [ipgeolocation.io](https://ipgeolocation.io/).
-
-### How to Get Your API Key
-
-1. **Sign up** here: [https://app.ipgeolocation.io/signup](https://app.ipgeolocation.io/signup)
-2. **(optional)** Verify your email, if you signed up using email.
-3. **Log in** to your account: [https://app.ipgeolocation.io/login](https://app.ipgeolocation.io/login)  
-4. After logging in, navigate to your **Dashboard** to find your API key: [https://app.ipgeolocation.io/dashboard](https://app.ipgeolocation.io/dashboard)
-
-### Setup API Key
-Once you've obtained the api key, configure your API client as follows:
+## Quick Start
 
 ```java
-import invoker.io.ipgeolocation.sdk.ApiClient;
-import invoker.io.ipgeolocation.sdk.Configuration;
-import auth.invoker.io.ipgeolocation.sdk.ApiKeyAuth;
+import io.ipgeolocation.sdk.IpGeolocationClient;
+import io.ipgeolocation.sdk.IpGeolocationClientConfig;
+import io.ipgeolocation.sdk.LookupIpGeolocationRequest;
+import io.ipgeolocation.sdk.ApiResponse;
+import io.ipgeolocation.sdk.model.IpGeolocationResponse;
 
-ApiClient client = Configuration.getDefaultApiClient();
-client.setBasePath("https://api.ipgeolocation.io/v2");
+IpGeolocationClientConfig config = IpGeolocationClientConfig.builder("YOUR_API_KEY").build();
 
-ApiKeyAuth apiKeyAuth = (ApiKeyAuth) client.getAuthentication("ApiKeyAuth");
-apiKeyAuth.setApiKey("YOUR_API_KEY_HERE");
+try (IpGeolocationClient client = new IpGeolocationClient(config)) {
+  ApiResponse<IpGeolocationResponse> result = client.lookupIpGeolocation(
+      LookupIpGeolocationRequest.builder()
+          .ip("8.8.8.8")
+          .include("*")
+          .build());
+
+  System.out.println("IP: " + result.data().ip());
+  if (result.data().location() != null) {
+    System.out.println("Country: " + result.data().location().countryName());
+    System.out.println("City: " + result.data().location().city());
+  }
+  System.out.println("Credits: " + result.metadata().creditsCharged());
+  System.out.println("Typed Response: " + result.data());
+} catch (Exception e) {
+  System.err.println("Request failed: " + e.getMessage());
+}
 ```
+
+## Authentication Modes
+
+| Mode                        | SDK Setup                                           | Typical Use                             |
+|-----------------------------|-----------------------------------------------------|-----------------------------------------|
+| API key query param         | `IpGeolocationClientConfig.builder("YOUR_API_KEY")` | Server-side API calls                   |
+| Request origin allowlisting | `IpGeolocationClientConfig.builder()`               | Single lookup (`/v3/ipgeo`) only on paid plan |
+
+## Free and Paid Plan Paths
+
+### Free Plan Path
+
+Use this path if you are on the free plan.
+
+Supported:
+- IPv4 and IPv6 single lookup
+- `fields` and `excludes`
+- `include=*` (accepted, returns base/default response)
+
+Not supported on free plan:
+- domain lookup
+- bulk endpoint
+- non-`*` include values such as `security` or `abuse`
+- non-English `lang`
+
+> [!CAUTION]
+> On the free plan, `/v3/ipgeo-bulk`, domain lookup, non-`*` include modules, and non-English `lang` are not available.
+
+```java
+var freeResponse = client.lookupIpGeolocation(
+    LookupIpGeolocationRequest.builder()
+        .ip("8.8.8.8")
+        .include("*")
+        .fields("location.country_name")
+        .excludes("currency")
+        .build());
+```
+
+### Paid Plan Path
+
+Use this path if you need domain lookup, enrichment modules, localization, bulk lookup, and everything included in the free plan.
+
+Supported:
+- domain lookup (`.ip("ipgeolocation.io")`)
+- bulk endpoint (`/v3/ipgeo-bulk`)
+- non-`*` include values (`security`, `abuse`, `user_agent`, and others)
+- non-English `lang`
+
+```java
+var paidResponse = client.lookupIpGeolocation(
+    LookupIpGeolocationRequest.builder()
+        .ip("ipgeolocation.io")
+        .lang(Language.DE)
+        .include("security")
+        .include("abuse")
+        .build());
+```
+
+## Client Configuration (Core)
+
+These are the configuration options for the client.
+
+| Builder Method             | Type       | Default                        | Notes                                                               |
+|----------------------------|------------|--------------------------------|---------------------------------------------------------------------|
+| `apiKey(String)`           | `String`   | `null` if omitted              | Required unless using request origin allowlisting                   |
+| `baseUrl(String)`          | `String`   | `https://api.ipgeolocation.io` | Not Required, trailing slash is trimmed                             |
+| `connectTimeout(Duration)` | `Duration` | `10s`                          | Not Required, must be greater than zero and less than `readTimeout` |
+| `readTimeout(Duration)`    | `Duration` | `30s`                          | Not Required, must be greater than zero                             |
 
 > [!IMPORTANT]
-> Ensure that your API key is securely stored and not exposed in public repositories.
-
-## IP Geolocation Examples
-This section provides usage examples of the `getIPGeolocation()` method from the SDK across Free, Standard, and Advanced subscription tiers. Each example highlights different combinations of parameters: `fields`, `include`, and `excludes`.
-
-**Parameters**
-
-- `fields`: Use this parameter to include specific fields in the response.
-- `excludes`: Use this parameter to omit specific fields from the response.
-- `include`: Use this parameter to add optional modules to the response, such as:
-  - `security`
-  - `user_agent`
-  - `hostname`
-  - `liveHostname`
-  - `hostnameFallbackLive`
-  - `abuse`
-  - `dma`
-  - `time_zone`
-
-For complete details, refer to the official documentation: [IP Geolocation API Documentation](https://ipgeolocation.io/documentation/ip-location-api.html)
-
-The `ip` parameter in the SDK can accept any valid IPv4 address, IPv6 address, or domain name. If the `ip()` method is not used or the parameter is omitted, the API will return information about the public IP address of the device or server where the SDK is executed.
-
-### Developer Plan Examples
-#### Get Default Fields
+> Validation rule:
+> - `connectTimeout <= readTimeout`
 
 ```java
-import io.ipgeolocation.sdk.api.IPGeolocationAPI;
-import io.ipgeolocation.sdk.model.GeolocationResponse;
+import java.time.Duration;
 
-IPGeolocationAPI api = new IPGeolocationAPI(client);
-GeolocationResponse response = api.getIPGeolocation()
-        .ip("8.8.8.8")
-        .execute();
-
-System.out.println(response);
-```
-Sample Response:
-```text
-class GeolocationResponse {
-    ip: 8.8.8.8
-    location: class Location {
-        continentCode: NA
-        continentName: North America
-        countryCode2: US
-        countryCode3: USA
-        countryName: United States
-        countryNameOfficial: United States of America
-        countryCapital: Washington, D.C.
-        stateProv: California
-        stateCode: US-CA
-        district: Santa Clara
-        city: Mountain View
-        zipcode: 94043-1351
-        latitude: 37.42240
-        longitude: -122.08421
-        isEu: false
-        countryFlag: https://ipgeolocation.io/static/flags/us_64.png
-        geonameId: 6301403
-        countryEmoji: 🇺🇸
-    }
-    countryMetadata: class CountryMetadata {
-        callingCode: +1
-        tld: .us
-        languages: [en-US, es-US, haw, fr]
-    }
-    currency: class Currency {
-        code: USD
-        name: US Dollar
-        symbol: $
-    }
-}
-```
-Filtering Specific Fields from the Response (Use of 'exclude' and 'fields')
-```java
-GeolocationResponse response = api.getIPGeolocation()
-    .ip("8.8.4.4")
-    .fields("location")
-    .excludes("location.continent_code,location.continent_name")
-    .execute();
-
-System.out.println(response);
-```
-Sample Response
-```text
-class GeolocationResponse {
-    ip: 8.8.4.4
-    location: class Location {
-        countryCode2: US
-        countryCode3: USA
-        countryName: United States
-        countryNameOfficial: United States of America
-        countryCapital: Washington, D.C.
-        stateProv: California
-        stateCode: US-CA
-        district: Santa Clara
-        city: Mountain View
-        zipcode: 94043-1351
-        latitude: 37.42240
-        longitude: -122.08421
-        isEu: false
-        countryFlag: https://ipgeolocation.io/static/flags/us_64.png
-        geonameId: 6301403
-        countryEmoji: 🇺🇸
-    }
-}
+IpGeolocationClientConfig config = IpGeolocationClientConfig.builder("YOUR_API_KEY")
+    .baseUrl("https://api.ipgeolocation.io")
+    .connectTimeout(Duration.ofSeconds(10))
+    .readTimeout(Duration.ofSeconds(30))
+    .build();
 ```
 
-### Standard Plan Examples
-#### Get Default Fields
+> [!WARNING]
+> Request-origin allowlisting applies only to `/v3/ipgeo`.
+> You can omit the API key only for single lookup requests when the request origin domain is whitelisted on a paid plan.
+> `/v3/ipgeo-bulk` always requires an API key.
 
-```java
-import io.ipgeolocation.sdk.api.IPGeolocationAPI;
-import io.ipgeolocation.sdk.model.GeolocationResponse;
-
-IPGeolocationAPI api = new IPGeolocationAPI(client);
-GeolocationResponse response = api.getIPGeolocation()
-        .ip("8.8.8.8")
-        .execute();
-
-System.out.println(response);
-```
-Sample Response:
-```text
-class GeolocationResponse {
-    ip: 8.8.8.8
-    location: class Location {
-        continentCode: NA
-        continentName: North America
-        countryCode2: US
-        countryCode3: USA
-        countryName: United States
-        countryNameOfficial: United States of America
-        countryCapital: Washington, D.C.
-        stateProv: California
-        stateCode: US-CA
-        district: Santa Clara
-        city: Mountain View
-        zipcode: 94043-1351
-        latitude: 37.42240
-        longitude: -122.08421
-        isEu: false
-        countryFlag: https://ipgeolocation.io/static/flags/us_64.png
-        geonameId: 6301403
-        countryEmoji: 🇺🇸
-    }
-    countryMetadata: class CountryMetadata {
-        callingCode: +1
-        tld: .us
-        languages: [en-US, es-US, haw, fr]
-    }
-    network: class Network {
-        asn: class NetworkAsn {
-            asNumber: AS15169
-            organization: Google LLC
-            country: US
-        }
-        company: class NetworkCompany {
-            name: Google LLC
-        }
-    }
-    currency: class Currency {
-        code: USD
-        name: US Dollar
-        symbol: $
-    }
-}
-```
-#### Retrieving Geolocation Data in Multiple Languages
-Here is an example to get the geolocation data for IP address '2001:4230:4890::1' in French language:
-```java
-IPGeolocationAPI api = new IPGeolocationAPI(client);
-GeolocationResponse response = api.getIPGeolocation()
-        .ip("2001:4230:4890::1")
-        .lang("fr")
-        .execute();
-
-System.out.println(response);
-```
-
-Sample Response
-```text
-class GeolocationResponse {
-    ip: 2001:4230:4890:0:0:0:0:1
-    location: class Location {
-        continentCode: AF
-        continentName: Afrique
-        countryCode2: MU
-        countryCode3: MUS
-        countryName: Maurice
-        countryNameOfficial: 
-        countryCapital: Port Louis
-        stateProv: Wilhems des plaines
-        stateCode: MU-PW
-        district: Quatre Bornes
-        city: Quatre Bornes
-        zipcode: 72201
-        latitude: -20.24304
-        longitude: 57.49631
-        isEu: false
-        countryFlag: https://ipgeolocation.io/static/flags/mu_64.png
-        geonameId: 1106777
-        countryEmoji: 🇲🇺
-    }
-    countryMetadata: class CountryMetadata {
-        callingCode: +230
-        tld: .mu
-        languages: [en-MU, bho, fr]
-    }
-    network: class Network {
-        asn: class NetworkAsn {
-            asNumber: AS0
-            organization: 
-            country:
-        }
-        company: class NetworkCompany {
-            name: African Network Information Center AfriNIC Ltd
-        }
-    }
-    currency: class Currency {
-        code: MUR
-        name: Mauritius Rupee
-        symbol: ₨
-    }
-}
-```
-
-#### Include HostName, Timezone and User-Agent
-```java
-IPGeolocationAPI api = new IPGeolocationAPI(client);
-GeolocationResponse response = api.getIPGeolocation()
-        .ip("4.5.6.7")
-        .fields("location.country_name,location.country_capital")
-        .include("user_agent, time_zone, hostnameFallbackLive")
-        .execute();
-
-System.out.println(response);
-```
-Sample Response
-```text
-class GeolocationResponse {
-    ip: 4.5.6.7
-    hostname: 4.5.6.7
-    location: class Location {
-        countryName: United States
-        countryCapital: Washington, D.C.
-    }
-    timeZone: class TimeZone {
-        name: America/Chicago
-        offset: -6
-        offsetWithDst: -5
-        currentTime: 2025-05-28 06:52:16.748-0500
-        currentTimeUnix: 1748433136.748
-        isDst: true
-        dstSavings: 1
-        dstExists: true
-        dstStart: class TimeZoneDstStart {
-            utcTime: 2025-03-09 TIME 08
-            duration: +1H
-            gap: true
-            dateTimeAfter: 2025-03-09 TIME 03
-            dateTimeBefore: 2025-03-09 TIME 02
-            overlap: false
-        }
-        dstEnd: class TimeZoneDstEnd {
-            utcTime: 2025-11-02 TIME 07
-            duration: -1H
-            gap: false
-            dateTimeAfter: 2025-11-02 TIME 01
-            dateTimeBefore: 2025-11-02 TIME 02
-            overlap: true
-        }
-    }
-    userAgent: class UserAgentData {
-        userAgentString: IPGeolocation/2.0.0/java
-        name: IPGeolocation Java SDK
-        type: Special
-        version: 2.0.0
-        versionMajor: 1
-        device: class UserAgentDataDevice {
-            name: Unknown
-            type: Unknown
-            brand: Unknown
-            cpu: Unknown
-        }
-        engine: class UserAgentDataEngine {
-            name: Unknown
-            type: Unknown
-            version: ??
-            versionMajor: ??
-        }
-        operatingSystem: class UserAgentDataOperatingSystem {
-            name: Unknown
-            type: Unknown
-            version: ??
-            versionMajor: ??
-            build: ??
-        }
-    }
-}
-```
+## Available Methods
 
 > [!NOTE]
-> The IP Geolocation API supports hostname lookup for all paid subscriptions. However, this is not included by default. To enable hostname resolution, use the `include` parameter with one of the following options:
-> 
-> - `hostname`: Performs a quick lookup using the internal hostname database. If no match is found, the IP is returned as-is. This is fast but may produce incomplete results.
-> - `liveHostname`: Queries live sources for accurate hostname resolution. This may increase response time.
-> - `hostnameFallbackLive`: Attempts the internal database first, and falls back to live sources if no result is found. This option provides a balance of speed and reliability.
+> What This SDK Supports:
+> `/v3/ipgeo` and `/v3/ipgeo-bulk` only.
 
-### Advanced Plan Examples
-#### Include DMA, Abuse and Security
+### Single Lookup
 
-```java
-import io.ipgeolocation.sdk.api.IPGeolocationAPI;
-import io.ipgeolocation.sdk.model.GeolocationResponse;
+| Method                            | Return Type                          | Notes                           |
+|-----------------------------------|--------------------------------------|---------------------------------|
+| `lookupIpGeolocation(request)`    | `ApiResponse<IpGeolocationResponse>` | Typed body plus metadata        |
+| `lookupIpGeolocationRaw(request)` | `ApiResponse<String>`                | Raw JSON/XML body plus metadata |
 
-IPGeolocationAPI api = new IPGeolocationAPI(client);
-GeolocationResponse response = api.getIPGeolocation()
-        .ip("8.8.8.8")
-        .excludes("location.country_flag,location.country_emoji")
-        .include("dma,abuse,security")
-        .execute();
+### Bulk Lookup
 
-System.out.println(response);
-```
-Sample Response:
-```text
-class GeolocationResponse {
-    ip: 8.8.8.8
-    location: class Location {
-        continentCode: NA
-        continentName: North America
-        countryCode2: US
-        countryCode3: USA
-        countryName: United States
-        countryNameOfficial: United States of America
-        countryCapital: Washington, D.C.
-        stateProv: California
-        stateCode: US-CA
-        district: Santa Clara
-        city: Mountain View
-        zipcode: 94043-1351
-        latitude: 37.42240
-        longitude: -122.08421
-        isEu: false
-        countryFlag: null
-        geonameId: 6301403
-        countryEmoji: null
-        accuracyRadius: 
-        locality: Mountain View
-        dmaCode: 807
-    }
-    countryMetadata: class CountryMetadata {
-        callingCode: +1
-        tld: .us
-        languages: [en-US, es-US, haw, fr]
-    }
-    network: class Network {
-        asn: class NetworkAsn {
-            asNumber: AS15169
-            organization: Google LLC
-            country: US
-            asnName: GOOGLE
-            type: BUSINESS
-            domain: about.google
-            dateAllocated: 
-            allocationStatus: assigned
-            numOfIpv4Routes: 965
-            numOfIpv6Routes: 104
-            rir: ARIN
-        }
-        connectionType: 
-        company: class NetworkCompany {
-            name: Google LLC
-            type: Business
-            domain: googlellc.com
-        }
-    }
-    currency: class Currency {
-        code: USD
-        name: US Dollar
-        symbol: $
-    }
-    security: class Security {
-        threatScore: 0
-        isTor: false
-        isProxy: false
-        proxyType: 
-        proxyProvider: 
-        isAnonymous: false
-        isKnownAttacker: false
-        isSpam: false
-        isBot: false
-        isCloudProvider: false
-        cloudProvider: 
-    }
-    abuse: class Abuse {
-        route: 8.8.8.0/24
-        country: 
-        handle: ABUSE5250-ARIN
-        name: Abuse
-        organization: Abuse
-        role: abuse
-        kind: group
-        address: 1600 Amphitheatre Parkway
-        Mountain View
-        CA
-        94043
-        United States
-        emails: [network-abuse@google.com]
-        phoneNumbers: [+1-650-253-0000]
-    }
-}
-```
-These examples demonstrate typical usage of the IP Geolocation API with different subscription tiers. Use `fields` to specify exactly which data to receive, `include` for optional data like security and user agent, and `excludes` to omit specific keys from the response.
+| Method                                | Return Type                           | Notes                           |
+|---------------------------------------|---------------------------------------|---------------------------------|
+| `bulkLookupIpGeolocation(request)`    | `ApiResponse<List<BulkLookupResult>>` | Typed bulk result plus metadata |
+| `bulkLookupIpGeolocationRaw(request)` | `ApiResponse<String>`                 | Raw JSON/XML body plus metadata |
 
-> [!Note]
-> All features available in the Free plan are also included in the Standard and Advanced plans. Similarly, all features of the Standard plan are available in the Advanced plan.
+## Request Parameters
 
-### Bulk IP Geolocation Example
-The SDK also supports bulk IP geolocation requests using the `getBulkIpGeolocation()` method. All parameters like `fields`, `include`, and `excludes` can also be used in bulk requests.
+### Single Lookup Query Parameters
 
-```java
+#### `LookupIpGeolocationRequest.builder()` options
 
-import io.ipgeolocation.sdk.model.BulkIPRequest;
-import io.ipgeolocation.sdk.api.IPGeolocationAPI;
-import io.ipgeolocation.sdk.model.BulkGeolocationResponse;
+| Builder Method           | API Param  | Type                | Default          | Notes                                                                      |
+|--------------------------|------------|---------------------|------------------|----------------------------------------------------------------------------|
+| `ip(String)`             | `ip`       | `String`            | omitted          | IPv4, IPv6, or domain. Blank is treated as omitted and resolves to the caller IP. |
+| `lang(Language)`         | `lang`     | `Language`          | API default `en` | Non-English requires paid plan                                             |
+| `include(String)`        | `include`  | repeatable `String` | none             | Sent to the API as comma-separated values                                  |
+| `fields(String)`         | `fields`   | repeatable `String` | none             | Sent to the API as comma-separated values                                  |
+| `excludes(String)`       | `excludes` | repeatable `String` | none             | Sent to the API as comma-separated values                                  |
+| `output(ResponseFormat)` | `output`   | `ResponseFormat`    | `JSON`           | Typed methods use JSON only. Raw methods support JSON and XML              |
 
-IPGeolocationAPI api = new IPGeolocationAPI(client);
 
-BulkIPRequest bulkRequest = new BulkIPRequest();
-bulkRequest.addIp("8.8.8.8");
-bulkRequest.addIp("1.1.1.1");
+Available enum values to pass in `.lang(...)` on paid plans for location fields translation are:
+- `Language.EN` - English (default)
+- `Language.DE` - German
+- `Language.RU` - Russian
+- `Language.JA` - Japanese
+- `Language.FR` - French
+- `Language.CN` - Chinese Simplified
+- `Language.ES` - Spanish
+- `Language.CS` - Czech
+- `Language.IT` - Italian
+- `Language.KO` - Korean
+- `Language.FA` - Persian (Farsi)
+- `Language.PT` - Portuguese
 
-List<BulkGeolocationResponse> response = api.getBulkIPGeolocation()
-        .bulkIpRequest(bulkRequest)
-        .fields("location.country_name,location.city")
-        .include("security,timezone")
-        .excludes("location.continent_code")
-        .execute();
+Dot-separated field paths can be passed to `.fields(...)` and `.excludes(...)` to control which parts of the response are returned.
+- `.fields(...)` returns only the specified fields or objects.
+- `.excludes(...)` removes the specified fields or objects from the response.
 
-System.out.println(response);
-```
+#### `include` supported values
 
-## IP Security Examples
-
-This section provides usage examples of the `getIPSecurity()` method from the SDK across various subscription tiers. Each example demonstrates different ways to query threat intelligence and risk metadata using parameters like fields, excludes, and optional modules.
-
-For full API specifications, refer to the [official IP Security API documentation](https://ipgeolocation.io/documentation/ip-security-api.html).
-
-### Get Security only fields
-
-```java
-import io.ipgeolocation.sdk.api.IPSecurityAPI;
-import io.ipgeolocation.sdk.model.SecurityAPIResponse;
-
-IPSecurityAPI api = new IPSecurityAPI(client);
-SecurityAPIResponse response = api.getIPSecurity()
-        .ip("2.56.188.34")
-        .execute();
-
-System.out.println(response);
-```
-
-Sample Response
-```text
-class SecurityAPIResponse {
-    ip: 2.56.188.34
-    security: class Security {
-        threatScore: 80
-        isTor: false
-        isProxy: true
-        proxyType: VPN
-        proxyProvider: Nord VPN
-        isAnonymous: true
-        isKnownAttacker: true
-        isSpam: false
-        isBot: false
-        isCloudProvider: true
-        cloudProvider: Packethub S.A.
-    }
-}
-```
-### Include Multiple Optional Fields
-```java
-SecurityAPIResponse response = api.getIPSecurity()
-    .ip("2.56.188.34")
-    .include("location,network,currency,time_zone,user_agent,country_metadata,hostname")
-    .execute();
-```
-> [!NOTE]
-> You can get all the available fields in a paid plan in combination with security data, when subscribed to paid plan.
-
-### Request with Field Filtering
-
-```java
-SecurityAPIResponse response = api.getIPSecurity()
-        .ip("195.154.221.54")
-        .fields("security.is_tor,security.is_proxy,security.is_bot,security.is_spam")
-        .execute();
-
-System.out.println(response);
-```
-Sample Response
-```text
-class SecurityAPIResponse {
-    ip: 195.154.221.54
-    security: class Security {
-        isTor: false
-        isProxy: true
-        isSpam: false
-        isBot: false
-    }
-}
-
-```
-### Bulk IP Security Request
-The SDK also supports bulk IP Security requests using the `getBulkIPSecurity()` method. All parameters like `fields`, `include`, and `excludes` can also be used in bulk requests.
-
-```java
-import io.ipgeolocation.sdk.model.BulkSecurityResponse;
-import io.ipgeolocation.sdk.model.BulkIPRequest;
-
-BulkIPRequest bulkRequest = new BulkIPRequest();
-bulkRequest.addIp("2.56.188.34");
-bulkRequest.addIp("2.56.188.35");
-
-List<BulkSecurityResponse> response = api.getBulkIPSecurity(bulkIPRequest)
-        .include("location,network")
-        .fields("security.threat_score,location.country_name")
-        .execute();
-
-System.out.println(response);
-```
-## ASN API Examples
-
-This section provides usage examples of the `getAsnDetails()` method from the SDK. These methods allow developers to retrieve detailed ASN-level network data either by ASN number or by IP address.
-
-> [!NOTE] 
-> ASN API is only available in the Advanced Plan.
-
-Refer to the [ASN API documentation](https://ipgeolocation.io/documentation/asn-api.html) for a detailed list of supported fields and behaviors.
-
-### Get ASN Information by IP Address
-
-```java
-import io.ipgeolocation.sdk.api.AsnLookupAPI;
-import io.ipgeolocation.sdk.api.AsnLookupApi;
-import io.ipgeolocation.sdk.model.ASNResponse;
-
-AsnLookupAPI api = new AsnLookupAPI(client);
-
-ASNResponse response = api.getAsnDetails()
-        .ip("8.8.8.8")
-        .execute();
-
-System.out.println(response);
-```
-Sample Response
-```text
-class ASNResponse {
-    ip: 8.8.8.8
-    asn: class ASNDetails {
-        asNumber: AS15169
-        organization: Google LLC
-        country: US
-        asnName: GOOGLE
-        type: BUSINESS
-        domain: about.google
-        dateAllocated: 
-        allocationStatus: assigned
-        numOfIpv4Routes: 983
-        numOfIpv6Routes: 104
-        rir: ARIN
-    }
-}
-```
-### Get ASN Information by ASN Number
-
-```java
-import io.ipgeolocation.sdk.model.ASNResponse;
-
-ASNResponse response = api.getAsnDetails()
-        .asn("AS15169")
-        .execute();
-
-System.out.println(response);
-```
-Sample Response
-```text
-class ASNResponse {
-    asn: class ASNDetails {
-        asNumber: AS15169
-        organization: Google LLC
-        country: US
-        asnName: GOOGLE
-        type: BUSINESS
-        domain: about.google
-        dateAllocated: 
-        allocationStatus: assigned
-        numOfIpv4Routes: 983
-        numOfIpv6Routes: 104
-        rir: ARIN
-    }
-}
-```
-
-### Combine All objects using Include
-```java
-import io.ipgeolocation.sdk.model.ASNResponse;
-
-ASNResponse response = api.getAsnDetails()
-        .asn("AS12")
-        .include("peers,downstreams,upstreams,routes,whois_response")
-        .execute();
-
-System.out.println(response);
-```
-Sample Response
-```text
-class ASNResponse {
-    ip: null
-    asn: class ASNDetails {
-        asNumber: AS12
-        organization: New York University
-        country: US
-        asnName: NYU-DOMAIN
-        type: EDUCATION
-        domain: nyu.edu
-        dateAllocated: 
-        allocationStatus: assigned
-        numOfIpv4Routes: 11
-        numOfIpv6Routes: 1
-        rir: ARIN
-        routes: [192.76.177.0/24, 216.165.96.0/20, 216.165.89.0/24, 216.165.0.0/18, 216.165.112.0/21, 128.122.0.0/16, 2607:f600::/32, 216.165.102.0/24, 216.165.64.0/19, 216.165.120.0/22, 192.86.139.0/24, 216.165.103.0/24]
-        upstreams: [class ASNConnection {
-            asNumber: AS3269
-            description: Telecom Italia S.p.A.
-            country: IT
-        },
-        ... 
-        class ASNConnection {
-            asNumber: AS137
-            description: Consortium GARR
-            country: IT
-        }]
-        downstreams: [class ASNConnection {
-            asNumber: AS394666
-            description: NYU Langone Health
-            country: US
-        }, class ASNConnection {
-            asNumber: AS54965
-            description: Polytechnic Institute of NYU
-            country: US
-        }]
-        peers: [class ASNConnection {
-            asNumber: AS3269
-            description: Telecom Italia S.p.A.
-            country: IT
-        }, 
-        ...
-        class ASNConnection {
-            asNumber: AS54965
-            description: Polytechnic Institute of NYU
-            country: US
-        }]
-        whoisResponse: 
-        
-        ASNumber:       12
-        ASName:         NYU-DOMAIN
-        ASHandle:       AS12
-        RegDate:        1984-07-05
-        Updated:        2023-05-25    
-        Ref:            https://rdap.arin.net/registry/autnum/12
-        ...       
-    }
-}
-```
-
-## Abuse Contact API Examples
-This section demonstrates how to use the `getAbuseContactInfo()` method of the AbuseContact API. This API helps security teams, hosting providers, and compliance professionals quickly identify the correct abuse reporting contacts for any IPv4 or IPv6 address. You can retrieve data like the responsible organization, role, contact emails, phone numbers, and address to take appropriate mitigation action against abusive or malicious activity.
+| Value                  | Adds to Response                                                       | Extra Credits |
+|------------------------|------------------------------------------------------------------------|---------------|
+| `security`             | `security` object                                                      | +2            |
+| `abuse`                | `abuse` object                                                         | +1            |
+| `geo_accuracy`         | `location.locality`, `location.accuracy_radius`, `location.confidence` | 0             |
+| `dma_code`             | `location.dma_code`                                                    | 0             |
+| `user_agent`           | `user_agent` object                                                    | 0             |
+| `hostname`             | `hostname` via local source                                            | 0             |
+| `liveHostname`         | `hostname` via live DNS                                                | 0             |
+| `hostnameFallbackLive` | `hostname` with fallback strategy                                      | 0             |
+| `*`                    | All modules (free plan returns base response only)                     | +3            |
 
 > [!NOTE]
-> Abuse Contact API is only available in the Advanced Plan.
+> `include=user_agent` behavior:
+> - If the request `User-Agent` header is passed through `userAgent(...)`, that value is parsed.
+> - If the request `User-Agent` header is not passed, the API parses the caller machine or application user agent.
 
-Refer to the official [Abuse Contact API documentation](https://ipgeolocation.io/documentation/ip-abuse-contact-api.html) for details on all available fields.
-### Lookup Abuse Contact by IP
-```java
-import io.ipgeolocation.sdk.api.AbuseContactAPI;
-import io.ipgeolocation.sdk.model.AbuseResponse;
+### Single Lookup Header Parameters
 
-AbuseContactAPI api = new AbuseContactAPI(client);
+| Builder Method      | API Header   | Type     | Default | Notes                                                      |
+|---------------------|--------------|----------|---------|------------------------------------------------------------|
+| `userAgent(String)` | `User-Agent` | `String` | omitted | Per-request override for `.include("user_agent")` requests |
 
-AbuseResponse response = api.getAbuseContactInfo()
-        .ip("1.0.0.0")
-        .execute();
+### Bulk Lookup Body, Query, and Header Parameters
 
-System.out.println(response);
-```
-Sample Response:
-```text
-class AbuseResponse {
-    ip: 1.0.0.0
-    abuse: class Abuse {
-        route: 1.0.0.0/24
-        country: AU
-        handle: IRT-APNICRANDNET-AU
-        name: IRT-APNICRANDNET-AU
-        organization: 
-        role: abuse
-        kind: group
-        address: PO Box 3646
-        South Brisbane, QLD 4101
-        Australia
-        emails: [helpdesk@apnic.net]
-        phoneNumbers: [+61 7 3858 3100]
-    }
-}
-```
+`BulkLookupIpGeolocationRequest.builder()` options:
 
-### Lookup Abuse Contact with Specific Fields
-```java
-AbuseResponse response = api.getAbuseContactInfo()
-        .ip("1.2.3.4")
-        .fields("abuse.role,abuse.emails")
-        .execute();
+| Builder Method           | API Field/Param  | Type                | Required | Notes                                                         |
+|--------------------------|------------------|---------------------|----------|---------------------------------------------------------------|
+| `addIp(String)`          | body `ips[]`     | `String`            | Yes      | Adds one IP/domain                                            |
+| `ips(List<String>)`      | body `ips[]`     | `List<String>`      | Yes      | Replaces current list                                         |
+| `lang(Language)`         | query `lang`     | `Language`          | No       | Same behavior as single lookup                                |
+| `include(String)`        | query `include`  | repeatable `String` | No       | Sent to the API as comma-separated values                     |
+| `fields(String)`         | query `fields`   | repeatable `String` | No       | Sent to the API as comma-separated values                     |
+| `excludes(String)`       | query `excludes` | repeatable `String` | No       | Sent to the API as comma-separated values                     |
+| `output(ResponseFormat)` | query `output`   | `ResponseFormat`    | No       | Typed methods use JSON only. Raw methods support JSON and XML |
 
-System.out.println(response);
-```
-Sample Response:
-```text
-class AbuseResponse {
-    ip: 1.2.3.4
-    abuse: class Abuse {
-        role: abuse
-        emails: [helpdesk@apnic.net]
-    }
-}
-```
-### Lookup Abuse Contact while Excluding Fields
-```java
-AbuseResponse response = api.getAbuseContactInfo()
-        .ip("9.9.9.9")
-        .excludes("abuse.handle,abuse.emails")
-        .execute();
+Bulk request header options:
 
-System.out.println(response);
-```
-Sample Response:
-```text
-class AbuseResponse {
-    ip: 9.9.9.9
-    abuse: class Abuse {
-        route: 9.9.9.0/24
-        country:
-        name: Quad9 Abuse
-        organization: Quad9 Abuse
-        role: abuse
-        kind: group
-        address: 1442 A Walnut Street Ste 501
-        Berkeley
-        CA
-        94709
-        United States
-        phoneNumbers: [+1-415-831-3129]
-    }
-}
-```
+| Builder Method      | API Header   | Type     | Required | Notes                                                  |
+|---------------------|--------------|----------|----------|--------------------------------------------------------|
+| `userAgent(String)` | `User-Agent` | `String` | No       | Per-request override for `include=user_agent` requests |
 
-## Timezone API Examples
 
-This section provides usage examples of the `getTimezone()` method from the SDK, showcasing how to fetch timezone and time-related data using different query types — IP address, latitude/longitude, and timezone ID.
+> [!IMPORTANT]
+> Bulk lookup validation rules:
+> - Client config must include an API key.
+> - `ips` must not be empty.
+> - Maximum `ips` size is 50,000.
+> - Request-origin allowlisting is not supported for `/v3/ipgeo-bulk`.
 
-For full API specifications, refer to the [Timezone API documentation](https://ipgeolocation.io/documentation/timezone-api.html).
+## Single Lookup Parameter Examples
 
-### Get Timezone by IP Address
+All examples below assume the following client setup:
 
 ```java
-import io.ipgeolocation.sdk.api.TimezoneAPI;
-import io.ipgeolocation.sdk.model.TimezoneResponse;
+IpGeolocationClient client = new IpGeolocationClient(
+        IpGeolocationClientConfig.builder("YOUR_API_KEY").build());
+```
 
-TimezoneAPI api = new TimezoneAPI(client);
+### `ip` Example
 
-TimezoneResponse response = api.getTimezone()
+```java
+var request = LookupIpGeolocationRequest.builder()
+    .ip("2607:fb91:16c6:8860:e531:2d1d:4944:6c7c")
+    .build();
+
+var response = client.lookupIpGeolocation(request);
+System.out.println(response.data().ip());
+```
+
+Expected: returned `ip` matches the lookup target.
+
+### `lang` Example
+
+```java
+var request = LookupIpGeolocationRequest.builder()
+    .ip("8.8.8.8")
+    .lang(Language.DE)
+    .build();
+
+var response = client.lookupIpGeolocation(request);
+System.out.println(response.data().location().countryName());
+```
+
+Expected: localized values are returned when the plan supports the selected language.
+
+### `include` Example
+
+```java
+var request = LookupIpGeolocationRequest.builder()
+    .ip("8.8.8.8")
+    .include("security")
+    .include("abuse")
+    .build();
+
+var response = client.lookupIpGeolocation(request);
+System.out.println(response.data().security());
+System.out.println(response.data().abuse());
+```
+
+Expected: `security` and `abuse` objects are present in the typed response.
+
+### User-Agent Header Example
+
+```java
+var request = LookupIpGeolocationRequest.builder()
+    .ip("91.128.103.196")
+    .include("user_agent")
+    .userAgent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_2) AppleWebKit/601.3.9 (KHTML, like Gecko) Version/9.0.2 Safari/601.3.9")
+    .build();
+
+var response = client.lookupIpGeolocation(request);
+System.out.println(response.data().userAgent().userAgentString());
+```
+
+Expected: `user_agent` is parsed from the forwarded visitor header value.
+
+### `fields` Example
+
+```java
+var request = LookupIpGeolocationRequest.builder()
+    .ip("8.8.8.8")
+    .fields("location.country_name")
+    .fields("asn.organization")
+    .build();
+
+var response = client.lookupIpGeolocation(request);
+```
+
+Expected: response contains only requested fields plus mandatory `ip`.
+
+> [!TIP]
+> Use `fields` to reduce response size and improve request time.
+
+### `excludes` Example
+
+```java
+var request = LookupIpGeolocationRequest.builder()
+    .ip("8.8.8.8")
+    .excludes("currency")
+    .excludes("time_zone")
+    .build();
+
+var response = client.lookupIpGeolocation(request);
+```
+
+Expected: excluded fields and objects are not returned in the payload.
+
+### `output` Example
+
+Typed methods are JSON only.
+
+```java
+assertThrows(
+    io.ipgeolocation.sdk.exceptions.ValidationException.class,
+    () -> client.lookupIpGeolocation(
+        LookupIpGeolocationRequest.builder()
+            .ip("8.8.8.8")
+            .output(ResponseFormat.XML)
+            .build()));
+```
+
+Expected: `ValidationException` with message that XML is not supported by typed methods.
+
+Raw methods support XML and return raw response text:
+
+```java
+var xml = client.lookupIpGeolocationRaw(
+    LookupIpGeolocationRequest.builder()
         .ip("8.8.8.8")
-        .execute();
+        .output(ResponseFormat.XML)
+        .build());
 
-System.out.println(response);
+System.out.println(xml.data());
 ```
-Sample Response
-```text
-class TimeZoneResponse {
-    ip: 8.8.8.8
-   
-    location: class TimezoneLocation {
-        continentCode: NA
-        continentName: North America
-        countryCode2: US
-        countryCode3: USA
-        countryName: United States
-        countryNameOfficial: United States of America
-        isEu: false
-        stateProv: California
-        stateCode: US-CA
-        district: Santa Clara
-        city: Mountain View
-        locality: null
-        zipcode: 94043-1351
-        latitude: 37.42240
-        longitude: -122.08421
-    }
-    timeZone: class TimezoneDetails {
-        name: America/Los_Angeles
-        offset: -8
-        offsetWithDst: -7
-        date: 2025-06-23
-        dateTime: 2025-06-23 02:15:25
-        dateTimeTxt: Monday, June 23, 2025 02:15:25
-        dateTimeWti: Mon, 23 Jun 2025 02:15:25 -0700
-        dateTimeYmd: 2025-06-23T02:15:25-0700
-        dateTimeUnix: 1.750670125437E9
-        time24: 02:15:25
-        time12: 02:15:25 AM
-        week: 26
-        month: 6
-        year: 2025
-        yearAbbr: 25
-        isDst: true
-        dstSavings: 1
-        dstExists: true
-        dstStart: class TimezoneDetailDstStart {
-            utcTime: 2025-03-09 TIME 10
-            duration: +1H
-            gap: true
-            dateTimeAfter: 2025-03-09 TIME 03
-            dateTimeBefore: 2025-03-09 TIME 02
-            overlap: false
-        }
-        dstEnd: class TimezoneDetailDstEnd {
-            utcTime: 2025-11-02 TIME 09
-            duration: -1H
-            gap: false
-            dateTimeAfter: 2025-11-02 TIME 01
-            dateTimeBefore: 2025-11-02 TIME 02
-            overlap: true
-        }
-    }
-}
-```
-### Get Timezone by Timezone Name
+
+Expected: `data()` contains XML returned by API and `metadata()` contains headers/status/duration.
+
+## Raw Response Methods
+
+Use raw methods when you want the server response body exactly as returned.
+
+| Method                            | `output` parameter              | `data()` Type            | Result                |
+|-----------------------------------|---------------------------------|--------------------------|-----------------------|
+| `lookupIpGeolocation(...)`        | omitted / `ResponseFormat.JSON` | `IpGeolocationResponse`  | typed parse           |
+| `lookupIpGeolocation(...)`        | `ResponseFormat.XML`            | N/A                      | `ValidationException` |
+| `lookupIpGeolocationRaw(...)`     | omitted / `ResponseFormat.JSON` | `String`                 | raw JSON              |
+| `lookupIpGeolocationRaw(...)`     | `ResponseFormat.XML`            | `String`                 | raw XML               |
+| `bulkLookupIpGeolocation(...)`    | omitted / `ResponseFormat.JSON` | `List<BulkLookupResult>` | typed parse           |
+| `bulkLookupIpGeolocation(...)`    | `ResponseFormat.XML`            | N/A                      | `ValidationException` |
+| `bulkLookupIpGeolocationRaw(...)` | omitted / `ResponseFormat.JSON` | `String`                 | raw JSON              |
+| `bulkLookupIpGeolocationRaw(...)` | `ResponseFormat.XML`            | `String`                 | raw XML               |
+
+Raw methods still return full metadata in `ApiResponseMetadata`.
+
+### Single Raw JSON Example
 
 ```java
-import io.ipgeolocation.sdk.model.TimezoneResponse;
-
-TimezoneResponse response = api.getTimezone()
-        .tz("Europe/London")
-        .execute();
-
-System.out.println(response);
-```
-Sample Response
-```text
-class TimeZoneResponse {
-    timeZone: class TimezoneDetails {
-        name: Europe/London
-        offset: 0
-        offsetWithDst: 1
-        date: 2025-06-23
-        dateTime: 2025-06-23 10:25:01
-        dateTimeTxt: Monday, June 23, 2025 10:25:01
-        dateTimeWti: Mon, 23 Jun 2025 10:25:01 +0100
-        dateTimeYmd: 2025-06-23T10:25:01+0100
-        dateTimeUnix: 1.750670701706E9
-        time24: 10:25:01
-        time12: 10:25:01 AM
-        week: 26
-        month: 6
-        year: 2025
-        yearAbbr: 25
-        isDst: true
-        dstSavings: 1
-        dstExists: true
-        dstStart: class TimezoneDetailDstStart {
-            utcTime: 2025-03-30 TIME 01
-            duration: +1H
-            gap: true
-            dateTimeAfter: 2025-03-30 TIME 02
-            dateTimeBefore: 2025-03-30 TIME 01
-            overlap: false
-        }
-        dstEnd: class TimezoneDetailDstEnd {
-            utcTime: 2025-10-26 TIME 01
-            duration: -1H
-            gap: false
-            dateTimeAfter: 2025-10-26 TIME 01
-            dateTimeBefore: 2025-10-26 TIME 02
-            overlap: true
-        }
-    }
-}
-```
-### Get Timezone from Any Address
-
-```java
-import io.ipgeolocation.sdk.model.TimezoneResponse;
-
-TimezoneResponse response = api.getTimezone()
-        .location("Munich, Germany")
-        .execute();
-
-System.out.println(response);
-```
-Sample Response
-```text
-class TimeZoneResponse {
-    location: class TimezoneLocation {
-        locationString: Munich, Germany
-        countryName: Germany
-        stateProv: Bavaria
-        city: Munich
-        locality: 
-        latitude: 48.13711
-        longitude: 11.57538
-    }
-    timeZone: class TimezoneDetails {
-        name: Europe/Berlin
-        offset: 1
-        offsetWithDst: 2
-        date: 2025-06-23
-        dateTime: 2025-06-23 11:35:23
-        dateTimeTxt: Monday, June 23, 2025 11:35:23
-        dateTimeWti: Mon, 23 Jun 2025 11:35:23 +0200
-        dateTimeYmd: 2025-06-23T11:35:23+0200
-        dateTimeUnix: 1.750671323755E9
-        time24: 11:35:23
-        time12: 11:35:23 AM
-        week: 26
-        month: 6
-        year: 2025
-        yearAbbr: 25
-        isDst: true
-        dstSavings: 1
-        dstExists: true
-        dstStart: class TimezoneDetailDstStart {
-            utcTime: 2025-03-30 TIME 01
-            duration: +1H
-            gap: true
-            dateTimeAfter: 2025-03-30 TIME 03
-            dateTimeBefore: 2025-03-30 TIME 02
-            overlap: false
-        }
-        dstEnd: class TimezoneDetailDstEnd {
-            utcTime: 2025-10-26 TIME 01
-            duration: -1H
-            gap: false
-            dateTimeAfter: 2025-10-26 TIME 02
-            dateTimeBefore: 2025-10-26 TIME 03
-            overlap: true
-        }
-    }
-}
-```
-### Get Timezone from Location Coordinates
-
-```java
-import io.ipgeolocation.sdk.model.TimezoneResponse;
-
-TimezoneResponse response = api.getTimezone()
-        .lat(48.8566F)
-        ._long(2.3522F)
-        .execute();
-
-System.out.println(response);
-```
-Sample Response
-```text
-class TimeZoneResponse {
-    timeZone: class TimezoneDetails {
-        name: Europe/Paris
-        offset: 1
-        offsetWithDst: 2
-        date: 2025-06-23
-        dateTime: 2025-06-23 11:53:31
-        dateTimeTxt: Monday, June 23, 2025 11:53:31
-        dateTimeWti: Mon, 23 Jun 2025 11:53:31 +0200
-        dateTimeYmd: 2025-06-23T11:53:31+0200
-        dateTimeUnix: 1.750672411295E9
-        time24: 11:53:31
-        time12: 11:53:31 AM
-        week: 26
-        month: 6
-        year: 2025
-        yearAbbr: 25
-        isDst: true
-        dstSavings: 1
-        dstExists: true
-        dstStart: class TimezoneDetailDstStart {
-            utcTime: 2025-03-30 TIME 01
-            duration: +1H
-            gap: true
-            dateTimeAfter: 2025-03-30 TIME 03
-            dateTimeBefore: 2025-03-30 TIME 02
-            overlap: false
-        }
-        dstEnd: class TimezoneDetailDstEnd {
-            utcTime: 2025-10-26 TIME 01
-            duration: -1H
-            gap: false
-            dateTimeAfter: 2025-10-26 TIME 02
-            dateTimeBefore: 2025-10-26 TIME 03
-            overlap: true
-        }
-    }
-}
-```
-### Get Timezone and Airport Details from IATA Code
-
-```java
-import io.ipgeolocation.sdk.model.TimezoneResponse;
-
-TimezoneResponse response = api.getTimezone()
-        .iataCode("ZRH")
-        .execute();
-
-System.out.println(response);
-```
-Sample Response
-```text
-class TimeZoneResponse {
-    airportDetails: class TimezoneAirport {
-        type: large_airport
-        name: Zurich Airport
-        latitude: 47.45806
-        longitude: 8.54806
-        elevationFt: 1417
-        continentCode: EU
-        countryCode: CH
-        stateCode: CH-ZH
-        city: Zurich
-        iataCode: ZRH
-        icaoCode: LSZH
-        faaCode: 
-    }
-    timeZone: class TimezoneDetails {
-        name: Europe/Zurich
-        offset: 1
-        offsetWithDst: 2
-        date: 2025-06-23
-        dateTime: 2025-06-23 12:24:08
-        dateTimeTxt: Monday, June 23, 2025 12:24:08
-        dateTimeWti: Mon, 23 Jun 2025 12:24:08 +0200
-        dateTimeYmd: 2025-06-23T12:24:08+0200
-        dateTimeUnix: 1.750674248242E9
-        time24: 12:24:08
-        time12: 12:24:08 PM
-        week: 26
-        month: 6
-        year: 2025
-        yearAbbr: 25
-        isDst: true
-        dstSavings: 1
-        dstExists: true
-        dstStart: class TimezoneDetailDstStart {
-            utcTime: 2025-03-30 TIME 01
-            duration: +1H
-            gap: true
-            dateTimeAfter: 2025-03-30 TIME 03
-            dateTimeBefore: 2025-03-30 TIME 02
-            overlap: false
-        }
-        dstEnd: class TimezoneDetailDstEnd {
-            utcTime: 2025-10-26 TIME 01
-            duration: -1H
-            gap: false
-            dateTimeAfter: 2025-10-26 TIME 02
-            dateTimeBefore: 2025-10-26 TIME 03
-            overlap: true
-        }
-    }
-}
-```
-Similarly, you can fetch Airport Details and Timezone from using any ICAO code as well
-
-### Get Timezone and City Details from UN/LOCODE
-
-```java
-import io.ipgeolocation.sdk.model.TimezoneResponse;
-
-TimezoneResponse response = api.getTimezone()
-        .loCode("ESBCN")
-        .execute();
-
-System.out.println(response);
-```
-Sample Response
-```text
-class TimeZoneResponse {
-    loCodeDetails: class TimezoneLocode {
-        loCode: ESBCN
-        city: Barcelona
-        stateCode: 
-        countryCode: ES
-        countryName: 
-        locationType: Port, Rail Terminal, Road Terminal, Airport, Postal Exchange
-        latitude: 41.38289
-        longitude: 2.17743
-    }
-    timeZone: class TimezoneDetails {
-        name: Europe/Madrid
-        offset: 1
-        offsetWithDst: 2
-        date: 2025-06-23
-        dateTime: 2025-06-23 12:32:55
-        dateTimeTxt: Monday, June 23, 2025 12:32:55
-        dateTimeWti: Mon, 23 Jun 2025 12:32:55 +0200
-        dateTimeYmd: 2025-06-23T12:32:55+0200
-        dateTimeUnix: 1.750674775033E9
-        time24: 12:32:55
-        time12: 12:32:55 PM
-        week: 26
-        month: 6
-        year: 2025
-        yearAbbr: 25
-        isDst: true
-        dstSavings: 1
-        dstExists: true
-        dstStart: class TimezoneDetailDstStart {
-            utcTime: 2025-03-30 TIME 01
-            duration: +1H
-            gap: true
-            dateTimeAfter: 2025-03-30 TIME 03
-            dateTimeBefore: 2025-03-30 TIME 02
-            overlap: false
-        }
-        dstEnd: class TimezoneDetailDstEnd {
-            utcTime: 2025-10-26 TIME 01
-            duration: -1H
-            gap: false
-            dateTimeAfter: 2025-10-26 TIME 02
-            dateTimeBefore: 2025-10-26 TIME 03
-            overlap: true
-        }
-    }
-}
-```
-## Timezone Converter Examples
-
-This section provides usage examples of the `convertTimezone()` method from the SDK. The Timezone Converter API allows you to convert a specific time from one timezone to another using timezone identifiers; coordinates; city; IATA/ICAO code or UN/LOCODE and optional date/time inputs.
-
-For more details, refer to official documentation: [Timezone Converter API](https://ipgeolocation.io/documentation/timezone-api.html#convert-time-between-time-zones).
-
-### Convert Current Time from One Timezone to Another
-
-```java
-import io.ipgeolocation.sdk.api.TimezoneConversionAPI;
-import io.ipgeolocation.sdk.model.TimezoneConversionResponse;
-
-TimezoneConversionAPI api = new TimezoneConversionAPI(client);
-
-TimezoneConversionResponse response = api.convertTimezone()
-        .from("America/New_York")
-        .to("Asia/Tokyo")
-        .execute();
-
-System.out.println(response);
-```
-Sample Response
-```text
-class TimezoneConversionResponse {
-    originalTime: 2024-12-08 11:00
-    convertedTime: 2024-12-09 01:00:00
-    diffHour: 14.0
-    diffMin: 840
-}
-```
-Similarly, you can convert time from any timezone to another timezone using location coordinates (Latitude and Longitude), location addresses, IATA codes, ICAO codes and UN/LUCODE .
-
-## User Agent API Examples
-
-This section provides usage examples of the `getUserAgent()` method from the SDK. The User Agent API extracts and classifies information from user agent strings, including browser, engine, device, OS, and type metadata.
-
-For full explanation, visit the [User Agent API documentation](https://ipgeolocation.io/documentation/user-agent-api.html).
-
-### Parse a Basic User Agent String
-
-```java
-import io.ipgeolocation.sdk.api.UserAgentAPI;
-import io.ipgeolocation.sdk.model.UserAgentResponse;
-
-UserAgentAPI api = new UserAgentAPI(client);
-
-UserAgentResponse response = api.getUserAgent()
-        .userAgentString("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36")
-        .execute();
-
-System.out.println(response);
-```
-Sample Response
-```text
-class UserAgentData {
-    userAgentString: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36
-    name: Chrome
-    type: Browser
-    version: 125
-    versionMajor: 125
-    device: class UserAgentDataDevice {
-        name: Desktop
-        type: Desktop
-        brand: Unknown
-        cpu: Intel x86_64
-    }
-    engine: class UserAgentDataEngine {
-        name: Blink
-        type: Browser
-        version: 125
-        versionMajor: 125
-    }
-    operatingSystem: class UserAgentDataOperatingSystem {
-        name: Windows NT
-        type: Desktop
-        version: ??
-        versionMajor: ??
-        build: ??
-    }
-}
-```
-If you don't pass any userAgentString, the API will return the data of device's user agent.
-
-### Bulk User Agent Parsing Example
-
-The SDK also supports bulk User Agent parsing using the `getBulkUserAgent()` method. This allows parsing multiple user agent strings in a single request. All fields available in single-user-agent parsing are returned per entry.
-
-```java
-import io.ipgeolocation.sdk.api.UserAgentAPI;
-import io.ipgeolocation.sdk.model.UserAgentBulkRequest;
-import io.ipgeolocation.sdk.model.UserAgentData;
-
-UserAgentAPI api = new UserAgentAPI(client);
-
-UserAgentBulkRequest bulkRequest = new UserAgentBulkRequest();
-bulkRequest.addUaString("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36");
-bulkRequest.addUaString("Mozilla/5.0 (iPhone; CPU iPhone OS 16_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.0 Mobile/15E148 Safari/604.1");
-
-List<UserAgentData> response = api.getBulkUserAgent()
-        .userAgentBulkRequest(bulkRequest)
-        .execute();
-
-System.out.println(response);
-```
-
-## Astronomy API Examples
-
-This section provides usage examples of the `getAstronomy()` method from the SDK, allowing developers to fetch sun and moon timings and position data based on coordinates, IP, or location string.
-
-Refer to the [official Astronomy API documentation](https://ipgeolocation.io/documentation/astronomy-api.html) for more details.
-
-### Lookup Astronomy by Coordinates
-
-```java
-import io.ipgeolocation.sdk.api.AstronomyAPI;
-import io.ipgeolocation.sdk.model.AstronomyResponse;
-
-AstronomyAPI api = new AstronomyAPI(client);
-
-AstronomyResponse response = api.getAstronomy()
-        .lat("40.7128")
-        ._long("-74.0060")
-        .execute();
-
-System.out.println(response);
-```
-Sample Response
-```text
-class AstronomyResponse {
-    location: class AstronomyLocation {
-        countryName:
-        stateProv: New York
-        city: New York
-        locality: 
-        latitude: 40.71280
-        longitude: -74.00600
-        elevation: 6.0
-    }
-    astronomy: class Astronomy {
-        date: 2025-07-22
-        currentTime: 05:34:17.046
-        midNight: 01:02
-        nightEnd: 03:48
-        morning: class AstronomyMorning {
-            astronomicalTwilightBegin: 03:48
-            astronomicalTwilightEnd: 04:32
-            nauticalTwilightBegin: 04:32
-            nauticalTwilightEnd: 05:12
-            civilTwilightBegin: 05:12
-            civilTwilightEnd: 05:43
-            blueHourBegin: 04:59
-            blueHourEnd: 05:24
-            goldenHourBegin: 05:24
-            goldenHourEnd: 06:23
-        }
-        sunrise: 05:43
-        sunset: 20:21
-        evening: class AstronomyEvening {
-            goldenHourBegin: 19:41
-            goldenHourEnd: 20:40
-            blueHourBegin: 20:40
-            blueHourEnd: 21:05
-            civilTwilightBegin: 20:21
-            civilTwilightEnd: 20:52
-            nauticalTwilightBegin: 20:52
-            nauticalTwilightEnd: 21:31
-            astronomicalTwilightBegin: 21:31
-            astronomicalTwilightEnd: 22:16
-        }
-        nightBegin: 22:16
-        sunStatus: -
-        solarNoon: 13:02
-        dayLength: 14:37
-        sunAltitude: -2.4240905951150817
-        sunDistance: 152012050.75662628
-        sunAzimuth: 60.53270916713848
-        moonPhase: WANING_CRESCENT
-        moonrise: 02:48
-        moonset: 19:10
-        moonStatus: -
-        moonAltitude: 26.687264834949556
-        moonDistance: 369857.6483476412
-        moonAzimuth: 74.22460131532307
-        moonParallacticAngle: -56.08124322972331
-        moonIlluminationPercentage: -7.41
-        moonAngle: 328.4181377849406
-    }
-}
-```
-### Lookup Astronomy by IP Address
-```java
-AstronomyResponse response = api.getAstronomy()
+var rawJson = client.lookupIpGeolocationRaw(
+    LookupIpGeolocationRequest.builder()
         .ip("8.8.8.8")
-        .execute();
+        .output(ResponseFormat.JSON)
+        .build());
 
-System.out.println(response);
-```
-Sample Response
-```text
-class AstronomyResponse {
-    ip: 8.8.8.8
-    location: class AstronomyLocation {
-        continentCode: NA
-        continentName: North America
-        countryCode2: US
-        countryCode3: USA
-        countryName: United States
-        countryNameOfficial: United States of America
-        isEu: false
-        stateProv: California
-        stateCode: US-CA
-        district: Santa Clara
-        city: Mountain View
-        locality: Charleston Terrace
-        zipcode: 94043-1351
-        latitude: 37.42240
-        longitude: -122.08421
-        elevation: 3.0
-    }
-    astronomy: class Astronomy {
-        date: 2025-07-22
-        currentTime: 02:36:01.027
-        midNight: 01:15
-        nightEnd: 04:18
-        morning: class AstronomyMorning {
-            astronomicalTwilightBegin: 04:18
-            astronomicalTwilightEnd: 04:58
-            nauticalTwilightBegin: 04:58
-            nauticalTwilightEnd: 05:35
-            civilTwilightBegin: 05:35
-            civilTwilightEnd: 06:04
-            blueHourBegin: 05:23
-            blueHourEnd: 05:47
-            goldenHourBegin: 05:47
-            goldenHourEnd: 06:42
-        }
-        sunrise: 06:04
-        sunset: 20:24
-        evening: class AstronomyEvening {
-            goldenHourBegin: 19:46
-            goldenHourEnd: 20:42
-            blueHourBegin: 20:42
-            blueHourEnd: 21:05
-            civilTwilightBegin: 20:24
-            civilTwilightEnd: 20:54
-            nauticalTwilightBegin: 20:54
-            nauticalTwilightEnd: 21:30
-            astronomicalTwilightBegin: 21:30
-            astronomicalTwilightEnd: 22:10
-        }
-        nightBegin: 22:10
-        sunStatus: -
-        solarNoon: 13:14
-        dayLength: 14:20
-        sunAltitude: -29.312204242565592
-        sunDistance: 152012050.7566263
-        sunAzimuth: 21.915241201213632
-        moonPhase: WANING_CRESCENT
-        moonrise: 03:23
-        moonset: 19:16
-        moonStatus: -
-        moonAltitude: -6.780866431657464
-        moonDistance: 369859.5847016905
-        moonAzimuth: 45.928379972251605
-        moonParallacticAngle: -40.47546867785306
-        moonIlluminationPercentage: -7.40
-        moonAngle: 328.43423626935555
-    }
-}
+System.out.println(rawJson.data()); // raw JSON text
+System.out.println(rawJson.metadata().statusCode());
+System.out.println(rawJson.metadata().creditsCharged());
 ```
 
-### Lookup Astronomy by Location String
+### Single Raw XML Example
+
 ```java
-AstronomyResponse response = api.getAstronomy()
-    .location("Milan, Italy")
-    .execute();
+var rawXml = client.lookupIpGeolocationRaw(
+    LookupIpGeolocationRequest.builder()
+        .ip("8.8.8.8")
+        .output(ResponseFormat.XML)
+        .build());
 
-System.out.println(response);
+System.out.println(rawXml.data()); // raw XML text
+System.out.println(rawXml.metadata().statusCode());
+System.out.println(rawXml.metadata().firstHeaderValue("Content-Type"));
 ```
-Sample Response
-```text
-class AstronomyResponse {
-    location: class AstronomyLocation {
-        locationString: Milan, Italy
-        countryName: Italy
-        stateProv: Lombardy
-        city: Milan
-        locality: 
-        latitude: 45.46419
-        longitude: 9.18963
-        elevation: 122.0
-    }
-    astronomy: class Astronomy {
-        date: 2025-07-22
-        currentTime: 11:37:28.787
-        midNight: 01:29
-        nightEnd: 03:39
-        morning: class AstronomyMorning {
-            astronomicalTwilightBegin: 03:39
-            astronomicalTwilightEnd: 04:35
-            nauticalTwilightBegin: 04:35
-            nauticalTwilightEnd: 05:21
-            civilTwilightBegin: 05:21
-            civilTwilightEnd: 05:54
-            blueHourBegin: 05:06
-            blueHourEnd: 05:35
-            goldenHourBegin: 05:35
-            goldenHourEnd: 06:40
-        }
-        sunrise: 05:54
-        sunset: 21:04
-        evening: class AstronomyEvening {
-            goldenHourBegin: 20:19
-            goldenHourEnd: 21:24
-            blueHourBegin: 21:24
-            blueHourEnd: 21:52
-            civilTwilightBegin: 21:04
-            civilTwilightEnd: 21:38
-            nauticalTwilightBegin: 21:38
-            nauticalTwilightEnd: 22:23
-            astronomicalTwilightBegin: 22:23
-            astronomicalTwilightEnd: 23:18
-        }
-        nightBegin: 23:18
-        sunStatus: -
-        solarNoon: 13:29
-        dayLength: 15:10
-        sunAltitude: 55.76507063803926
-        sunDistance: 152012050.7566263
-        sunAzimuth: 128.26574664275847
-        moonPhase: WANING_CRESCENT
-        moonrise: 02:36
-        moonset: 19:49
-        moonStatus: -
-        moonAltitude: 72.39158071193661
-        moonDistance: 369861.22005060845
-        moonAzimuth: 197.31311454833428
-        moonParallacticAngle: 13.735730743087668
-        moonIlluminationPercentage: -7.39
-        moonAngle: 328.44782327106236
-    }
-}
-```
-### Lookup Astronomy for Specific Date
+
+### Bulk Raw JSON Example
+
 ```java
-AstronomyResponse response = api.getAstronomy()
-        .lat("-27.47")
-        ._long("153.02")
-        .date("2025-01-01")
-        .execute();
+var rawBulkJson = client.bulkLookupIpGeolocationRaw(
+    BulkLookupIpGeolocationRequest.builder()
+        .addIp("8.8.8.8")
+        .addIp("1.1.1.1")
+        .output(ResponseFormat.JSON)
+        .build());
 
-System.out.println(response);
-```
-Sample Response
-```text
-class AstronomyResponse {
-    location: class AstronomyLocation {
-        countryName: Australia
-        stateProv: Queensland
-        city: Brisbane
-        locality: Brisbane
-        latitude: -27.47000
-        longitude: 153.02000
-        elevation: 
-    }
-    astronomy: class Astronomy {
-        date: 2025-01-01
-        currentTime: 19:45:17.561
-        midNight: 23:51
-        nightEnd: 03:24
-        morning: class AstronomyMorning {
-            astronomicalTwilightBegin: 03:24
-            astronomicalTwilightEnd: 03:57
-            nauticalTwilightBegin: 03:57
-            nauticalTwilightEnd: 04:29
-            civilTwilightBegin: 04:29
-            civilTwilightEnd: 04:56
-            blueHourBegin: 04:19
-            blueHourEnd: 04:40
-            goldenHourBegin: 04:40
-            goldenHourEnd: 05:30
-        }
-        sunrise: 04:56
-        sunset: 18:46
-        evening: class AstronomyEvening {
-            goldenHourBegin: 18:12
-            goldenHourEnd: 19:02
-            blueHourBegin: 19:02
-            blueHourEnd: 19:23
-            civilTwilightBegin: 18:46
-            civilTwilightEnd: 19:13
-            nauticalTwilightBegin: 19:13
-            nauticalTwilightEnd: 19:45
-            astronomicalTwilightBegin: 19:45
-            astronomicalTwilightEnd: 20:18
-        }
-        nightBegin: 20:18
-        sunStatus: -
-        solarNoon: 11:51
-        dayLength: 13:50
-        sunAltitude: -12.059617608402677
-        sunDistance: 147102938.88036567
-        sunAzimuth: 235.897971324645
-        moonPhase: NEW_MOON
-        moonrise: 05:42
-        moonset: 20:08
-        moonStatus: -
-        moonAltitude: 4.6701693782344345
-        moonDistance: 380596.5823950267
-        moonAzimuth: 244.56945849604378
-        moonParallacticAngle: 118.21976701203934
-        moonIlluminationPercentage: 2.49
-        moonAngle: 18.156495178599695
-    }
-}
+System.out.println(rawBulkJson.data()); // raw JSON array text
+System.out.println(rawBulkJson.metadata().creditsCharged());
 ```
 
-### Lookup Astronomy in Different Language
-You can also get Astronomy Data in other languages as well. Only paid subscriptions can access this feature.
+### Bulk Raw XML Example
+
 ```java
-AstronomyResponse response = api.getAstronomy()
-        .ip("1.1.1.1")
-        .lang("fr")
-        .execute();
+var rawBulkXml = client.bulkLookupIpGeolocationRaw(
+    BulkLookupIpGeolocationRequest.builder()
+        .addIp("8.8.8.8")
+        .addIp("invalid-ip")
+        .output(ResponseFormat.XML)
+        .build());
 
-System.out.println(response);
+System.out.println(rawBulkXml.data()); // raw XML text
+System.out.println(rawBulkXml.metadata().statusCode());
+System.out.println(rawBulkXml.metadata().rawHeaders());
 ```
-Sample Response
-```text
-class AstronomyResponse {
-    ip: 1.1.1.1
-    location: class AstronomyLocation {
-        continentCode: OC
-        continentName: Océanie
-        countryCode2: AU
-        countryCode3: AUS
-        countryName: Australie
-        countryNameOfficial: 
-        isEu: false
-        stateProv: Queensland
-        stateCode: AU-QLD
-        district: Brisbane
-        city: Brisbane Sud
-        locality: 
-        zipcode: 4101
-        latitude: -27.47306
-        longitude: 153.01421
-        elevation: 
-    }
-    astronomy: class Astronomy {
-        date: 2025-07-22
-        currentTime: 19:54:32.920
-        midNight: 23:54
-        nightEnd: 05:13
-        morning: class AstronomyMorning {
-            astronomicalTwilightBegin: 05:13
-            astronomicalTwilightEnd: 05:41
-            nauticalTwilightBegin: 05:41
-            nauticalTwilightEnd: 06:09
-            civilTwilightBegin: 06:09
-            civilTwilightEnd: 06:34
-            blueHourBegin: 06:00
-            blueHourEnd: 06:19
-            goldenHourBegin: 06:19
-            goldenHourEnd: 07:08
-        }
-        sunrise: 06:34
-        sunset: 17:14
-        evening: class AstronomyEvening {
-            goldenHourBegin: 16:40
-            goldenHourEnd: 17:29
-            blueHourBegin: 17:29
-            blueHourEnd: 17:49
-            civilTwilightBegin: 17:14
-            civilTwilightEnd: 17:39
-            nauticalTwilightBegin: 17:39
-            nauticalTwilightEnd: 18:07
-            astronomicalTwilightBegin: 18:07
-            astronomicalTwilightEnd: 18:35
-        }
-        nightBegin: 18:35
-        sunStatus: -
-        solarNoon: 11:54
-        dayLength: 10:39
-        sunAltitude: -35.15165719378359
-        sunDistance: 152012050.75662628
-        sunAzimuth: 276.2757088601843
-        moonPhase: WANING_CRESCENT
-        moonrise: 04:04
-        moonset: 14:19
-        moonStatus: -
-        moonAltitude: -66.8771626746063
-        moonDistance: 369880.37618917384
-        moonAzimuth: 278.66762618741274
-        moonParallacticAngle: 93.79636599869248
-        moonIlluminationPercentage: -7.32
-        moonAngle: 328.6063710418327
-    }
+
+## Bulk Examples
+
+### Bulk With All Valid Inputs
+
+```java
+var request = BulkLookupIpGeolocationRequest.builder()
+    .addIp("8.8.8.8")
+    .addIp("1.1.1.1")
+    .build();
+
+var response = client.bulkLookupIpGeolocation(request);
+System.out.println("Count: " + response.data().size());
+System.out.println("Credits: " + response.metadata().creditsCharged());
+```
+
+### Bulk With Mixed Valid and Invalid Inputs
+
+```java
+BulkLookupIpGeolocationRequest request = BulkLookupIpGeolocationRequest.builder()
+    .addIp("8.8.8.8")
+    .addIp("invalid-ip")
+    .addIp("1.1.1.1")
+    .build();
+
+ApiResponse<List<BulkLookupResult>> results = client.bulkLookupIpGeolocation(request);
+for (var item : results.data()) {
+  if (item instanceof BulkLookupSuccess(IpGeolocationResponse ok)) {
+    System.out.println("OK: " + ok.ip());
+  } else if (item instanceof BulkLookupError(String message)) {
+    System.out.println("ERR: " + message);
+  }
 }
 ```
 
-## Documentation for Models
-- [ASNConnection](https://github.com/IPGeolocation/ip-geolocation-api-java-sdk/blob/master/docs/ASNConnection.md)
-- [ASNResponse](https://github.com/IPGeolocation/ip-geolocation-api-java-sdk/blob/master/docs/ASNResponse.md)
-- [ASNDetails](https://github.com/IPGeolocation/ip-geolocation-api-java-sdk/blob/master/docs/ASNDetails.md)
-- [Abuse](https://github.com/IPGeolocation/ip-geolocation-api-java-sdk/blob/master/docs/Abuse.md)
-- [AbuseResponse](https://github.com/IPGeolocation/ip-geolocation-api-java-sdk/blob/master/docs/AbuseResponse.md)
-- [Astronomy](https://github.com/IPGeolocation/ip-geolocation-api-java-sdk/blob/master/docs/Astronomy.md)
-- [AstronomyEvening](https://github.com/IPGeolocation/ip-geolocation-api-java-sdk/blob/master/docs/AstronomyEvening.md)
-- [AstronomyLocation](https://github.com/IPGeolocation/ip-geolocation-api-java-sdk/blob/master/docs/AstronomyLocation.md)
-- [AstronomyMorning](https://github.com/IPGeolocation/ip-geolocation-api-java-sdk/blob/master/docs/AstronomyMorning.md)
-- [AstronomyResponse](https://github.com/IPGeolocation/ip-geolocation-api-java-sdk/blob/master/docs/AstronomyResponse.md)
-- [CountryMetadata](https://github.com/IPGeolocation/ip-geolocation-api-java-sdk/blob/master/docs/CountryMetadata.md)
-- [Currency](https://github.com/IPGeolocation/ip-geolocation-api-java-sdk/blob/master/docs/Currency.md)
-- [ErrorResponse](https://github.com/IPGeolocation/ip-geolocation-api-java-sdk/blob/master/docs/ErrorResponse.md)
-- [GeolocationResponse](https://github.com/IPGeolocation/ip-geolocation-api-java-sdk/blob/master/docs/GeolocationResponse.md)
-- [BulkGeolocationResponse](https://github.com/IPGeolocation/ip-geolocation-api-java-sdk/blob/master/docs/BulkGeolocationResponse.md)
-- [BulkIPRequest](https://github.com/IPGeolocation/ip-geolocation-api-java-sdk/blob/master/docs/BulkIPRequest.md)
-- [Location](https://github.com/IPGeolocation/ip-geolocation-api-java-sdk/blob/master/docs/Location.md)
-- [LocationMinimal](https://github.com/IPGeolocation/ip-geolocation-api-java-sdk/blob/master/docs/LocationMinimal.md)
-- [Network](https://github.com/IPGeolocation/ip-geolocation-api-java-sdk/blob/master/docs/Network.md)
-- [NetworkAsn](https://github.com/IPGeolocation/ip-geolocation-api-java-sdk/blob/master/docs/NetworkAsn.md)
-- [NetworkCompany](https://github.com/IPGeolocation/ip-geolocation-api-java-sdk/blob/master/docs/NetworkCompany.md)
-- [NetworkMinimal](https://github.com/IPGeolocation/ip-geolocation-api-java-sdk/blob/master/docs/NetworkMinimal.md)
-- [NetworkMinimalAsn](https://github.com/IPGeolocation/ip-geolocation-api-java-sdk/blob/master/docs/NetworkMinimalAsn.md)
-- [NetworkMinimalCompany](https://github.com/IPGeolocation/ip-geolocation-api-java-sdk/blob/master/docs/NetworkMinimalCompany.md)
-- [Security](https://github.com/IPGeolocation/ip-geolocation-api-java-sdk/blob/master/docs/Security.md)
-- [SecurityAPIResponse](https://github.com/IPGeolocation/ip-geolocation-api-java-sdk/blob/master/docs/SecurityAPIResponse.md)
-- [BulkSecurityResponse](https://github.com/IPGeolocation/ip-geolocation-api-java-sdk/blob/master/docs/BulkSecurityResponse.md)
-- [TimeConversionResponse](https://github.com/IPGeolocation/ip-geolocation-api-java-sdk/blob/master/docs/TimezoneConversionResponse.md)
-- [TimeZone](https://github.com/IPGeolocation/ip-geolocation-api-java-sdk/blob/master/docs/TimeZone.md)
-- [TimezoneResponse](https://github.com/IPGeolocation/ip-geolocation-api-java-sdk/blob/master/docs/TimezoneResponse.md)
-- [TimezoneDstEnd](https://github.com/IPGeolocation/ip-geolocation-api-java-sdk/blob/master/docs/TimezoneDstEnd.md)
-- [TimezoneDstStart](https://github.com/IPGeolocation/ip-geolocation-api-java-sdk/blob/master/docs/TimeZoneDstStart.md)
-- [TimezoneAirport](https://github.com/IPGeolocation/ip-geolocation-api-java-sdk/blob/master/docs/TimezoneAirport.md)
-- [TimezoneDetails](https://github.com/IPGeolocation/ip-geolocation-api-java-sdk/blob/master/docs/TimezoneDetails.md)
-- [TimezoneDetailDstEnd](https://github.com/IPGeolocation/ip-geolocation-api-java-sdk/blob/master/docs/TimezoneDetailDstEnd.md)
-- [TimezoneDetailDstStart](https://github.com/IPGeolocation/ip-geolocation-api-java-sdk/blob/master/docs/TimezoneDetailDstStart.md)
-- [TimezoneLocation](https://github.com/IPGeolocation/ip-geolocation-api-java-sdk/blob/master/docs/TimezoneLocation.md)
-- [TimezoneLocode](https://github.com/IPGeolocation/ip-geolocation-api-java-sdk/blob/master/docs/TimezoneLocode.md)
-- [UserAgentBulkRequest](https://github.com/IPGeolocation/ip-geolocation-api-java-sdk/blob/master/docs/UserAgentBulkRequest.md)
-- [UserAgentData](https://github.com/IPGeolocation/ip-geolocation-api-java-sdk/blob/master/docs/UserAgentData.md)
-- [UserAgentDataDevice](https://github.com/IPGeolocation/ip-geolocation-api-java-sdk/blob/master/docs/UserAgentDataDevice.md)
-- [UserAgentDataEngine](https://github.com/IPGeolocation/ip-geolocation-api-java-sdk/blob/master/docs/UserAgentDataEngine.md)
-- [UserAgentDataOperatingSystem](https://github.com/IPGeolocation/ip-geolocation-api-java-sdk/blob/master/docs/UserAgentDataOperatingSystem.md)
-- [UserAgentPostRequest](https://github.com/IPGeolocation/ip-geolocation-api-java-sdk/blob/master/docs/UserAgentRequest.md)
+Expected behavior:
+- response array length equals input length
+- valid entries map to `BulkLookupSuccess`
+- invalid entries map to `BulkLookupError`
 
+> [!TIP]
+> Prefer bulk lookups when processing large datasets.
+
+## Advanced Configuration
+
+### Response Metadata
+
+All lookup methods return `ApiResponse<T>`.
+
+`ApiResponse<T>` contains:
+- `data()`
+- `metadata()`
+
+`ApiResponseMetadata` fields:
+
+| Field               | Type                        | Description                                                              |
+|---------------------|-----------------------------|--------------------------------------------------------------------------|
+| `statusCode`        | `int`                       | final HTTP response status                                               |
+| `durationMs`        | `long`                      | total request duration                                                   |
+| `creditsCharged`    | `Integer`                   | parsed from `X-Credits-Charged` when request is successful               |
+| `successfulRecords` | `Integer`                   | parsed from `X-Successful-Record` for bulk lookup responses              |
+| `rawHeaders`        | `Map<String, List<String>>` | immutable raw response header map                                        |
+
+Header helper methods:
+
+| Method                            | Return Type    | Description                                           |
+|-----------------------------------|----------------|-------------------------------------------------------|
+| `headerValues("Header-Name")`     | `List<String>` | case-insensitive header lookup, all values            |
+| `firstHeaderValue("Header-Name")` | `String`       | case-insensitive header lookup, first value or `null` |
+
+```java
+var response = client.lookupIpGeolocation(
+    LookupIpGeolocationRequest.builder().ip("8.8.8.8").build());
+
+System.out.println("Status: " + response.metadata().statusCode());
+System.out.println("Duration ms: " + response.metadata().durationMs());
+System.out.println("Credits: " + response.metadata().creditsCharged());
+System.out.println("Raw X-Credits-Charged: " + response.metadata().firstHeaderValue("X-Credits-Charged"));
+```
+
+The SDK always uses:
+- timeout is always `IpGeolocationClientConfig.readTimeout()`
+- SDK-managed headers always include `User-Agent`, `Accept`, and bulk `Content-Type`
+
+### JSON Output Modes
+
+Use `JsonOutput` for logs or CLI output. By default, it omits `null` fields from API response.
+
+| Mode                     | Behavior               |
+|--------------------------|------------------------|
+| `JsonOutputMode.COMPACT` | omits `null` fields    |
+| `JsonOutputMode.FULL`    | includes `null` fields |
+
+```java
+import io.ipgeolocation.sdk.JsonOutput;
+import io.ipgeolocation.sdk.JsonOutputMode;
+
+String compact = JsonOutput.toPrettyJson(response.data()); // default compact mode
+String full = JsonOutput.toPrettyJson(response.data(), JsonOutputMode.FULL);
+```
+
+## Error Handling
+
+All SDK exceptions extend `IpGeolocationException`. Catch specific types for targeted handling:
+
+| HTTP Status   | Exception                       |
+|---------------|---------------------------------|
+| 400           | `BadRequestException`           |
+| 401           | `UnauthorizedException`         |
+| 404           | `NotFoundException`             |
+| 405           | `MethodNotAllowedException`     |
+| 413           | `PayloadTooLargeException`      |
+| 415           | `UnsupportedMediaTypeException` |
+| 423           | `LockedException`               |
+| 429           | `RateLimitException`            |
+| 499           | `ClientClosedRequestException`  |
+| 5xx           | `ServerErrorException`          |
+| other non-2xx | `ApiException`                  |
+
+```java
+import io.ipgeolocation.sdk.exceptions.RateLimitException;
+import io.ipgeolocation.sdk.exceptions.UnauthorizedException;
+
+try {
+    client.lookupIpGeolocation(LookupIpGeolocationRequest.builder().build());
+} catch (UnauthorizedException ex) {
+    System.err.println("Unauthorized: " + ex.apiMessage());
+} catch (RateLimitException ex) {
+    System.err.println("Rate limit: " + ex.apiMessage());
+}
+```
+
+## Troubleshooting
+
+| Symptom                                                            | Likely Cause                             | What To Do                                                                     |
+|--------------------------------------------------------------------|------------------------------------------|--------------------------------------------------------------------------------|
+| `IllegalArgumentException: connectTimeout must be <= readTimeout`  | Timeout relation invalid                 | Set connect timeout less than or equal to read timeout                         |
+| `ValidationException` for XML with typed methods                   | Typed methods are JSON-only              | Use `lookupIpGeolocationRaw(...)` or `bulkLookupIpGeolocationRaw(...)` for XML |
+| `ValidationException: bulk lookup requires apiKey in client config` | Bulk client config omits API key         | Configure `IpGeolocationClientConfig` with an API key                          |
+| `ValidationException: ips must not be empty`                       | Bulk body has no entries                 | Add at least one IP/domain                                                     |
+| `ValidationException: ips must contain at most 50000 entries`      | Bulk request too large                   | Split request into chunks                                                      |
+| `UnauthorizedException`                                            | Key missing, invalid, or plan limitation | Verify key and requested features                                              |
+| `RateLimitException`                                               | Usage or billing condition               | Review account usage and subscription status                                   |
+| `LockedException`                                                  | Bogon IP address is queried              | Use a valid public IP address                                                  |
+| `BadRequestException`                                              | Provided IP address is not valid.        | Use a valid public IP address                                                  |
+
+For a detailed list of errors, causes, and fixes, refer to the [IP Geolocation API Error Codes Documentation](https://ipgeolocation.io/documentation/ip-location-api.html#error-codes).
+
+## Plan Behavior (Free vs Paid)
+
+| Behavior                                           | Free Plan                               | Paid Plan                             |
+|----------------------------------------------------|-----------------------------------------|---------------------------------------|
+| IPv4 / IPv6 lookup                                 | supported                               | supported                             |
+| Domain lookup                                      | `UnauthorizedException`                 | supported                             |
+| Bulk endpoint (`/v3/ipgeo-bulk`)                   | `UnauthorizedException` with API key    | supported, but always requires API key |
+| `.include("*")`                                    | accepted, returns base/default response | accepted, returns all include modules |
+| non-`*` include values (`security`, `abuse`, etc.) | `UnauthorizedException`                 | supported                             |
+| non-English `lang`                                 | `UnauthorizedException`                 | supported                             |
+| `fields` / `excludes`                              | supported                               | supported                             |
+
+## Links
+
+Use these links to navigate the main IPGeolocation resources related to this Java SDK.
+
+- [IPGeolocation.io Website](https://ipgeolocation.io/)
+- [IPGeolocation Java SDK GitHub Repository](https://github.com/IPGeolocation/ip-geolocation-api-java-sdk)
+- [IP Geolocation API Documentation](https://ipgeolocation.io/documentation/ip-location-api.html)
+- [Credits Usage for the IP Geolocation API](https://ipgeolocation.io/documentation/credits-usage.html)
+- [API Authentication with API Key and Request Origin](https://ipgeolocation.io/documentation/api-authentication.html)
+- [API Response Formats for JSON and XML](https://ipgeolocation.io/documentation/api-response-formats.html)
+- [IPGeolocation API Plans and Pricing](https://ipgeolocation.io/pricing.html)
+- [Maven Central Package for the Java SDK](https://mvnrepository.com/artifact/io.ipgeolocation/ipgeolocation/latest)
+- [Java SDK Contribution Guide](https://github.com/IPGeolocation/ip-geolocation-api-java-sdk/blob/master/CONTRIBUTING.md)
