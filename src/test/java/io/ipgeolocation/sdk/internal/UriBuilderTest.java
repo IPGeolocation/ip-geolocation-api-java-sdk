@@ -1,6 +1,7 @@
 package io.ipgeolocation.sdk.internal;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.net.URI;
 import org.junit.jupiter.api.Test;
@@ -48,5 +49,12 @@ class UriBuilderTest {
   void buildWithoutQueryParamsKeepsBaseUrlAndPathOnly() {
     URI uri = UriBuilder.of("https://api.ipgeolocation.io", "/v3/ipgeo").build();
     assertThat(uri.toString()).isEqualTo("https://api.ipgeolocation.io/v3/ipgeo");
+  }
+
+  @Test
+  void encodeRejectsUnsupportedCharsets() {
+    assertThatThrownBy(() -> UriBuilder.encode("vpn detection", "unsupported-charset"))
+        .isInstanceOf(IllegalStateException.class)
+        .hasMessageContaining("UTF-8 must be supported");
   }
 }

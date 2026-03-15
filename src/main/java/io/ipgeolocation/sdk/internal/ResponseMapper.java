@@ -69,27 +69,35 @@ public final class ResponseMapper {
   public ApiException toApiException(int statusCode, String body) {
     String apiMessage = extractApiMessage(body);
     String message =
-        apiMessage == null || apiMessage.isBlank()
+        Compat.isBlank(apiMessage)
             ? "API request failed with HTTP status " + statusCode
             : "API request failed with HTTP status " + statusCode + ": " + apiMessage;
 
-    return switch (statusCode) {
-      case 400 -> new BadRequestException(message, statusCode, apiMessage);
-      case 401 -> new UnauthorizedException(message, statusCode, apiMessage);
-      case 404 -> new NotFoundException(message, statusCode, apiMessage);
-      case 405 -> new MethodNotAllowedException(message, statusCode, apiMessage);
-      case 413 -> new PayloadTooLargeException(message, statusCode, apiMessage);
-      case 415 -> new UnsupportedMediaTypeException(message, statusCode, apiMessage);
-      case 423 -> new LockedException(message, statusCode, apiMessage);
-      case 429 -> new RateLimitException(message, statusCode, apiMessage);
-      case 499 -> new ClientClosedRequestException(message, statusCode, apiMessage);
-      default -> {
+    switch (statusCode) {
+      case 400:
+        return new BadRequestException(message, statusCode, apiMessage);
+      case 401:
+        return new UnauthorizedException(message, statusCode, apiMessage);
+      case 404:
+        return new NotFoundException(message, statusCode, apiMessage);
+      case 405:
+        return new MethodNotAllowedException(message, statusCode, apiMessage);
+      case 413:
+        return new PayloadTooLargeException(message, statusCode, apiMessage);
+      case 415:
+        return new UnsupportedMediaTypeException(message, statusCode, apiMessage);
+      case 423:
+        return new LockedException(message, statusCode, apiMessage);
+      case 429:
+        return new RateLimitException(message, statusCode, apiMessage);
+      case 499:
+        return new ClientClosedRequestException(message, statusCode, apiMessage);
+      default:
         if (statusCode >= 500 && statusCode <= 599) {
-          yield new ServerErrorException(message, statusCode, apiMessage);
+          return new ServerErrorException(message, statusCode, apiMessage);
         }
-        yield new ApiException(message, statusCode, apiMessage);
-      }
-    };
+        return new ApiException(message, statusCode, apiMessage);
+    }
   }
 
   public ApiResponseMetadata toMetadata(
@@ -106,7 +114,7 @@ public final class ResponseMapper {
   }
 
   private Integer parseIntHeader(String value) {
-    if (value == null || value.isBlank()) {
+    if (Compat.isBlank(value)) {
       return null;
     }
     try {
@@ -132,7 +140,7 @@ public final class ResponseMapper {
   }
 
   private String extractApiMessage(String body) {
-    if (body == null || body.isBlank()) {
+    if (Compat.isBlank(body)) {
       return null;
     }
     try {

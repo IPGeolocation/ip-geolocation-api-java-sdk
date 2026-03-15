@@ -1,6 +1,7 @@
 package io.ipgeolocation.sdk;
 
 import io.ipgeolocation.sdk.exceptions.ValidationException;
+import io.ipgeolocation.sdk.internal.Compat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -9,7 +10,7 @@ import java.util.Objects;
  * Request payload and query parameters for the Unified IPGeolocation API bulk-lookup endpoint
  * {@code POST /v3/ipgeo-bulk}.
  *
- * <p>Use this type with the IP Geolocation API at https://ipgeolocation.io.
+ * <p>Use this type with the IPGeolocation API at https://ipgeolocation.io.
  *
  * <p>Use {@link Builder} to construct instances. Query values for {@code include},
  * {@code fields}, and {@code excludes} are passed through as provided and validated by the API.
@@ -25,11 +26,11 @@ public final class BulkLookupIpGeolocationRequest {
   private final ResponseFormat output;
 
   private BulkLookupIpGeolocationRequest(Builder builder) {
-    this.ips = List.copyOf(builder.ips);
+    this.ips = Compat.immutableList(builder.ips);
     this.lang = builder.lang;
-    this.include = List.copyOf(builder.include);
-    this.fields = List.copyOf(builder.fields);
-    this.excludes = List.copyOf(builder.excludes);
+    this.include = Compat.immutableList(builder.include);
+    this.fields = Compat.immutableList(builder.fields);
+    this.excludes = Compat.immutableList(builder.excludes);
     this.userAgent = builder.userAgent;
     this.output = builder.output;
   }
@@ -195,7 +196,7 @@ public final class BulkLookupIpGeolocationRequest {
         this.userAgent = null;
         return this;
       }
-      if (userAgent.isBlank()) {
+      if (Compat.isBlank(userAgent)) {
         throw new ValidationException("userAgent must not be blank");
       }
       this.userAgent = userAgent;
@@ -233,7 +234,7 @@ public final class BulkLookupIpGeolocationRequest {
     }
 
     private static String requireToken(String value, String field) {
-      if (value == null || value.isBlank()) {
+      if (Compat.isBlank(value)) {
         throw new ValidationException(field + " value must not be blank");
       }
       return value;

@@ -11,6 +11,8 @@ import io.ipgeolocation.sdk.model.BulkLookupResult;
 import io.ipgeolocation.sdk.model.BulkLookupSuccess;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
 import java.net.InetSocketAddress;
 import java.net.SocketException;
 import java.nio.charset.StandardCharsets;
@@ -72,7 +74,7 @@ class IpGeolocationClientIntegrationTest {
         "/v3/ipgeo-bulk",
         exchange -> {
           String query = exchange.getRequestURI().getQuery();
-          String body = new String(exchange.getRequestBody().readAllBytes(), StandardCharsets.UTF_8);
+          String body = readBody(exchange.getRequestBody());
           if (query == null || !query.contains("apiKey=local-key") || !body.contains("\"ips\"")) {
             exchange.sendResponseHeaders(400, 0);
             exchange.close();
@@ -80,12 +82,10 @@ class IpGeolocationClientIntegrationTest {
           }
 
           byte[] responseBody =
-              """
-              [
-                {"ip":"8.8.8.8"},
-                {"message":"'invalid-ip' is invalid."}
-              ]
-              """
+              ("["
+                      + "{\"ip\":\"8.8.8.8\"},"
+                      + "{\"message\":\"'invalid-ip' is invalid.\"}"
+                      + "]")
                   .getBytes(StandardCharsets.UTF_8);
 
           exchange.getResponseHeaders().add("Content-Type", "application/json");
@@ -276,5 +276,15 @@ class IpGeolocationClientIntegrationTest {
             .connectTimeout(Duration.ofSeconds(2))
             .readTimeout(Duration.ofSeconds(5))
             .build());
+  }
+
+  private String readBody(InputStream inputStream) throws IOException {
+    ByteArrayOutputStream output = new ByteArrayOutputStream();
+    byte[] buffer = new byte[1024];
+    int read;
+    while ((read = inputStream.read(buffer)) != -1) {
+      output.write(buffer, 0, read);
+    }
+    return new String(output.toByteArray(), StandardCharsets.UTF_8);
   }
 }

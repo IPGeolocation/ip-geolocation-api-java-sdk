@@ -3,14 +3,15 @@ package io.ipgeolocation.sdk;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import java.util.Map;
+import java.util.Collections;
 import org.junit.jupiter.api.Test;
 
 class ApiResponseTest {
 
   @Test
   void allowsNullDataWhenMetadataIsPresent() {
-    ApiResponseMetadata metadata = new ApiResponseMetadata(null, null, 200, 4L, Map.of());
+    ApiResponseMetadata metadata =
+        new ApiResponseMetadata(null, null, 200, 4L, Collections.<String, java.util.List<String>>emptyMap());
 
     ApiResponse<String> response = new ApiResponse<>(null, metadata);
 

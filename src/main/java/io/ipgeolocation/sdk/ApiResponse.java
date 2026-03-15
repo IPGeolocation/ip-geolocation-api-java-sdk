@@ -3,14 +3,46 @@ package io.ipgeolocation.sdk;
 import java.util.Objects;
 
 /**
- * Wraps parsed IP Geolocation API response data with SDK metadata.
+ * Wraps parsed IPGeolocation API response data with SDK metadata.
  *
  * @param <T> parsed response body type
- * @param data parsed response payload; may be {@code null} for empty API responses
- * @param metadata response metadata extracted from headers and SDK execution metrics
  */
-public record ApiResponse<T>(T data, ApiResponseMetadata metadata) {
-  public ApiResponse {
-    Objects.requireNonNull(metadata, "metadata must not be null");
+public final class ApiResponse<T> {
+  private final T data;
+  private final ApiResponseMetadata metadata;
+
+  public ApiResponse(T data, ApiResponseMetadata metadata) {
+    this.data = data;
+    this.metadata = Objects.requireNonNull(metadata, "metadata must not be null");
+  }
+
+  public T data() {
+    return data;
+  }
+
+  public ApiResponseMetadata metadata() {
+    return metadata;
+  }
+
+  @Override
+  public boolean equals(Object other) {
+    if (this == other) {
+      return true;
+    }
+    if (!(other instanceof ApiResponse)) {
+      return false;
+    }
+    ApiResponse<?> that = (ApiResponse<?>) other;
+    return Objects.equals(data, that.data) && Objects.equals(metadata, that.metadata);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(data, metadata);
+  }
+
+  @Override
+  public String toString() {
+    return "ApiResponse{data=" + data + ", metadata=" + metadata + '}';
   }
 }

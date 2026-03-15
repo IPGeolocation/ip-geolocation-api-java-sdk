@@ -8,7 +8,6 @@ import io.ipgeolocation.sdk.model.CountryMetadata;
 import io.ipgeolocation.sdk.model.IpGeolocationResponse;
 import io.ipgeolocation.sdk.model.Location;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 import org.junit.jupiter.api.Test;
 
@@ -83,6 +82,13 @@ class JsonOutputTest {
         .hasMessageContaining("Failed to serialize output as JSON");
   }
 
+  @Test
+  void genericObjectsDoNotExposePrivateFieldsWithoutAccessors() {
+    assertThatThrownBy(() -> JsonOutput.toJson(new PrivatePojo(), JsonOutputMode.FULL))
+        .isInstanceOf(SerializationException.class)
+        .hasMessageContaining("Failed to serialize output as JSON");
+  }
+
   private IpGeolocationResponse sampleResponse() {
     Location location =
         new Location(
@@ -109,7 +115,7 @@ class JsonOutputTest {
             null,
             null);
 
-    CountryMetadata countryMetadata = new CountryMetadata("+1", ".us", List.of("en-US"));
+    CountryMetadata countryMetadata = new CountryMetadata("+1", ".us", TestSupport.list("en-US"));
 
     return new IpGeolocationResponse(
         "8.8.8.8",
@@ -125,5 +131,9 @@ class JsonOutputTest {
         null,
         null,
         null);
+  }
+
+  private static final class PrivatePojo {
+    private final String secret = "should-not-leak";
   }
 }

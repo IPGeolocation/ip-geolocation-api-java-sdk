@@ -39,8 +39,7 @@ public final class SdkVersion {
     return properties.getProperty(VERSION_KEY);
   }
 
-  private static String detectImplementationVersion() {
-    Package sdkPackage = IpGeolocationClient.class.getPackage();
+  static String detectImplementationVersion(Package sdkPackage) {
     if (sdkPackage != null) {
       String implementationVersion = sdkPackage.getImplementationVersion();
       return implementationVersion == null ? null : implementationVersion.trim();
@@ -48,15 +47,33 @@ public final class SdkVersion {
     return null;
   }
 
-  private static String loadResourceVersion() {
-    try (InputStream inputStream = SdkVersion.class.getResourceAsStream(VERSION_RESOURCE)) {
+  static String loadResourceVersion(ResourceStreamSupplier resourceStreamSupplier) {
+    try (InputStream inputStream = resourceStreamSupplier.get()) {
       return readVersionProperty(inputStream);
     } catch (IOException ignored) {
       return null;
     }
   }
 
+  private static String detectImplementationVersion() {
+    return detectImplementationVersion(IpGeolocationClient.class.getPackage());
+  }
+
+  private static String loadResourceVersion() {
+    return loadResourceVersion(
+        new ResourceStreamSupplier() {
+          @Override
+          public InputStream get() {
+            return SdkVersion.class.getResourceAsStream(VERSION_RESOURCE);
+          }
+        });
+  }
+
   private static boolean isResolvedVersion(String version) {
-    return version != null && !version.isBlank() && !version.contains("${");
+    return !Compat.isBlank(version) && !version.contains("${");
+  }
+
+  interface ResourceStreamSupplier {
+    InputStream get() throws IOException;
   }
 }

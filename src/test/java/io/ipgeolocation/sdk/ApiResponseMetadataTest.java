@@ -2,8 +2,11 @@ package io.ipgeolocation.sdk;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static io.ipgeolocation.sdk.TestSupport.headers;
+import static io.ipgeolocation.sdk.TestSupport.list;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -20,7 +23,7 @@ class ApiResponseMetadataTest {
             3,
             200,
             12L,
-            Map.of("X-Credits-Charged", List.of("2")));
+            headers("X-Credits-Charged", "2"));
 
     assertThat(metadata.creditsCharged()).isEqualTo(2);
     assertThat(metadata.successfulRecords()).isEqualTo(3);
@@ -35,21 +38,21 @@ class ApiResponseMetadataTest {
         new ApiResponseMetadata(null, null, 200, 0L, null);
 
     assertThat(metadata.rawHeaders()).isEmpty();
-    assertThatThrownBy(() -> metadata.rawHeaders().put("X-New", List.of("1")))
+    assertThatThrownBy(() -> metadata.rawHeaders().put("X-New", list("1")))
         .isInstanceOf(UnsupportedOperationException.class);
   }
 
   @Test
   void rawHeadersAreDefensivelyCopiedAndNormalized() {
     Map<String, List<String>> source = new HashMap<>();
-    source.put("X-Trace-Id", new ArrayList<>(List.of("trace-1")));
+    source.put("X-Trace-Id", new ArrayList<String>(list("trace-1")));
     source.put("X-Null", null);
-    source.put(null, List.of("ignored"));
+    source.put(null, list("ignored"));
 
     ApiResponseMetadata metadata =
         new ApiResponseMetadata(null, null, 200, 1L, source);
 
-    source.put("X-Client-Hint", List.of("hint-1"));
+    source.put("X-Client-Hint", list("hint-1"));
     source.get("X-Trace-Id").add("trace-2");
 
     assertThat(metadata.rawHeaders()).containsOnlyKeys("X-Trace-Id", "X-Null");
@@ -62,7 +65,7 @@ class ApiResponseMetadataTest {
   @Test
   void rawHeadersWithOnlyNullHeaderNamesNormalizeToEmptyMap() {
     Map<String, List<String>> source = new HashMap<>();
-    source.put(null, List.of("ignored"));
+    source.put(null, list("ignored"));
 
     ApiResponseMetadata metadata =
         new ApiResponseMetadata(null, null, 200, 1L, source);
@@ -78,7 +81,7 @@ class ApiResponseMetadataTest {
             null,
             200,
             1L,
-            Map.of("X-Credits-Charged", List.of("2")));
+            headers("X-Credits-Charged", "2"));
 
     assertThat(metadata.headerValues("x-credits-charged")).containsExactly("2");
     assertThat(metadata.firstHeaderValue("X-CREDITS-CHARGED")).isEqualTo("2");
@@ -87,8 +90,8 @@ class ApiResponseMetadataTest {
   @Test
   void duplicateHeaderNamesWithDifferentCasePreferFirstInsertedHeader() {
     Map<String, List<String>> headers = new LinkedHashMap<>();
-    headers.put("X-Credits-Charged", List.of("2"));
-    headers.put("x-credits-charged", List.of("9"));
+    headers.put("X-Credits-Charged", list("2"));
+    headers.put("x-credits-charged", list("9"));
 
     ApiResponseMetadata metadata =
         new ApiResponseMetadata(null, null, 200, 1L, headers);
@@ -100,7 +103,7 @@ class ApiResponseMetadataTest {
   @Test
   void missingHeaderReturnsEmptyListAndNullFirstValue() {
     ApiResponseMetadata metadata =
-        new ApiResponseMetadata(null, null, 200, 0L, Map.of());
+        new ApiResponseMetadata(null, null, 200, 0L, Collections.<String, List<String>>emptyMap());
 
     assertThat(metadata.headerValues("X-Unknown")).isEmpty();
     assertThat(metadata.firstHeaderValue("X-Unknown")).isNull();
@@ -109,7 +112,7 @@ class ApiResponseMetadataTest {
   @Test
   void headerLookupRejectsBlankName() {
     ApiResponseMetadata metadata =
-        new ApiResponseMetadata(null, null, 200, 0L, Map.of());
+        new ApiResponseMetadata(null, null, 200, 0L, Collections.<String, List<String>>emptyMap());
 
     assertThatThrownBy(() -> metadata.headerValues(" "))
         .isInstanceOf(IllegalArgumentException.class)
@@ -122,7 +125,7 @@ class ApiResponseMetadataTest {
   @Test
   void allowsNullParsedHeaderValues() {
     ApiResponseMetadata metadata =
-        new ApiResponseMetadata(null, null, 200, 0L, Map.of());
+        new ApiResponseMetadata(null, null, 200, 0L, Collections.<String, List<String>>emptyMap());
 
     assertThat(metadata.creditsCharged()).isNull();
     assertThat(metadata.successfulRecords()).isNull();
@@ -130,14 +133,16 @@ class ApiResponseMetadataTest {
 
   @Test
   void rejectsOutOfRangeStatusCode() {
-    assertThatThrownBy(() -> new ApiResponseMetadata(null, null, 99, 0L, Map.of()))
+    assertThatThrownBy(
+            () -> new ApiResponseMetadata(null, null, 99, 0L, Collections.<String, List<String>>emptyMap()))
         .isInstanceOf(IllegalArgumentException.class)
         .hasMessageContaining("statusCode must be between 100 and 599");
   }
 
   @Test
   void rejectsNegativeDurationMs() {
-    assertThatThrownBy(() -> new ApiResponseMetadata(null, null, 200, -1L, Map.of()))
+    assertThatThrownBy(
+            () -> new ApiResponseMetadata(null, null, 200, -1L, Collections.<String, List<String>>emptyMap()))
         .isInstanceOf(IllegalArgumentException.class)
         .hasMessageContaining("durationMs must be >= 0");
   }

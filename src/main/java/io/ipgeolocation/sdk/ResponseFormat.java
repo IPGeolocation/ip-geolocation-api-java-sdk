@@ -1,7 +1,7 @@
 package io.ipgeolocation.sdk;
 
 /**
- * Response format accepted by the IP Geolocation API query parameter {@code output}.
+ * Response format accepted by the IPGeolocation API query parameter {@code output}.
  */
 public enum ResponseFormat {
   JSON("json"),

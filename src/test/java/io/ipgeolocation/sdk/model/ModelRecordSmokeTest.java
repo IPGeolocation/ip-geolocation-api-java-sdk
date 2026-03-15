@@ -2,7 +2,7 @@ package io.ipgeolocation.sdk.model;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.util.List;
+import io.ipgeolocation.sdk.TestSupport;
 import org.junit.jupiter.api.Test;
 
 class ModelRecordSmokeTest {
@@ -17,8 +17,8 @@ class ModelRecordSmokeTest {
             "Example ISP",
             "abuse",
             "Street 1",
-            List.of("abuse@example.com"),
-            List.of("+1-555-0101"));
+            TestSupport.list("abuse@example.com"),
+            TestSupport.list("+1-555-0101"));
     Asn asn = new Asn("AS15169", "Example ASN", "US", "isp", "example.com", "2020-01-01", "ARIN");
     Company company = new Company("Example Inc", "hosting", "example.com");
     Currency currency = new Currency("USD", "US Dollar", "$");
@@ -30,12 +30,12 @@ class ModelRecordSmokeTest {
             0.1d,
             false,
             false,
-            List.of(),
+            TestSupport.list(),
             0.0d,
             null,
             false,
             false,
-            List.of(),
+            TestSupport.list(),
             0.0d,
             null,
             false,

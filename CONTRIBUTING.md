@@ -3,7 +3,7 @@
 This repository contains the public Java SDK package for the IP Geolocation API.
 
 ## Prerequisites
-- Java 21+
+- Java 8+
 - Maven 3.8+
 
 ## Setup
@@ -39,6 +39,12 @@ Live tests consume API credits and are disabled by default.
 
 ```bash
 IPGEO_RUN_LIVE_TESTS=true IPGEO_FREE_KEY=... IPGEO_PAID_KEY=... mvn -Dtest=IpGeolocationLiveIntegrationTest test
+```
+
+Optional live hardening tests compare raw API JSON to the typed SDK model and consume additional credits.
+
+```bash
+IPGEO_RUN_LIVE_HARDENING=true IPGEO_PAID_KEY=... mvn -Dtest=IpGeolocationLiveFieldParityTest test
 ```
 
 ## Coding and PR Notes

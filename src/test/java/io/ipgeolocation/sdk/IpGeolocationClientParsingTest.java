@@ -2,6 +2,7 @@ package io.ipgeolocation.sdk;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static io.ipgeolocation.sdk.TestSupport.headers;
 
 import io.ipgeolocation.sdk.exceptions.SerializationException;
 import io.ipgeolocation.sdk.internal.ObjectMapperFactory;
@@ -10,7 +11,6 @@ import io.ipgeolocation.sdk.model.BulkLookupResult;
 import io.ipgeolocation.sdk.model.BulkLookupSuccess;
 import io.ipgeolocation.sdk.model.IpGeolocationResponse;
 import java.util.List;
-import java.util.Map;
 import org.junit.jupiter.api.Test;
 
 class IpGeolocationClientParsingTest {
@@ -20,22 +20,19 @@ class IpGeolocationClientParsingTest {
     TestHttpExecutor executor = new TestHttpExecutor();
     executor.enqueueResponse(
         200,
-        """
-        {
-          "ip":"91.128.103.196",
-          "location":{"country_name":"Sweden","is_eu":true,"confidence":"high"},
-          "time_zone":{"name":"Europe/Stockholm","is_dst":false}
-        }
-        """,
-        Map.of(
-            "X-Credits-Charged", List.of("1"),
-            "X-Trace-Id", List.of("trace-1")));
+        "{"
+            + "\"ip\":\"91.128.103.196\","
+            + "\"location\":{\"country_name\":\"Sweden\",\"is_eu\":true,\"confidence\":\"high\"},"
+            + "\"time_zone\":{\"name\":\"Europe/Stockholm\",\"is_dst\":false,"
+            + "\"current_tz_abbreviation\":\"CET\","
+            + "\"current_tz_full_name\":\"Central European Standard Time\"}"
+            + "}",
+        headers("X-Credits-Charged", "1", "X-Trace-Id", "trace-1"));
 
     IpGeolocationClient client =
         new IpGeolocationClient(
             IpGeolocationClientConfig.builder("k").build(),
             executor,
-            millis -> {},
             ObjectMapperFactory.create());
 
     ApiResponse<IpGeolocationResponse> response =
@@ -45,6 +42,9 @@ class IpGeolocationClientParsingTest {
     assertThat(response.data().location().countryName()).isEqualTo("Sweden");
     assertThat(response.data().location().isEu()).isTrue();
     assertThat(response.data().location().confidence()).isEqualTo(io.ipgeolocation.sdk.model.Location.Confidence.HIGH);
+    assertThat(response.data().timeZone().currentTzAbbreviation()).isEqualTo("CET");
+    assertThat(response.data().timeZone().currentTzFullName())
+        .isEqualTo("Central European Standard Time");
     assertThat(response.metadata().creditsCharged()).isEqualTo(1);
     assertThat(response.metadata().statusCode()).isEqualTo(200);
     assertThat(response.metadata().durationMs()).isGreaterThanOrEqualTo(0L);
@@ -55,18 +55,15 @@ class IpGeolocationClientParsingTest {
     TestHttpExecutor executor = new TestHttpExecutor();
     executor.enqueueResponse(
         200,
-        """
-        [
-          {"ip":"8.8.8.8","location":{"country_name":"United States"}},
-          {"message":"'10.0.0.1' is a bogon IP address."}
-        ]
-        """);
+        "["
+            + "{\"ip\":\"8.8.8.8\",\"location\":{\"country_name\":\"United States\"}},"
+            + "{\"message\":\"'10.0.0.1' is a bogon IP address.\"}"
+            + "]");
 
     IpGeolocationClient client =
         new IpGeolocationClient(
             IpGeolocationClientConfig.builder("k").build(),
             executor,
-            millis -> {},
             ObjectMapperFactory.create());
 
     ApiResponse<List<BulkLookupResult>> response =
@@ -85,19 +82,16 @@ class IpGeolocationClientParsingTest {
     TestHttpExecutor executor = new TestHttpExecutor();
     executor.enqueueResponse(
         200,
-        """
-        {"ip":"8.8.8.8"}
-        """,
-        Map.of(
-            "x-credits-charged", List.of("not-a-number"),
-            "x-trace-id", List.of("trace-2"),
-            "x-client-hint", List.of("hint-2")));
+        "{\"ip\":\"8.8.8.8\"}",
+        headers(
+            "x-credits-charged", "not-a-number",
+            "x-trace-id", "trace-2",
+            "x-client-hint", "hint-2"));
 
     IpGeolocationClient client =
         new IpGeolocationClient(
             IpGeolocationClientConfig.builder("k").build(),
             executor,
-            millis -> {},
             ObjectMapperFactory.create());
 
     ApiResponse<IpGeolocationResponse> response =
@@ -110,15 +104,12 @@ class IpGeolocationClientParsingTest {
   @Test
   void bulkTypedResponseRejectsNonArrayPayload() {
     TestHttpExecutor executor = new TestHttpExecutor();
-    executor.enqueueResponse(200, """
-        {"ip":"8.8.8.8"}
-        """);
+    executor.enqueueResponse(200, "{\"ip\":\"8.8.8.8\"}");
 
     IpGeolocationClient client =
         new IpGeolocationClient(
             IpGeolocationClientConfig.builder("k").build(),
             executor,
-            millis -> {},
             ObjectMapperFactory.create());
 
     assertThatThrownBy(
@@ -138,7 +129,6 @@ class IpGeolocationClientParsingTest {
         new IpGeolocationClient(
             IpGeolocationClientConfig.builder("k").build(),
             executor,
-            millis -> {},
             ObjectMapperFactory.create());
 
     assertThatThrownBy(
@@ -156,7 +146,6 @@ class IpGeolocationClientParsingTest {
         new IpGeolocationClient(
             IpGeolocationClientConfig.builder("k").build(),
             executor,
-            millis -> {},
             ObjectMapperFactory.create());
 
     assertThatThrownBy(
@@ -176,7 +165,6 @@ class IpGeolocationClientParsingTest {
         new IpGeolocationClient(
             IpGeolocationClientConfig.builder("k").build(),
             executor,
-            millis -> {},
             ObjectMapperFactory.create());
 
     ApiResponse<IpGeolocationResponse> response =
@@ -200,7 +188,7 @@ class IpGeolocationClientParsingTest {
             .build();
 
     IpGeolocationClient client =
-        new IpGeolocationClient(config, executor, millis -> {}, ObjectMapperFactory.create());
+        new IpGeolocationClient(config, executor, ObjectMapperFactory.create());
 
     client.lookupIpGeolocation(LookupIpGeolocationRequest.builder().build());
 
@@ -213,13 +201,12 @@ class IpGeolocationClientParsingTest {
     executor.enqueueResponse(
         200,
         "{\"ip\":\"8.8.8.8\"}",
-        Map.of("X-Credits-Charged", List.of(" ")));
+        headers("X-Credits-Charged", " "));
 
     IpGeolocationClient client =
         new IpGeolocationClient(
             IpGeolocationClientConfig.builder("k").build(),
             executor,
-            millis -> {},
             ObjectMapperFactory.create());
 
     ApiResponse<IpGeolocationResponse> response =
@@ -233,17 +220,14 @@ class IpGeolocationClientParsingTest {
     TestHttpExecutor executor = new TestHttpExecutor();
     executor.enqueueResponse(
         200,
-        """
-        [
-          {"ip":"8.8.8.8","message":"ignored-message","location":{"country_name":"United States"}}
-        ]
-        """);
+        "["
+            + "{\"ip\":\"8.8.8.8\",\"message\":\"ignored-message\",\"location\":{\"country_name\":\"United States\"}}"
+            + "]");
 
     IpGeolocationClient client =
         new IpGeolocationClient(
             IpGeolocationClientConfig.builder("k").build(),
             executor,
-            millis -> {},
             ObjectMapperFactory.create());
 
     ApiResponse<List<BulkLookupResult>> response =
@@ -251,8 +235,8 @@ class IpGeolocationClientParsingTest {
             BulkLookupIpGeolocationRequest.builder().addIp("8.8.8.8").build());
 
     assertThat(response.data()).hasSize(1);
-    assertThat(response.data().getFirst()).isInstanceOf(BulkLookupSuccess.class);
-    assertThat(((BulkLookupSuccess) response.data().getFirst()).item().ip()).isEqualTo("8.8.8.8");
+    assertThat(response.data().get(0)).isInstanceOf(BulkLookupSuccess.class);
+    assertThat(((BulkLookupSuccess) response.data().get(0)).item().ip()).isEqualTo("8.8.8.8");
   }
 
   @Test
@@ -261,13 +245,12 @@ class IpGeolocationClientParsingTest {
     executor.enqueueResponse(
         200,
         "<ipgeo><ip>8.8.8.8</ip><location><country_name>United States</country_name></location></ipgeo>",
-        Map.of("X-Credits-Charged", List.of("1")));
+        headers("X-Credits-Charged", "1"));
 
     IpGeolocationClient client =
         new IpGeolocationClient(
             IpGeolocationClientConfig.builder("k").build(),
             executor,
-            millis -> {},
             ObjectMapperFactory.create());
 
     ApiResponse<String> response =
@@ -287,13 +270,12 @@ class IpGeolocationClientParsingTest {
     executor.enqueueResponse(
         200,
         "<items><item><ip>8.8.8.8</ip></item><item><message>invalid</message></item></items>",
-        Map.of("X-Credits-Charged", List.of("2")));
+        headers("X-Credits-Charged", "2"));
 
     IpGeolocationClient client =
         new IpGeolocationClient(
             IpGeolocationClientConfig.builder("k").build(),
             executor,
-            millis -> {},
             ObjectMapperFactory.create());
 
     ApiResponse<String> response =
