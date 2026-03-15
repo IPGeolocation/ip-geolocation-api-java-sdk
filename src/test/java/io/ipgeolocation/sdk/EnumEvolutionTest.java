@@ -12,12 +12,10 @@ class EnumEvolutionTest {
   @Test
   void unknownConfidenceValueFallsBackToUnknown() throws Exception {
     String payload =
-        """
-        {
-          "ip":"8.8.8.8",
-          "location":{"confidence":"very_high"}
-        }
-        """;
+        "{"
+            + "\"ip\":\"8.8.8.8\","
+            + "\"location\":{\"confidence\":\"very_high\"}"
+            + "}";
 
     IpGeolocationResponse parsed =
         ObjectMapperFactory.create().readValue(payload, IpGeolocationResponse.class);

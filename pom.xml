@@ -7,7 +7,7 @@
   <artifactId>ipgeolocation</artifactId>
   <version>3.0.0</version>
   <name>IPGeolocation Java SDK</name>
-  <description>Enterprise Java SDK for the IP Geolocation API.</description>
+  <description>Java SDK for IP geolocation, company, ASN, VPN and proxy detection, risk signals, timezone, user-agent parsing, and bulk IP intelligence with the IPGeolocation API.</description>
   <url>https://ipgeolocation.io/</url>
   <organization>
     <name>IPGeolocation</name>
@@ -15,8 +15,9 @@
   </organization>
   <licenses>
     <license>
-      <name>Proprietary</name>
-      <url>https://ipgeolocation.io/tos.html</url>
+      <name>MIT License</name>
+      <url>https://opensource.org/license/mit/</url>
+      <distribution>repo</distribution>
     </license>
   </licenses>
   <developers>
@@ -35,7 +36,7 @@
   </scm>
 
   <properties>
-    <maven.compiler.release>21</maven.compiler.release>
+    <maven.compiler.release>8</maven.compiler.release>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <jackson.version>2.21.1</jackson.version>
     <junit.version>5.11.4</junit.version>
@@ -196,7 +197,7 @@
                   <version>[3.8.0,)</version>
                 </requireMavenVersion>
                 <requireJavaVersion>
-                  <version>[21,)</version>
+                  <version>[1.8,)</version>
                 </requireJavaVersion>
                 <banDuplicatePomDependencyVersions/>
                 <dependencyConvergence/>
@@ -233,6 +234,9 @@
             <version>${maven.javadoc.plugin.version}</version>
             <configuration>
               <source>${maven.compiler.release}</source>
+              <doclint>all,-missing</doclint>
+              <excludePackageNames>io.ipgeolocation.sdk.internal</excludePackageNames>
+              <quiet>true</quiet>
             </configuration>
             <executions>
               <execution>

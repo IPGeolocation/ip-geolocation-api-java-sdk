@@ -15,7 +15,7 @@ import io.ipgeolocation.sdk.exceptions.ServerErrorException;
 import io.ipgeolocation.sdk.exceptions.UnauthorizedException;
 import io.ipgeolocation.sdk.exceptions.UnsupportedMediaTypeException;
 import io.ipgeolocation.sdk.internal.ObjectMapperFactory;
-import java.util.Map;
+import java.util.Collections;
 import org.junit.jupiter.api.Test;
 
 class IpGeolocationClientErrorMappingTest {
@@ -86,14 +86,13 @@ class IpGeolocationClientErrorMappingTest {
     executor.enqueueResponse(
         401,
         "{\"message\":\"invalid key\"}",
-        Map.of());
+        Collections.<String, java.util.List<String>>emptyMap());
 
     IpGeolocationClient client =
         new IpGeolocationClient(
             IpGeolocationClientConfig.builder("k")
                 .build(),
             executor,
-            millis -> {},
             ObjectMapperFactory.create());
 
     assertThatThrownBy(
@@ -107,18 +106,46 @@ class IpGeolocationClientErrorMappingTest {
   }
 
   @Test
+  void exceptionMessagesDoNotExposeConfiguredApiKeys() {
+    String apiKey = "secret-api-key";
+    TestHttpExecutor executor = new TestHttpExecutor();
+    executor.enqueueResponse(
+        401,
+        "{\"message\":\"invalid key\"}",
+        Collections.<String, java.util.List<String>>emptyMap());
+
+    IpGeolocationClient client =
+        new IpGeolocationClient(
+            IpGeolocationClientConfig.builder(apiKey).build(),
+            executor,
+            ObjectMapperFactory.create());
+
+    assertThatThrownBy(
+            () -> client.lookupIpGeolocation(LookupIpGeolocationRequest.builder().build()))
+        .isInstanceOfSatisfying(
+            ApiException.class,
+            ex -> {
+              assertThat(ex.getMessage()).doesNotContain(apiKey);
+              assertThat(ex.apiMessage()).doesNotContain(apiKey);
+            });
+  }
+
+  @Test
   void nonJsonErrorBodyIsTruncatedAndExposedAsApiMessage() {
-    String longBody = "x".repeat(700);
+    StringBuilder builder = new StringBuilder();
+    for (int i = 0; i < 700; i++) {
+      builder.append('x');
+    }
+    String longBody = builder.toString();
 
     TestHttpExecutor executor = new TestHttpExecutor();
-    executor.enqueueResponse(400, longBody, Map.of());
+    executor.enqueueResponse(400, longBody, Collections.<String, java.util.List<String>>emptyMap());
 
     IpGeolocationClient client =
         new IpGeolocationClient(
             IpGeolocationClientConfig.builder("k")
                 .build(),
             executor,
-            millis -> {},
             ObjectMapperFactory.create());
 
     assertThatThrownBy(
@@ -134,14 +161,13 @@ class IpGeolocationClientErrorMappingTest {
   @Test
   void emptyErrorBodyUsesGenericStatusMessage() {
     TestHttpExecutor executor = new TestHttpExecutor();
-    executor.enqueueResponse(400, "", Map.of());
+    executor.enqueueResponse(400, "", Collections.<String, java.util.List<String>>emptyMap());
 
     IpGeolocationClient client =
         new IpGeolocationClient(
             IpGeolocationClientConfig.builder("k")
                 .build(),
             executor,
-            millis -> {},
             ObjectMapperFactory.create());
 
     assertThatThrownBy(
@@ -157,14 +183,13 @@ class IpGeolocationClientErrorMappingTest {
   @Test
   void shortNonJsonErrorBodyIsExposedWithoutTruncation() {
     TestHttpExecutor executor = new TestHttpExecutor();
-    executor.enqueueResponse(400, "plain-error-body", Map.of());
+    executor.enqueueResponse(400, "plain-error-body", Collections.<String, java.util.List<String>>emptyMap());
 
     IpGeolocationClient client =
         new IpGeolocationClient(
             IpGeolocationClientConfig.builder("k")
                 .build(),
             executor,
-            millis -> {},
             ObjectMapperFactory.create());
 
     assertThatThrownBy(
@@ -182,14 +207,13 @@ class IpGeolocationClientErrorMappingTest {
     executor.enqueueResponse(
         statusCode,
         "{\"message\":\"error detail\"}",
-        Map.of());
+        Collections.<String, java.util.List<String>>emptyMap());
 
     IpGeolocationClient client =
         new IpGeolocationClient(
             IpGeolocationClientConfig.builder("k")
                 .build(),
             executor,
-            millis -> {},
             ObjectMapperFactory.create());
 
     assertThatThrownBy(

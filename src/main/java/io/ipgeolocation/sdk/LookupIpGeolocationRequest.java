@@ -1,5 +1,6 @@
 package io.ipgeolocation.sdk;
 
+import io.ipgeolocation.sdk.internal.Compat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -8,7 +9,7 @@ import java.util.Objects;
  * Request parameters for the Unified IPGeolocation API single-lookup endpoint
  * {@code GET /v3/ipgeo}.
  *
- * <p>Use this type with the IP Geolocation API at https://ipgeolocation.io.
+ * <p>Use this type with the IPGeolocation API at https://ipgeolocation.io.
  *
  * <p>Use {@link Builder} to construct instances. Query values for {@code include},
  * {@code fields}, and {@code excludes} are passed through as provided and validated by the API.
@@ -26,9 +27,9 @@ public final class LookupIpGeolocationRequest {
   private LookupIpGeolocationRequest(Builder builder) {
     this.ip = builder.ip;
     this.lang = builder.lang;
-    this.include = List.copyOf(builder.include);
-    this.fields = List.copyOf(builder.fields);
-    this.excludes = List.copyOf(builder.excludes);
+    this.include = Compat.immutableList(builder.include);
+    this.fields = Compat.immutableList(builder.fields);
+    this.excludes = Compat.immutableList(builder.excludes);
     this.userAgent = builder.userAgent;
     this.output = builder.output;
   }
@@ -112,7 +113,7 @@ public final class LookupIpGeolocationRequest {
      * @return this builder
      */
     public Builder ip(String ip) {
-      if (ip != null && ip.isBlank()) {
+      if (ip != null && Compat.isBlank(ip)) {
         // Mirrors API behavior: blank ip is treated as omission and resolves caller IP.
         this.ip = null;
         return this;
@@ -184,7 +185,7 @@ public final class LookupIpGeolocationRequest {
         this.userAgent = null;
         return this;
       }
-      if (userAgent.isBlank()) {
+      if (Compat.isBlank(userAgent)) {
         throw new IllegalArgumentException("userAgent must not be blank");
       }
       this.userAgent = userAgent;
@@ -213,7 +214,7 @@ public final class LookupIpGeolocationRequest {
     }
 
     private static String requireToken(String value, String field) {
-      if (value == null || value.isBlank()) {
+      if (Compat.isBlank(value)) {
         throw new IllegalArgumentException(field + " value must not be blank");
       }
       return value;

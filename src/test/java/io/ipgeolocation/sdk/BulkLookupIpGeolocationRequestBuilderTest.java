@@ -4,7 +4,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import io.ipgeolocation.sdk.exceptions.ValidationException;
-import java.util.List;
 import org.junit.jupiter.api.Test;
 
 class BulkLookupIpGeolocationRequestBuilderTest {
@@ -14,7 +13,7 @@ class BulkLookupIpGeolocationRequestBuilderTest {
     BulkLookupIpGeolocationRequest request =
         BulkLookupIpGeolocationRequest.builder()
             .addIp("8.8.8.8")
-            .ips(List.of("1.1.1.1"))
+            .ips(TestSupport.list("1.1.1.1"))
             .build();
 
     assertThat(request.ips()).containsExactly("1.1.1.1");

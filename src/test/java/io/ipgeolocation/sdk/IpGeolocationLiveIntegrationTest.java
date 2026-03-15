@@ -10,8 +10,8 @@ import io.ipgeolocation.sdk.model.BulkLookupResult;
 import io.ipgeolocation.sdk.model.BulkLookupSuccess;
 import java.util.List;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Assumptions;
+import org.junit.jupiter.api.Test;
 
 class IpGeolocationLiveIntegrationTest {
   private static String freeKey;
@@ -26,18 +26,21 @@ class IpGeolocationLiveIntegrationTest {
     freeKey = System.getenv("IPGEO_FREE_KEY");
     paidKey = System.getenv("IPGEO_PAID_KEY");
 
-    Assumptions.assumeTrue(freeKey != null && !freeKey.isBlank(), "IPGEO_FREE_KEY is required");
-    Assumptions.assumeTrue(paidKey != null && !paidKey.isBlank(), "IPGEO_PAID_KEY is required");
+    Assumptions.assumeTrue(!TestSupport.isBlank(freeKey), "IPGEO_FREE_KEY is required");
+    Assumptions.assumeTrue(!TestSupport.isBlank(paidKey), "IPGEO_PAID_KEY is required");
   }
 
   @Test
   void freePlanBaseLookupWorks() {
     try (IpGeolocationClient client = new IpGeolocationClient(IpGeolocationClientConfig.builder(freeKey).build())) {
-      var response = client.lookupIpGeolocation(
+      ApiResponse<io.ipgeolocation.sdk.model.IpGeolocationResponse> response = client.lookupIpGeolocation(
           LookupIpGeolocationRequest.builder().ip("8.8.8.8").build());
 
       assertThat(response.data().ip()).isEqualTo("8.8.8.8");
       assertThat(response.metadata().creditsCharged()).isGreaterThanOrEqualTo(1);
+      assertThat(response.data().timeZone()).isNotNull();
+      assertThat(response.data().timeZone().currentTzAbbreviation()).isNotBlank();
+      assertThat(response.data().timeZone().currentTzFullName()).isNotBlank();
     }
   }
 
@@ -86,7 +89,7 @@ class IpGeolocationLiveIntegrationTest {
   @Test
   void freePlanIncludeStarReturnsDefaultResponseWithoutAdditionalModules() {
     try (IpGeolocationClient client = new IpGeolocationClient(IpGeolocationClientConfig.builder(freeKey).build())) {
-      var response =
+      ApiResponse<io.ipgeolocation.sdk.model.IpGeolocationResponse> response =
           client.lookupIpGeolocation(
               LookupIpGeolocationRequest.builder()
                   .ip("8.8.8.8")
@@ -115,7 +118,7 @@ class IpGeolocationLiveIntegrationTest {
   @Test
   void paidPlanSecurityAndAbuseWorks() {
     try (IpGeolocationClient client = new IpGeolocationClient(IpGeolocationClientConfig.builder(paidKey).build())) {
-      var response =
+      ApiResponse<io.ipgeolocation.sdk.model.IpGeolocationResponse> response =
           client.lookupIpGeolocation(
               LookupIpGeolocationRequest.builder()
                   .ip("8.8.8.8")
@@ -163,7 +166,7 @@ class IpGeolocationLiveIntegrationTest {
   @Test
   void paidPlanIncludeUserAgentReflectsRequestUserAgentOverride() {
     try (IpGeolocationClient client = new IpGeolocationClient(IpGeolocationClientConfig.builder(paidKey).build())) {
-      var defaultUaResponse =
+      ApiResponse<io.ipgeolocation.sdk.model.IpGeolocationResponse> defaultUaResponse =
           client.lookupIpGeolocation(
               LookupIpGeolocationRequest.builder()
                   .ip("8.8.8.8")
@@ -171,7 +174,7 @@ class IpGeolocationLiveIntegrationTest {
                   .build());
 
       String overrideUserAgent = "python-requests/2.32.5";
-      var overriddenUaResponse =
+      ApiResponse<io.ipgeolocation.sdk.model.IpGeolocationResponse> overriddenUaResponse =
           client.lookupIpGeolocation(
               LookupIpGeolocationRequest.builder()
                   .ip("8.8.8.8")

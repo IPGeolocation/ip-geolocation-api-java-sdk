@@ -6,7 +6,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import io.ipgeolocation.sdk.exceptions.RequestTimeoutException;
 import io.ipgeolocation.sdk.exceptions.TransportException;
 import io.ipgeolocation.sdk.internal.ObjectMapperFactory;
-import java.net.http.HttpTimeoutException;
+import java.net.SocketTimeoutException;
 import org.junit.jupiter.api.Test;
 
 class IpGeolocationClientTransportTest {
@@ -14,13 +14,12 @@ class IpGeolocationClientTransportTest {
   @Test
   void timeoutIOExceptionMapsToRequestTimeoutException() {
     TestHttpExecutor executor = new TestHttpExecutor();
-    executor.enqueueIOException(new HttpTimeoutException("socket timed out"));
+    executor.enqueueIOException(new SocketTimeoutException("socket timed out"));
 
     IpGeolocationClient client =
         new IpGeolocationClient(
             IpGeolocationClientConfig.builder("k").build(),
             executor,
-            millis -> {},
             ObjectMapperFactory.create());
 
     assertThatThrownBy(
@@ -38,7 +37,6 @@ class IpGeolocationClientTransportTest {
         new IpGeolocationClient(
             IpGeolocationClientConfig.builder("k").build(),
             executor,
-            millis -> {},
             ObjectMapperFactory.create());
 
     assertThatThrownBy(
@@ -56,7 +54,6 @@ class IpGeolocationClientTransportTest {
         new IpGeolocationClient(
             IpGeolocationClientConfig.builder("k").build(),
             executor,
-            millis -> {},
             ObjectMapperFactory.create());
 
     try {

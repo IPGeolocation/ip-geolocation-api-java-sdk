@@ -1,12 +1,13 @@
 package io.ipgeolocation.sdk;
 
+import io.ipgeolocation.sdk.internal.Compat;
 import java.time.Duration;
 import java.util.Objects;
 
 /**
  * Immutable configuration for {@link IpGeolocationClient}.
  *
- * <p>Use this configuration when calling the IP Geolocation API at https://ipgeolocation.io.
+ * <p>Use this configuration when calling the IPGeolocation API at https://ipgeolocation.io.
  */
 public final class IpGeolocationClientConfig {
   private final String apiKey;
@@ -106,7 +107,7 @@ public final class IpGeolocationClientConfig {
         this.apiKey = null;
         return this;
       }
-      if (apiKey.isBlank()) {
+      if (Compat.isBlank(apiKey)) {
         throw new IllegalArgumentException("apiKey must not be blank");
       }
       this.apiKey = apiKey;
@@ -116,7 +117,7 @@ public final class IpGeolocationClientConfig {
     /**
      * Sets the API base URL.
      *
-     * <p>The default points to the production IP Geolocation API hosted by
+     * <p>The default points to the production IPGeolocation API hosted by
      * https://ipgeolocation.io.
      *
      * @param baseUrl non-blank base URL
@@ -124,7 +125,7 @@ public final class IpGeolocationClientConfig {
      * @throws IllegalArgumentException when value is blank
      */
     public Builder baseUrl(String baseUrl) {
-      if (baseUrl == null || baseUrl.isBlank()) {
+      if (Compat.isBlank(baseUrl)) {
         throw new IllegalArgumentException("baseUrl must not be blank");
       }
       this.baseUrl = trimTrailingSlash(baseUrl);

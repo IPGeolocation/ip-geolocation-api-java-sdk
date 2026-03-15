@@ -1,6 +1,7 @@
 package io.ipgeolocation.sdk.internal;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static io.ipgeolocation.sdk.TestSupport.list;
 
 import io.ipgeolocation.sdk.ApiResponseMetadata;
 import io.ipgeolocation.sdk.exceptions.ApiException;
@@ -27,10 +28,10 @@ class ResponseMapperTest {
   void metadataParsingHandlesInvalidAndMissingHeaderValues() {
     ResponseMapper mapper = new ResponseMapper(ObjectMapperFactory.create());
     Map<String, List<String>> rawHeaders = new LinkedHashMap<>();
-    rawHeaders.put(null, List.of("ignored"));
+    rawHeaders.put(null, list("ignored"));
     rawHeaders.put("X-Credits-Charged", null);
-    rawHeaders.put("X-Successful-Record", List.of("7"));
-    rawHeaders.put("X-Trace-Id", List.of());
+    rawHeaders.put("X-Successful-Record", list("7"));
+    rawHeaders.put("X-Trace-Id", list());
 
     ApiResponseMetadata metadata =
         mapper.toMetadata(200, 15L, rawHeaders);

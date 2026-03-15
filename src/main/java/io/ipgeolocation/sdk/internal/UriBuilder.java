@@ -2,7 +2,7 @@ package io.ipgeolocation.sdk.internal;
 
 import java.net.URI;
 import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
+import java.io.UnsupportedEncodingException;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.StringJoiner;
@@ -22,7 +22,7 @@ public final class UriBuilder {
   }
 
   public UriBuilder queryParam(String name, String value) {
-    if (name == null || name.isBlank() || value == null || value.isBlank()) {
+    if (Compat.isBlank(name) || Compat.isBlank(value)) {
       return this;
     }
     queryParams.put(name, value);
@@ -40,6 +40,14 @@ public final class UriBuilder {
   }
 
   private static String encode(String value) {
-    return URLEncoder.encode(value, StandardCharsets.UTF_8).replace("+", "%20");
+    return encode(value, "UTF-8");
+  }
+
+  static String encode(String value, String charsetName) {
+    try {
+      return URLEncoder.encode(value, charsetName).replace("+", "%20");
+    } catch (UnsupportedEncodingException e) {
+      throw new IllegalStateException("UTF-8 must be supported", e);
+    }
   }
 }

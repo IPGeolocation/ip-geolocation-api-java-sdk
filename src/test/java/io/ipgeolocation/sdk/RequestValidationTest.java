@@ -21,7 +21,6 @@ class RequestValidationTest {
         new IpGeolocationClient(
             IpGeolocationClientConfig.builder("k").build(),
             executor,
-            millis -> {},
             io.ipgeolocation.sdk.internal.ObjectMapperFactory.create());
 
     LookupIpGeolocationRequest request =
@@ -39,7 +38,6 @@ class RequestValidationTest {
         new IpGeolocationClient(
             IpGeolocationClientConfig.builder("k").build(),
             executor,
-            millis -> {},
             io.ipgeolocation.sdk.internal.ObjectMapperFactory.create());
 
     BulkLookupIpGeolocationRequest request =
@@ -62,7 +60,6 @@ class RequestValidationTest {
         new IpGeolocationClient(
             IpGeolocationClientConfig.builder("k").build(),
             executor,
-            millis -> {},
             io.ipgeolocation.sdk.internal.ObjectMapperFactory.create());
 
     client.lookupIpGeolocationRaw(
@@ -85,7 +82,6 @@ class RequestValidationTest {
         new IpGeolocationClient(
             IpGeolocationClientConfig.builder("k").build(),
             executor,
-            millis -> {},
             io.ipgeolocation.sdk.internal.ObjectMapperFactory.create());
 
     assertThatThrownBy(() -> client.lookupIpGeolocation(null))
@@ -100,7 +96,6 @@ class RequestValidationTest {
         new IpGeolocationClient(
             IpGeolocationClientConfig.builder("k").build(),
             executor,
-            millis -> {},
             io.ipgeolocation.sdk.internal.ObjectMapperFactory.create());
 
     assertThatThrownBy(() -> client.bulkLookupIpGeolocation(null))
@@ -115,7 +110,6 @@ class RequestValidationTest {
         new IpGeolocationClient(
             IpGeolocationClientConfig.builder().build(),
             executor,
-            millis -> {},
             io.ipgeolocation.sdk.internal.ObjectMapperFactory.create());
 
     assertThatThrownBy(
@@ -135,7 +129,6 @@ class RequestValidationTest {
         new IpGeolocationClient(
             IpGeolocationClientConfig.builder().build(),
             executor,
-            millis -> {},
             io.ipgeolocation.sdk.internal.ObjectMapperFactory.create());
 
     assertThatThrownBy(

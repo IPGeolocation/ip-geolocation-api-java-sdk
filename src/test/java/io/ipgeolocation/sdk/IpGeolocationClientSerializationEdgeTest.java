@@ -24,7 +24,6 @@ class IpGeolocationClientSerializationEdgeTest {
         new IpGeolocationClient(
             IpGeolocationClientConfig.builder("k").build(),
             executor,
-            millis -> {},
             failingMapper);
 
     assertThatThrownBy(
