@@ -13,59 +13,9 @@ The official Java SDK for the [IPGeolocation API](https://ipgeolocation.io/docum
 
 This SDK supports IPv4, IPv6, and domain lookups, typed Java response classes, raw JSON or XML output, and response metadata including credits charged and request duration.
 
-## At a Glance
-
-| Item | Value |
-|------|-------|
-| SDK Name | IPGeolocation Java SDK |
-| API Type | IPGeolocation API |
-| Supported Endpoints | `/v3/ipgeo`, `/v3/ipgeo-bulk` |
-| Supported Inputs | IPv4, IPv6, domain |
-| Main Data Returned | Geolocation, company, ASN, timezone, security, abuse, hostname, user-agent, network, currency |
-| Pricing | Free plan available; paid plans for higher limits and extra modules |
-| Authentication | API key, request origin allowlisting for `/v3/ipgeo` only |
-| Response Formats | Typed JSON, raw JSON, raw XML |
-| Bulk Limit | Up to 50,000 IPs or domains per request |
-| Java Requirement | 8+ |
-| API Version | 3.0 |
-
-**Official Release**
-
-- Available on [Maven Central](https://central.sonatype.com/artifact/io.ipgeolocation/ipgeolocation)
-- Source code on [GitHub](https://github.com/IPGeolocation/ip-geolocation-api-java-sdk)
-
-## Table of Contents
-
-- [Requirements](#requirements)
-- [Installation](#installation)
-- [Get Your API Key](#get-your-api-key)
-- [Quick Start](#quick-start)
-- [What You Can Get From One API Call](#what-you-can-get-from-one-api-call)
-- [Common Use Cases](#common-use-cases)
-- [Security and Risk Signals](#security-and-risk-signals)
-- [Supported Endpoints](#supported-endpoints)
-- [Authentication Modes](#authentication-modes)
-- [Plan Features and Limits](#plan-features-and-limits)
-- [Client Configuration](#client-configuration)
-- [Available Methods](#available-methods)
-- [Request Options](#request-options)
-- [Single Lookup Examples](#single-lookup-examples)
-- [Raw JSON and XML Methods](#raw-json-and-xml-methods)
-- [Bulk Lookup Examples](#bulk-lookup-examples)
-- [Advanced Configuration](#advanced-configuration)
-- [Error Handling](#error-handling)
-- [Troubleshooting](#troubleshooting)
-- [FAQ](#faq)
-- [Links](#links)
-
-## Requirements
-
-| Item | Value |
-|------|-------|
-| Java | 8+ |
-| Maven | 3.8+ |
-
 ## Installation
+
+Requires Java 8+ and Maven 3.8+.
 
 ### Maven
 
@@ -101,21 +51,6 @@ cd ip-geolocation-api-java-sdk
 mvn clean install
 ```
 
-## Get Your API Key
-
-To use the SDK, create or access your IPGeolocation account and copy an API key from your dashboard.
-
-1. Sign up: [https://app.ipgeolocation.io/signup](https://app.ipgeolocation.io/signup)
-2. If you signed up with email, verify your email address when prompted.
-3. Sign in: [https://app.ipgeolocation.io/login](https://app.ipgeolocation.io/login)
-4. Open your dashboard: [https://app.ipgeolocation.io/dashboard](https://app.ipgeolocation.io/dashboard)
-5. Copy an API key from the `API Keys` section
-6. Use that key in `IpGeolocationClientConfig.builder("YOUR_API_KEY")`
-
-> [!TIP]
-> For backend applications, store your API key in an environment variable or secret manager.
-> For browser-based single lookups on paid plans, use request origin allowlisting instead of exposing an API key in frontend code.
-
 ## Quick Start
 
 ```java
@@ -148,6 +83,66 @@ try (IpGeolocationClient client = new IpGeolocationClient(config)) {
 
 > [!TIP]
 > Start with the default response, then add `include(...)` values such as `security`, `abuse`, `hostname`, `user_agent`, `geo_accuracy`, or `dma_code` when you need more data.
+
+## At a Glance
+
+| Item | Value |
+|------|-------|
+| SDK Name | IPGeolocation Java SDK |
+| API Type | IPGeolocation API |
+| Supported Endpoints | `/v3/ipgeo`, `/v3/ipgeo-bulk` |
+| Supported Inputs | IPv4, IPv6, domain |
+| Main Data Returned | Geolocation, company, ASN, timezone, security, abuse, hostname, user-agent, network, currency |
+| Pricing | Free plan available; paid plans for higher limits and extra modules |
+| Authentication | API key, request origin allowlisting for `/v3/ipgeo` only |
+| Response Formats | Typed JSON, raw JSON, raw XML |
+| Bulk Limit | Up to 50,000 IPs or domains per request |
+| Java Requirement | 8+ |
+| API Version | 3.0 |
+
+**Official Release**
+
+- Available on [Maven Central](https://central.sonatype.com/artifact/io.ipgeolocation/ipgeolocation)
+- Source code on [GitHub](https://github.com/IPGeolocation/ip-geolocation-api-java-sdk)
+
+## Table of Contents
+
+- [Installation](#installation)
+- [Quick Start](#quick-start)
+- [At a Glance](#at-a-glance)
+- [Get Your API Key](#get-your-api-key)
+- [What You Can Get From One API Call](#what-you-can-get-from-one-api-call)
+- [Common Use Cases](#common-use-cases)
+- [Security and Risk Signals](#security-and-risk-signals)
+- [Supported Endpoints](#supported-endpoints)
+- [Authentication Modes](#authentication-modes)
+- [Plan Features and Limits](#plan-features-and-limits)
+- [Client Configuration](#client-configuration)
+- [Available Methods](#available-methods)
+- [Request Options](#request-options)
+- [Single Lookup Examples](#single-lookup-examples)
+- [Raw JSON and XML Methods](#raw-json-and-xml-methods)
+- [Bulk Lookup Examples](#bulk-lookup-examples)
+- [Advanced Configuration](#advanced-configuration)
+- [Error Handling](#error-handling)
+- [Troubleshooting](#troubleshooting)
+- [FAQ](#faq)
+- [Links](#links)
+
+## Get Your API Key
+
+To use the SDK, create or access your IPGeolocation account and copy an API key from your dashboard.
+
+1. Sign up: [https://app.ipgeolocation.io/signup](https://app.ipgeolocation.io/signup)
+2. If you signed up with email, verify your email address when prompted.
+3. Sign in: [https://app.ipgeolocation.io/login](https://app.ipgeolocation.io/login)
+4. Open your dashboard: [https://app.ipgeolocation.io/dashboard](https://app.ipgeolocation.io/dashboard)
+5. Copy an API key from the `API Keys` section
+6. Use that key in `IpGeolocationClientConfig.builder("YOUR_API_KEY")`
+
+> [!TIP]
+> For backend applications, store your API key in an environment variable or secret manager.
+> For browser-based single lookups on paid plans, use request origin allowlisting instead of exposing an API key in frontend code.
 
 ## What You Can Get From One API Call
 
