@@ -5,7 +5,7 @@
 
   <groupId>io.ipgeolocation</groupId>
   <artifactId>ipgeolocation</artifactId>
-  <version>3.0.0</version>
+  <version>3.0.1</version>
   <name>IPGeolocation Java SDK</name>
   <description>Java SDK for IP geolocation, company, ASN, VPN and proxy detection, risk signals, timezone, user-agent parsing, and bulk IP intelligence with the IPGeolocation API.</description>
   <url>https://ipgeolocation.io/</url>
