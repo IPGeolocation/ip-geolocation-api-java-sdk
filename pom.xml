@@ -5,7 +5,7 @@
 
   <groupId>io.ipgeolocation</groupId>
   <artifactId>ipgeolocation</artifactId>
-  <version>3.0.0</version>
+  <version>3.0.1</version>
   <name>IPGeolocation Java SDK</name>
   <description>Java SDK for IP geolocation, company, ASN, VPN and proxy detection, risk signals, timezone, user-agent parsing, and bulk IP intelligence with the IPGeolocation API.</description>
   <url>https://ipgeolocation.io/</url>
@@ -38,7 +38,7 @@
   <properties>
     <maven.compiler.release>8</maven.compiler.release>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <jackson.version>2.21.1</jackson.version>
+    <jackson.version>2.21.7</jackson.version>
     <junit.version>5.11.4</junit.version>
     <assertj.version>3.27.7</assertj.version>
     <jacoco.version>0.8.12</jacoco.version>

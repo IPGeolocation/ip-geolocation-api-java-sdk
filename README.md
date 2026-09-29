@@ -23,7 +23,7 @@ Requires Java 8+ and Maven 3.8+.
 <dependency>
   <groupId>io.ipgeolocation</groupId>
   <artifactId>ipgeolocation</artifactId>
-  <version>3.0.0</version>
+  <version>3.0.1</version>
 </dependency>
 ```
 
@@ -31,7 +31,7 @@ Requires Java 8+ and Maven 3.8+.
 
 ```gradle
 dependencies {
-  implementation 'io.ipgeolocation:ipgeolocation:3.0.0'
+  implementation 'io.ipgeolocation:ipgeolocation:3.0.1'
 }
 ```
 
@@ -39,7 +39,7 @@ dependencies {
 
 ```kotlin
 dependencies {
-  implementation("io.ipgeolocation:ipgeolocation:3.0.0")
+  implementation("io.ipgeolocation:ipgeolocation:3.0.1")
 }
 ```
 
