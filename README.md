@@ -1,4 +1,4 @@
-# IPGeolocation Java SDK for the IPGeolocation API
+# IPGeolocation.io Java SDK for the IP Geolocation API
 
 [![Maven Central](https://img.shields.io/maven-central/v/io.ipgeolocation/ipgeolocation?label=Maven%20Central)](https://central.sonatype.com/artifact/io.ipgeolocation/ipgeolocation)
 [![Java 8+](https://img.shields.io/badge/Java-8%2B-orange)](https://openjdk.org/)
@@ -9,7 +9,7 @@
 [![Website](https://img.shields.io/badge/Website-ipgeolocation.io-117A37)](https://ipgeolocation.io/)
 
 ## Overview
-The official Java SDK for the [IPGeolocation API](https://ipgeolocation.io/documentation/ip-location-api.html). Use `/v3/ipgeo` and `/v3/ipgeo-bulk` to get IP geolocation, company and ASN data, timezone and network data, hostname and abuse details, browser and device details, and security signals from one API call. Security signals include VPN detection, proxy detection, threat score, Tor detection, attacker flags, and cloud or data center IP checks.
+The official Java SDK for the [IP Geolocation API](https://ipgeolocation.io/documentation/ip-location-api.html). Use `/v3/ipgeo` and `/v3/ipgeo-bulk` to get IP geolocation, company and ASN data, timezone and network data, hostname and abuse details, browser and device details, and security signals from one API call. Security signals include VPN detection, proxy detection, threat score, Tor detection, attacker flags, and cloud or data center IP checks.
 
 This SDK supports IPv4, IPv6, and domain lookups, typed Java response classes, raw JSON or XML output, and response metadata including credits charged and request duration.
 
@@ -88,8 +88,8 @@ try (IpGeolocationClient client = new IpGeolocationClient(config)) {
 
 | Item | Value |
 |------|-------|
-| SDK Name | IPGeolocation Java SDK |
-| API Type | IPGeolocation API |
+| SDK Name | IPGeolocation.io Java SDK |
+| API Type | IPGeolocation.io IP Geolocation API |
 | Supported Endpoints | `/v3/ipgeo`, `/v3/ipgeo-bulk` |
 | Supported Inputs | IPv4, IPv6, domain |
 | Main Data Returned | Geolocation, company, ASN, timezone, security, abuse, hostname, user-agent, network, currency |
@@ -131,7 +131,7 @@ try (IpGeolocationClient client = new IpGeolocationClient(config)) {
 
 ## Get Your API Key
 
-To use the SDK, create or access your IPGeolocation account and copy an API key from your dashboard.
+To use the SDK, create or access your IPGeolocation.io account and copy an API key from your dashboard.
 
 1. Sign up: [https://app.ipgeolocation.io/signup](https://app.ipgeolocation.io/signup)
 2. If you signed up with email, verify your email address when prompted.
@@ -188,7 +188,7 @@ Provider names, confidence scores, and last-seen dates are returned when the API
 
 ## Supported Endpoints
 
-This SDK supports the IPGeolocation API endpoints below.
+This SDK supports the IP Geolocation API endpoints below.
 
 | Endpoint | HTTP Method | SDK Methods | Primary Use Case |
 |----------|-------------|-------------|------------------|
@@ -733,7 +733,7 @@ try {
 | `LockedException` | Bogon IP address was queried | Use a valid public IP address |
 | `BadRequestException` | Provided IP address is not valid | Use a valid public IP address |
 
-For the full list of API-side errors, see the [IPGeolocation API error codes documentation](https://ipgeolocation.io/documentation/ip-location-api.html#error-codes).
+For the full list of API-side errors, see the [IP Geolocation API error codes documentation](https://ipgeolocation.io/documentation/ip-location-api.html#error-codes).
 
 ## FAQ
 
@@ -771,11 +771,11 @@ No. Request origin allowlisting works only for `/v3/ipgeo` on paid plans. `/v3/i
 
 ## Links
 
-- [IPGeolocation Website](https://ipgeolocation.io/)
-- [IPGeolocation Java SDK on GitHub](https://github.com/IPGeolocation/ip-geolocation-api-java-sdk)
-- [IPGeolocation API Documentation](https://ipgeolocation.io/documentation/ip-location-api.html)
+- [IPGeolocation.io Website](https://ipgeolocation.io/)
+- [IPGeolocation.io Java SDK on GitHub](https://github.com/IPGeolocation/ip-geolocation-api-java-sdk)
+- [IP Geolocation API Documentation](https://ipgeolocation.io/documentation/ip-location-api.html)
 - [IPGeolocation API Credits and Usage](https://ipgeolocation.io/documentation/credits-usage.html)
 - [IPGeolocation API Authentication Methods](https://ipgeolocation.io/documentation/api-authentication.html)
 - [IPGeolocation API Response Formats](https://ipgeolocation.io/documentation/api-response-formats.html)
 - [IPGeolocation API Plans and Pricing](https://ipgeolocation.io/pricing.html)
-- [IPGeolocation Java SDK on Maven Central](https://central.sonatype.com/artifact/io.ipgeolocation/ipgeolocation)
+- [IPGeolocation.io Java SDK on Maven Central](https://central.sonatype.com/artifact/io.ipgeolocation/ipgeolocation)
