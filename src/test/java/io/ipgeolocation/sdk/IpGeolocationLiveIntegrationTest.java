@@ -31,6 +31,33 @@ class IpGeolocationLiveIntegrationTest {
   }
 
   @Test
+  void paidPlanArabicWorksForSingleAndBulk() {
+    try (IpGeolocationClient client = new IpGeolocationClient(IpGeolocationClientConfig.builder(paidKey).build())) {
+      ApiResponse<io.ipgeolocation.sdk.model.IpGeolocationResponse> single =
+          client.lookupIpGeolocation(LookupIpGeolocationRequest.builder()
+              .ip("8.8.8.8").lang(Language.AR).build());
+      String countryName = single.data().location().countryName();
+      assertThat(countryName).containsPattern("[\\u0600-\\u06ff]");
+
+      ApiResponse<List<BulkLookupResult>> bulk = client.bulkLookupIpGeolocation(
+          BulkLookupIpGeolocationRequest.builder().addIp("8.8.8.8").lang(Language.AR).build());
+      assertThat(bulk.data()).hasSize(1);
+      assertThat(bulk.data().get(0)).isInstanceOf(BulkLookupSuccess.class);
+      assertThat(((BulkLookupSuccess) bulk.data().get(0)).item().location().countryName())
+          .isEqualTo(countryName);
+    }
+  }
+
+  @Test
+  void freePlanArabicIsRejected() {
+    try (IpGeolocationClient client = new IpGeolocationClient(IpGeolocationClientConfig.builder(freeKey).build())) {
+      assertThatThrownBy(() -> client.lookupIpGeolocation(LookupIpGeolocationRequest.builder()
+          .ip("8.8.8.8").lang(Language.AR).build()))
+          .isInstanceOf(UnauthorizedException.class);
+    }
+  }
+
+  @Test
   void freePlanBaseLookupWorks() {
     try (IpGeolocationClient client = new IpGeolocationClient(IpGeolocationClientConfig.builder(freeKey).build())) {
       ApiResponse<io.ipgeolocation.sdk.model.IpGeolocationResponse> response = client.lookupIpGeolocation(
@@ -101,17 +128,6 @@ class IpGeolocationLiveIntegrationTest {
       assertThat(response.data().abuse()).isNull();
       assertThat(response.data().userAgent()).isNull();
       assertThat(response.data().hostname()).isNull();
-    }
-  }
-
-  @Test
-  void freePlanBulkIsRejected() {
-    try (IpGeolocationClient client = new IpGeolocationClient(IpGeolocationClientConfig.builder(freeKey).build())) {
-      assertThatThrownBy(
-              () ->
-                  client.bulkLookupIpGeolocation(
-                      BulkLookupIpGeolocationRequest.builder().addIp("8.8.8.8").build()))
-          .isInstanceOf(UnauthorizedException.class);
     }
   }
 

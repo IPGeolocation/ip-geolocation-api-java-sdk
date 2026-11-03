@@ -1,0 +1,29 @@
+name: Java checks
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        java: ['8', '21']
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-java@b843ebf9b913146b38da2eaa7aeddf76074ae1ad
+        with:
+          distribution: temurin
+          java-version: ${{ matrix.java }}
+      - run: mvn --batch-mode --no-transfer-progress clean verify
+        env:
+          IPGEO_RUN_LIVE_TESTS: 'false'
+          IPGEO_RUN_LIVE_HARDENING: 'false'

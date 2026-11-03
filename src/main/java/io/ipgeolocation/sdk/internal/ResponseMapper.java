@@ -28,23 +28,33 @@ import java.util.Objects;
 
 public final class ResponseMapper {
   private final ObjectMapper objectMapper;
+  private final ErrorSanitizer errors;
 
   public ResponseMapper(ObjectMapper objectMapper) {
+    this(objectMapper, null);
+  }
+
+  public ResponseMapper(ObjectMapper objectMapper, String apiKey) {
     this.objectMapper = Objects.requireNonNull(objectMapper, "objectMapper must not be null");
+    this.errors = new ErrorSanitizer(apiKey);
   }
 
   public <T> T readBody(String body, Class<T> type) {
     try {
-      return objectMapper.readValue(body, type);
+      T result = objectMapper.readValue(body, type);
+      if (result == null) {
+        throw new IOException("Expected a JSON object");
+      }
+      return result;
     } catch (IOException e) {
-      throw new SerializationException("Failed to deserialize API response", e);
+      throw new SerializationException("Failed to deserialize API response", errors.cause(e));
     }
   }
 
   public List<BulkLookupResult> parseBulkResponse(String body) {
     try {
       JsonNode root = objectMapper.readTree(body);
-      if (!root.isArray()) {
+      if (root == null || !root.isArray()) {
         throw new SerializationException(
             "Failed to deserialize bulk response: expected an array payload",
             new IllegalArgumentException("Unexpected JSON token"));
@@ -52,6 +62,9 @@ public final class ResponseMapper {
 
       List<BulkLookupResult> result = new ArrayList<>(root.size());
       for (JsonNode node : root) {
+        if (!node.isObject()) {
+          throw new IOException("Expected a JSON object for each bulk result");
+        }
         if (node.has("message") && !node.has("ip")) {
           ErrorResponse error = objectMapper.treeToValue(node, ErrorResponse.class);
           result.add(new BulkLookupError(error.message()));
@@ -62,7 +75,7 @@ public final class ResponseMapper {
       }
       return result;
     } catch (IOException e) {
-      throw new SerializationException("Failed to deserialize bulk lookup response", e);
+      throw new SerializationException("Failed to deserialize bulk lookup response", errors.cause(e));
     }
   }
 
@@ -145,9 +158,10 @@ public final class ResponseMapper {
     }
     try {
       ErrorResponse err = objectMapper.readValue(body, ErrorResponse.class);
-      return err.message();
+      return err == null ? null : errors.message(err.message());
     } catch (IOException ignored) {
-      return body.length() > 512 ? body.substring(0, 512) : body;
+      String message = errors.message(body);
+      return message.length() > 512 ? message.substring(0, 512) : message;
     }
   }
 }

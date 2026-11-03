@@ -142,6 +142,11 @@ class ValueObjectCoverageTest {
 
   private Constructor<?> constructorFor(Class<?> type) {
     Constructor<?>[] constructors = type.getConstructors();
+    for (Constructor<?> constructor : constructors) {
+      if (constructor.isAnnotationPresent(com.fasterxml.jackson.annotation.JsonCreator.class)) {
+        return constructor;
+      }
+    }
     if (constructors.length != 1) {
       throw new IllegalStateException("Expected exactly one public constructor for " + type);
     }

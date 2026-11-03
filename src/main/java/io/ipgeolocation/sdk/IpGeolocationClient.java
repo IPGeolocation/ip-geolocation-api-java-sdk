@@ -8,6 +8,7 @@ import io.ipgeolocation.sdk.exceptions.SerializationException;
 import io.ipgeolocation.sdk.exceptions.TransportException;
 import io.ipgeolocation.sdk.exceptions.ValidationException;
 import io.ipgeolocation.sdk.internal.HttpExecutor;
+import io.ipgeolocation.sdk.internal.ErrorSanitizer;
 import io.ipgeolocation.sdk.internal.HttpRequestData;
 import io.ipgeolocation.sdk.internal.HttpResponseData;
 import io.ipgeolocation.sdk.internal.JavaNetHttpExecutor;
@@ -46,6 +47,7 @@ public final class IpGeolocationClient implements AutoCloseable {
   private final ObjectMapper objectMapper;
   private final HttpExecutor executor;
   private final ResponseMapper responseMapper;
+  private final ErrorSanitizer errors;
 
   /**
    * Creates a client that uses the provided SDK configuration.
@@ -63,7 +65,8 @@ public final class IpGeolocationClient implements AutoCloseable {
     this.config = Objects.requireNonNull(config, "config must not be null");
     this.executor = Objects.requireNonNull(executor, "executor must not be null");
     this.objectMapper = Objects.requireNonNull(objectMapper, "objectMapper must not be null");
-    this.responseMapper = new ResponseMapper(this.objectMapper);
+    this.responseMapper = new ResponseMapper(this.objectMapper, config.apiKey());
+    this.errors = new ErrorSanitizer(config.apiKey());
   }
   /**
    * Executes a single-IP lookup request and returns typed data plus response metadata.
@@ -249,7 +252,7 @@ public final class IpGeolocationClient implements AutoCloseable {
     try {
       payload = objectMapper.writeValueAsString(new BulkGeolocationRequestBody(request.ips()));
     } catch (JsonProcessingException e) {
-      throw new SerializationException("Failed to serialize bulk lookup request body", e);
+      throw new SerializationException("Failed to serialize bulk lookup request body", errors.cause(e));
     }
 
     Map<String, List<String>> headers = new LinkedHashMap<String, List<String>>();
@@ -318,12 +321,12 @@ public final class IpGeolocationClient implements AutoCloseable {
     try {
       return executor.send(request);
     } catch (SocketTimeoutException e) {
-      throw new RequestTimeoutException("HTTP request timed out", e);
+      throw new RequestTimeoutException("HTTP request timed out", errors.cause(e));
     } catch (IOException e) {
-      throw new TransportException("HTTP transport error", e);
+      throw new TransportException("HTTP transport error", errors.cause(e));
     } catch (InterruptedException e) {
       Thread.currentThread().interrupt();
-      throw new TransportException("Request execution was interrupted", e);
+      throw new TransportException("Request execution was interrupted", errors.cause(e));
     }
   }
 

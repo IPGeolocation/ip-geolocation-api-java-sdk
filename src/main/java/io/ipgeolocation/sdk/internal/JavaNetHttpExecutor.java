@@ -122,11 +122,13 @@ public final class JavaNetHttpExecutor implements HttpExecutor {
   }
 
   private static int toMillis(Duration duration) {
-    long millis = duration.toMillis();
-    if (millis > Integer.MAX_VALUE) {
+    if (duration.isNegative() || duration.isZero()) {
+      throw new IllegalArgumentException("timeout must be greater than zero");
+    }
+    if (duration.compareTo(Duration.ofMillis(Integer.MAX_VALUE)) >= 0) {
       return Integer.MAX_VALUE;
     }
-    return (int) millis;
+    return (int) Math.max(1L, duration.toMillis());
   }
 
   interface ConnectionFactory {
