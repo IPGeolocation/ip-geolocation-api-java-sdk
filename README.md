@@ -9,7 +9,7 @@
 [![Website](https://img.shields.io/badge/Website-ipgeolocation.io-117A37)](https://ipgeolocation.io/)
 
 ## Overview
-The official Java SDK for the [IP Geolocation API](https://ipgeolocation.io/documentation/ip-location-api.html). Use `/v3/ipgeo` and `/v3/ipgeo-bulk` to get IP geolocation, company and ASN data, timezone and network data, hostname and abuse details, browser and device details, and security signals from one API call. Security signals include VPN detection, proxy detection, threat score, Tor detection, attacker flags, and cloud or data center IP checks.
+The official Java SDK for the [IP Geolocation API](https://ipgeolocation.io/documentation/ip-location-api.html). Use `/v3/ipgeo` and `/v3/ipgeo-bulk` to get IP geolocation, company and ASN data, time zone and network data, hostname and abuse details, browser and device details, and security signals from one API call. Security signals include VPN detection, proxy detection, threat score, Tor detection, attacker flags, and cloud or data center IP checks.
 
 This SDK supports IPv4, IPv6, and domain lookups, typed Java response classes, raw JSON or XML output, and response metadata including credits charged and request duration.
 
@@ -92,7 +92,7 @@ try (IpGeolocationClient client = new IpGeolocationClient(config)) {
 | API Type | IPGeolocation.io IP Geolocation API |
 | Supported Endpoints | `/v3/ipgeo`, `/v3/ipgeo-bulk` |
 | Supported Inputs | IPv4, IPv6, domain |
-| Main Data Returned | Geolocation, company, ASN, timezone, security, abuse, hostname, user-agent, network, currency |
+| Main Data Returned | Geolocation, company, ASN, time zone, security, abuse, hostname, user-agent, network, currency |
 | Pricing | Free plan available; paid plans for higher limits and extra modules |
 | Authentication | API key, request origin allowlisting for `/v3/ipgeo` only |
 | Response Formats | Typed JSON, raw JSON, raw XML |
@@ -196,7 +196,7 @@ This SDK supports the IP Geolocation API endpoints below.
 | `/v3/ipgeo-bulk` | `POST` | `bulkLookupIpGeolocation(...)`, `bulkLookupIpGeolocationRaw(...)` | Bulk lookup for up to 50,000 IPs or domains |
 
 > [!NOTE]
-> Through these two endpoints, the API can return geolocation, company, ASN, timezone, hostname, user-agent, abuse, network, currency, and security data depending on your request parameters and plan.
+> Through these two endpoints, the API can return geolocation, company, ASN, time zone, hostname, user-agent, abuse, network, currency, and security data depending on your request parameters and plan.
 
 ## Authentication Modes
 
@@ -742,9 +742,9 @@ For the full list of API-side errors, see the [IP Geolocation API error codes do
 
 Yes. Use `include("security")` with `/v3/ipgeo` or `/v3/ipgeo-bulk` to receive the `security` object. That object can contain threat score, VPN detection, proxy detection, Tor detection, anonymous IP checks, residential proxy signals, bot and spam signals, known attacker signals, relay detection, and cloud or data center IP identification.
 
-### Can I get geolocation, company, ASN, timezone, and security data in one API call?
+### Can I get geolocation, company, ASN, time zone, and security data in one API call?
 
-Yes. A single request can return geolocation, company, ASN, timezone, network, and currency data by default, and you can add more modules such as `security`, `abuse`, `hostname`, and `user_agent` with `include(...)`.
+Yes. A single request can return geolocation, company, ASN, time zone, network, and currency data by default, and you can add more modules such as `security`, `abuse`, `hostname`, and `user_agent` with `include(...)`.
 
 ### Does the SDK support domain lookup?
 
