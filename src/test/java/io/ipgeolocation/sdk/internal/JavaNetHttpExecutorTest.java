@@ -19,8 +19,58 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.ValueSource;
 
 class JavaNetHttpExecutorTest {
+
+  @ParameterizedTest
+  @CsvSource({
+      "PT0.000000001S, 1",
+      "PT0.000999999S, 1",
+      "PT0.001S, 1",
+      "PT0.001999999S, 1",
+      "PT10S, 10000",
+      "PT2147483.646S, 2147483646",
+      "PT2147483.647S, 2147483647",
+      "PT2147483.648S, 2147483647",
+      "PT9223372036854775807S, 2147483647"
+  })
+  void appliesFiniteTimeoutsWithoutOverflow(String value, int expectedMillis) throws Exception {
+    Duration timeout = Duration.parse(value);
+    StubHttpURLConnection connection =
+        new StubHttpURLConnection(
+            url("https://api.ipgeolocation.io/v3/ipgeo"), 200, "{}",
+            Collections.<String, List<String>>emptyMap());
+    JavaNetHttpExecutor executor =
+        new JavaNetHttpExecutor(timeout, new StubConnectionFactory(connection));
+
+    executor.send(new HttpRequestData(
+        connection.getURL().toURI(), "GET",
+        Collections.<String, List<String>>emptyMap(), null, timeout));
+
+    assertThat(connection.getConnectTimeout()).isEqualTo(expectedMillis);
+    assertThat(connection.getReadTimeout()).isEqualTo(expectedMillis);
+    assertThat(connection.disconnected).isTrue();
+  }
+
+  @ParameterizedTest
+  @ValueSource(longs = {0L, -1L, -1_000_000_000L})
+  void rejectsNonPositiveReadTimeouts(long nanos) {
+    StubHttpURLConnection connection =
+        new StubHttpURLConnection(
+            url("https://api.ipgeolocation.io/v3/ipgeo"), 200, "{}",
+            Collections.<String, List<String>>emptyMap());
+    JavaNetHttpExecutor executor =
+        new JavaNetHttpExecutor(Duration.ofSeconds(1), new StubConnectionFactory(connection));
+
+    assertThatThrownBy(() -> executor.send(new HttpRequestData(
+        URI.create("https://api.ipgeolocation.io/v3/ipgeo"), "GET",
+        Collections.<String, List<String>>emptyMap(), null, Duration.ofNanos(nanos))))
+        .isInstanceOf(IllegalArgumentException.class);
+    assertThat(connection.disconnected).isTrue();
+  }
 
   @Test
   void rejectsInvalidTimeoutsAndNullConnectionFactory() {
@@ -252,6 +302,7 @@ class JavaNetHttpExecutorTest {
     private boolean nullInputStream;
     private boolean nullErrorStream;
     private boolean outputStreamRequested;
+    private boolean disconnected;
     private int fixedLengthStreamingMode = -1;
 
     private StubHttpURLConnection(
@@ -263,7 +314,9 @@ class JavaNetHttpExecutorTest {
     }
 
     @Override
-    public void disconnect() {}
+    public void disconnect() {
+      disconnected = true;
+    }
 
     @Override
     public boolean usingProxy() {

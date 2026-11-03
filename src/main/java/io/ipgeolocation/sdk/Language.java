@@ -17,7 +17,8 @@ public enum Language {
   IT("it"),
   KO("ko"),
   FA("fa"),
-  PT("pt");
+  PT("pt"),
+  AR("ar");
 
   private final String code;
 

@@ -36,7 +36,11 @@ public final class UriBuilder {
       queryParams.forEach((k, v) -> joiner.add(encode(k) + "=" + encode(v)));
       full.append('?').append(joiner);
     }
-    return URI.create(full.toString());
+    try {
+      return URI.create(full.toString());
+    } catch (IllegalArgumentException invalidUri) {
+      throw new IllegalArgumentException("Invalid API request URI");
+    }
   }
 
   private static String encode(String value) {

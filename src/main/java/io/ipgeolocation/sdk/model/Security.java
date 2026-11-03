@@ -40,6 +40,47 @@ public final class Security {
   private final Boolean isCloudProvider;
   private final String cloudProviderName;
 
+  @JsonProperty("proxy_days_seen_30d")
+  private final Integer proxyDaysSeen30d;
+  @JsonProperty("proxy_days_seen_7d")
+  private final Integer proxyDaysSeen7d;
+  @JsonProperty("proxy_provider_count_30d")
+  private final Integer proxyProviderCount30d;
+  private final Double botConfidenceScore;
+  private final String botOperatorName;
+  private final String botType;
+  private final Boolean isKnownGoodBot;
+  private final String botLastSeen;
+  private final Boolean isCorporateGateway;
+  private final String corporateGatewayType;
+  private final String corporateGatewayProviderName;
+
+  public Security(
+      Double threatScore,
+      Boolean isTor,
+      Boolean isProxy,
+      List<String> proxyProviderNames,
+      Double proxyConfidenceScore,
+      String proxyLastSeen,
+      Boolean isResidentialProxy,
+      Boolean isVpn,
+      List<String> vpnProviderNames,
+      Double vpnConfidenceScore,
+      String vpnLastSeen,
+      Boolean isRelay,
+      String relayProviderName,
+      Boolean isAnonymous,
+      Boolean isKnownAttacker,
+      Boolean isBot,
+      Boolean isSpam,
+      Boolean isCloudProvider,
+      String cloudProviderName) {
+    this(threatScore, isTor, isProxy, proxyProviderNames, proxyConfidenceScore, proxyLastSeen,
+        isResidentialProxy, isVpn, vpnProviderNames, vpnConfidenceScore, vpnLastSeen, isRelay,
+        relayProviderName, isAnonymous, isKnownAttacker, isBot, isSpam, isCloudProvider, cloudProviderName,
+        null, null, null, null, null, null, null, null, null, null, null);
+  }
+
   @JsonCreator
   public Security(
       @JsonProperty("threat_score") Double threatScore,
@@ -60,7 +101,18 @@ public final class Security {
       @JsonProperty("is_bot") Boolean isBot,
       @JsonProperty("is_spam") Boolean isSpam,
       @JsonProperty("is_cloud_provider") Boolean isCloudProvider,
-      @JsonProperty("cloud_provider_name") String cloudProviderName) {
+      @JsonProperty("cloud_provider_name") String cloudProviderName,
+      @JsonProperty("proxy_days_seen_30d") Integer proxyDaysSeen30d,
+      @JsonProperty("proxy_days_seen_7d") Integer proxyDaysSeen7d,
+      @JsonProperty("proxy_provider_count_30d") Integer proxyProviderCount30d,
+      @JsonProperty("bot_confidence_score") Double botConfidenceScore,
+      @JsonProperty("bot_operator_name") String botOperatorName,
+      @JsonProperty("bot_type") String botType,
+      @JsonProperty("is_known_good_bot") Boolean isKnownGoodBot,
+      @JsonProperty("bot_last_seen") String botLastSeen,
+      @JsonProperty("is_corporate_gateway") Boolean isCorporateGateway,
+      @JsonProperty("corporate_gateway_type") String corporateGatewayType,
+      @JsonProperty("corporate_gateway_provider_name") String corporateGatewayProviderName) {
     this.threatScore = threatScore;
     this.isTor = isTor;
     this.isProxy = isProxy;
@@ -80,6 +132,17 @@ public final class Security {
     this.isSpam = isSpam;
     this.isCloudProvider = isCloudProvider;
     this.cloudProviderName = cloudProviderName;
+    this.proxyDaysSeen30d = proxyDaysSeen30d;
+    this.proxyDaysSeen7d = proxyDaysSeen7d;
+    this.proxyProviderCount30d = proxyProviderCount30d;
+    this.botConfidenceScore = botConfidenceScore;
+    this.botOperatorName = botOperatorName;
+    this.botType = botType;
+    this.isKnownGoodBot = isKnownGoodBot;
+    this.botLastSeen = botLastSeen;
+    this.isCorporateGateway = isCorporateGateway;
+    this.corporateGatewayType = corporateGatewayType;
+    this.corporateGatewayProviderName = corporateGatewayProviderName;
   }
 
   public Double threatScore() { return threatScore; }
@@ -108,6 +171,18 @@ public final class Security {
   public Boolean isCloudProvider() { return isCloudProvider; }
   public String cloudProviderName() { return cloudProviderName; }
 
+  public Integer proxyDaysSeen30d() { return proxyDaysSeen30d; }
+  public Integer proxyDaysSeen7d() { return proxyDaysSeen7d; }
+  public Integer proxyProviderCount30d() { return proxyProviderCount30d; }
+  public Double botConfidenceScore() { return botConfidenceScore; }
+  public String botOperatorName() { return botOperatorName; }
+  public String botType() { return botType; }
+  public Boolean isKnownGoodBot() { return isKnownGoodBot; }
+  public String botLastSeen() { return botLastSeen; }
+  public Boolean isCorporateGateway() { return isCorporateGateway; }
+  public String corporateGatewayType() { return corporateGatewayType; }
+  public String corporateGatewayProviderName() { return corporateGatewayProviderName; }
+
   @Override
   public boolean equals(Object other) {
     if (this == other) {
@@ -135,7 +210,18 @@ public final class Security {
         && Objects.equals(isBot, that.isBot)
         && Objects.equals(isSpam, that.isSpam)
         && Objects.equals(isCloudProvider, that.isCloudProvider)
-        && Objects.equals(cloudProviderName, that.cloudProviderName);
+        && Objects.equals(cloudProviderName, that.cloudProviderName)
+        && Objects.equals(proxyDaysSeen30d, that.proxyDaysSeen30d)
+        && Objects.equals(proxyDaysSeen7d, that.proxyDaysSeen7d)
+        && Objects.equals(proxyProviderCount30d, that.proxyProviderCount30d)
+        && Objects.equals(botConfidenceScore, that.botConfidenceScore)
+        && Objects.equals(botOperatorName, that.botOperatorName)
+        && Objects.equals(botType, that.botType)
+        && Objects.equals(isKnownGoodBot, that.isKnownGoodBot)
+        && Objects.equals(botLastSeen, that.botLastSeen)
+        && Objects.equals(isCorporateGateway, that.isCorporateGateway)
+        && Objects.equals(corporateGatewayType, that.corporateGatewayType)
+        && Objects.equals(corporateGatewayProviderName, that.corporateGatewayProviderName);
   }
 
   @Override
@@ -159,7 +245,18 @@ public final class Security {
         isBot,
         isSpam,
         isCloudProvider,
-        cloudProviderName);
+        cloudProviderName,
+        proxyDaysSeen30d,
+        proxyDaysSeen7d,
+        proxyProviderCount30d,
+        botConfidenceScore,
+        botOperatorName,
+        botType,
+        isKnownGoodBot,
+        botLastSeen,
+        isCorporateGateway,
+        corporateGatewayType,
+        corporateGatewayProviderName);
   }
 
   @Override
@@ -202,6 +299,28 @@ public final class Security {
         + isCloudProvider
         + ", cloudProviderName='"
         + cloudProviderName
-        + "'}";
+        + "', proxyDaysSeen30d="
+        + proxyDaysSeen30d
+        + ", proxyDaysSeen7d="
+        + proxyDaysSeen7d
+        + ", proxyProviderCount30d="
+        + proxyProviderCount30d
+        + ", botConfidenceScore="
+        + botConfidenceScore
+        + ", botOperatorName="
+        + botOperatorName
+        + ", botType="
+        + botType
+        + ", isKnownGoodBot="
+        + isKnownGoodBot
+        + ", botLastSeen="
+        + botLastSeen
+        + ", isCorporateGateway="
+        + isCorporateGateway
+        + ", corporateGatewayType="
+        + corporateGatewayType
+        + ", corporateGatewayProviderName="
+        + corporateGatewayProviderName
+        + "}";
   }
 }

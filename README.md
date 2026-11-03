@@ -320,6 +320,7 @@ Language values supported by `.lang(...)`:
 - `Language.KO` for Korean
 - `Language.FA` for Persian
 - `Language.PT` for Portuguese
+- `Language.AR` for Arabic
 
 Dot-separated field paths can be passed to `.fields(...)` and `.excludes(...)` to control which parts of the response are returned.
 
@@ -690,7 +691,7 @@ String full = JsonOutput.toPrettyJson(response.data(), JsonOutputMode.FULL);
 
 ## Error Handling
 
-All SDK exceptions extend `IpGeolocationException`.
+All SDK exceptions extend `IpGeolocationException`. If an error includes your API key, the SDK replaces it with `[REDACTED]`. The error type and HTTP status stay the same. Some technical error details may be shortened to keep the key hidden.
 
 | HTTP Status | Exception |
 |-------------|-----------|

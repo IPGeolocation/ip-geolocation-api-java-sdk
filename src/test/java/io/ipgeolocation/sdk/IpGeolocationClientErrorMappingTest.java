@@ -90,7 +90,7 @@ class IpGeolocationClientErrorMappingTest {
 
     IpGeolocationClient client =
         new IpGeolocationClient(
-            IpGeolocationClientConfig.builder("k")
+            IpGeolocationClientConfig.builder("test-key")
                 .build(),
             executor,
             ObjectMapperFactory.create());

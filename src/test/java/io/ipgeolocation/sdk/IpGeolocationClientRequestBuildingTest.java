@@ -7,8 +7,39 @@ import io.ipgeolocation.sdk.internal.ObjectMapperFactory;
 import java.net.URI;
 import java.time.Duration;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
 
 class IpGeolocationClientRequestBuildingTest {
+
+  @ParameterizedTest
+  @EnumSource(Language.class)
+  void sendsEveryLanguageForTypedAndRawSingleAndBulkLookups(Language language) {
+    TestHttpExecutor executor = new TestHttpExecutor();
+    String item = "{\"ip\":\"8.8.8.8\",\"location\":{\"country_name\":\"الولايات المتحدة\"}}";
+    executor.enqueueResponse(200, item);
+    executor.enqueueResponse(200, item);
+    executor.enqueueResponse(200, "[" + item + "]");
+    executor.enqueueResponse(200, "[" + item + "]");
+    IpGeolocationClient client = new IpGeolocationClient(
+        IpGeolocationClientConfig.builder("test-key").build(),
+        executor, ObjectMapperFactory.create());
+    LookupIpGeolocationRequest single = LookupIpGeolocationRequest.builder()
+        .ip("8.8.8.8").lang(language).build();
+    BulkLookupIpGeolocationRequest bulk = BulkLookupIpGeolocationRequest.builder()
+        .addIp("8.8.8.8").lang(language).build();
+
+    assertThat(client.lookupIpGeolocation(single).data().location().countryName())
+        .isEqualTo("الولايات المتحدة");
+    assertThat(client.lookupIpGeolocationRaw(single).data()).isEqualTo(item);
+    assertThat(client.bulkLookupIpGeolocation(bulk).data()).hasSize(1);
+    assertThat(client.bulkLookupIpGeolocationRaw(bulk).data()).isEqualTo("[" + item + "]");
+
+    assertThat(executor.capturedRequests()).hasSize(4);
+    for (HttpRequestData request : executor.capturedRequests()) {
+      assertThat(request.uri().getQuery()).contains("lang=" + language.code());
+    }
+  }
 
   @Test
   void lookupBuildsExpectedQueryAndHeaders() {
