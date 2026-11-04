@@ -208,7 +208,7 @@ This SDK supports the IP Geolocation API endpoints below.
 > [!WARNING]
 > Request origin allowlisting does not work with `/v3/ipgeo-bulk`.
 > Bulk lookup always requires an API key in the client configuration.
-> The API key is sent as the `apiKey` query parameter because that is how our IPGeolocation API authenticates these endpoints, so avoid logging full request URLs in application logs.
+> The API key is sent as the `apiKey` query parameter because that is how our IP Geolocation API authenticates these endpoints, so avoid logging full request URLs in application logs.
 
 ## Plan Features and Limits
 
@@ -775,8 +775,8 @@ No. Request origin allowlisting works only for `/v3/ipgeo` on paid plans. `/v3/i
 - [IPGeolocation.io Website](https://ipgeolocation.io/)
 - [IPGeolocation.io Java SDK on GitHub](https://github.com/IPGeolocation/ip-geolocation-api-java-sdk)
 - [IP Geolocation API Documentation](https://ipgeolocation.io/documentation/ip-location-api.html)
-- [IPGeolocation API Credits and Usage](https://ipgeolocation.io/documentation/credits-usage.html)
-- [IPGeolocation API Authentication Methods](https://ipgeolocation.io/documentation/api-authentication.html)
-- [IPGeolocation API Response Formats](https://ipgeolocation.io/documentation/api-response-formats.html)
-- [IPGeolocation API Plans and Pricing](https://ipgeolocation.io/pricing.html)
+- [IPGeolocation.io API Credits and Usage](https://ipgeolocation.io/documentation/credits-usage.html)
+- [IPGeolocation.io API Authentication Methods](https://ipgeolocation.io/documentation/api-authentication.html)
+- [IPGeolocation.io API Response Formats](https://ipgeolocation.io/documentation/api-response-formats.html)
+- [IPGeolocation.io API Plans and Pricing](https://ipgeolocation.io/pricing.html)
 - [IPGeolocation.io Java SDK on Maven Central](https://central.sonatype.com/artifact/io.ipgeolocation/ipgeolocation)
